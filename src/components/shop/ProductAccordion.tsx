@@ -1,7 +1,66 @@
 import { Link } from "@tanstack/react-router";
 import type { Product } from "@/lib/catalog";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 export function ProductAccordion({ product }: { product: Product }) {
-  const specs = product.specifications?.verified ? Object.entries(product.specifications).filter(([key, value]) => key !== "verified" && typeof value === "string") : [];
-  return <Accordion type="multiple" className="border-t border-border"><AccordionItem value="details"><AccordionTrigger>Product details</AccordionTrigger><AccordionContent className="leading-loose text-muted-foreground">{specs.length ? <dl className="space-y-2">{specs.map(([key, value]) => <div key={key} className="flex flex-wrap justify-between gap-4"><dt className="capitalize">{key}</dt><dd>{String(value)}</dd></div>)}</dl> : <p>Material, 925 purity, stone, finish, weight and dimensions have not been supplied or verified for this sample. No hallmark or stock claims are made.</p>}</AccordionContent></AccordionItem><AccordionItem value="care"><AccordionTrigger>Jewellery care</AccordionTrigger><AccordionContent className="leading-loose text-muted-foreground"><p>General care: store pieces separately in a dry place, avoid contact with perfume and household chemicals, and wipe gently with a soft cloth. Material-specific care will accompany the approved catalogue.</p></AccordionContent></AccordionItem><AccordionItem value="shipping"><AccordionTrigger>Shipping &amp; returns</AccordionTrigger><AccordionContent className="leading-loose text-muted-foreground"><p>These samples are not for sale. Delivery times, charges and return terms are awaiting approval.</p><div className="mt-3 flex flex-wrap gap-5"><Link to="/shipping" className="underline underline-offset-4">Shipping information</Link><Link to="/returns" className="underline underline-offset-4">Return information</Link></div></AccordionContent></AccordionItem></Accordion>;
+  const specs = product.specifications?.verified
+    ? Object.entries(product.specifications).filter(
+        ([key, value]) => key !== "verified" && typeof value === "string",
+      )
+    : [];
+  return (
+    <Accordion type="multiple" className="border-t border-border">
+      <AccordionItem value="details">
+        <AccordionTrigger>Product details</AccordionTrigger>
+        <AccordionContent className="leading-loose text-muted-foreground">
+          {specs.length ? (
+            <dl className="space-y-2">
+              {specs.map(([key, value]) => (
+                <div key={key} className="flex flex-wrap justify-between gap-4">
+                  <dt className="capitalize">{key}</dt>
+                  <dd>{String(value)}</dd>
+                </div>
+              ))}
+            </dl>
+          ) : (
+            <p>
+              Material, 925 purity, stone, finish, weight and dimensions have not been supplied or
+              verified for this sample. No hallmark or stock claims are made.
+            </p>
+          )}
+        </AccordionContent>
+      </AccordionItem>
+      <AccordionItem value="care">
+        <AccordionTrigger>Jewellery care</AccordionTrigger>
+        <AccordionContent className="leading-loose text-muted-foreground">
+          <p>
+            General care: store pieces separately in a dry place, avoid contact with perfume and
+            household chemicals, and wipe gently with a soft cloth. Material-specific care will
+            accompany the approved catalogue.
+          </p>
+        </AccordionContent>
+      </AccordionItem>
+      <AccordionItem value="shipping">
+        <AccordionTrigger>Shipping &amp; returns</AccordionTrigger>
+        <AccordionContent className="leading-loose text-muted-foreground">
+          <p>
+            These samples are not for sale. Delivery times, charges and return terms are awaiting
+            approval.
+          </p>
+          <div className="mt-3 flex flex-wrap gap-5">
+            <Link to="/shipping" className="underline underline-offset-4">
+              Shipping information
+            </Link>
+            <Link to="/returns" className="underline underline-offset-4">
+              Return information
+            </Link>
+          </div>
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
+  );
 }

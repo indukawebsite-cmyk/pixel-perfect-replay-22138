@@ -6,4 +6,8 @@ export function RecentlyViewedProvider({ children }: { children: ReactNode }) {
   const record = useCallback((id: string) => setIds((current) => recordViewed(current, id)), []);
   return <Context.Provider value={{ ids, record }}>{children}</Context.Provider>;
 }
-export function useRecentlyViewed() { const context = useContext(Context); if (!context) throw new Error("RecentlyViewedProvider is required"); return context; }
+export function useRecentlyViewed() {
+  const context = useContext(Context);
+  if (!context) throw new Error("RecentlyViewedProvider is required");
+  return context;
+}
