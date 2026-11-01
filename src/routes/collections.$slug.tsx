@@ -1,6 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { getCollection } from "@/lib/catalog";
+import { SampleBadge } from "@/components/brand/primitives";
 
 export const Route = createFileRoute("/collections/$slug")({
   loader: ({ params }) => {
@@ -46,6 +47,7 @@ function CollectionPage() {
         <p className="max-w-md text-sm text-ivory/85">This collection is in the making. Its first pieces will appear here at launch.</p>
         <Button asChild variant="luxLight" size="xl"><Link to="/collections">All collections</Link></Button>
       </div>
+      <SampleBadge className="absolute bottom-4 right-4" />
     </section>
   );
 }
