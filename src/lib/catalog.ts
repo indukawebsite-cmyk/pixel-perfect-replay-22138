@@ -16,6 +16,9 @@ export type Collection = {
   focus: string;
   image: string;
 };
+export type ProductVariant = { id: string; label: string; isDemo: boolean };
+export type ProductImage = { src: string; label: string; detailCrop?: boolean };
+export type VerifiedSpecifications = { verified: true; material?: string; purity?: string; stone?: string; finish?: string; weight?: string; dimensions?: string };
 export type Product = {
   id: string;
   name: string;
@@ -30,6 +33,10 @@ export type Product = {
   edit?: string; // Demo merchandising label, not a product specification.
   addedOn?: string;
   featuredOrder?: number;
+  description?: string;
+  gallery?: ProductImage[];
+  variants?: ProductVariant[];
+  specifications?: VerifiedSpecifications;
 };
 
 export const categories: Category[] = [
@@ -87,6 +94,9 @@ export const demoProducts: Product[] = collections.flatMap((collection, collecti
     addedOn: `2026-10-${String(collectionIndex * 4 + categoryIndex + 1).padStart(2, "0")}`,
     featuredOrder: collectionIndex * 4 + categoryIndex,
     isSample: true as const,
+    description: `An illustrative ${collection.name} ${category.name.toLowerCase()} preview from the INDUKA demo catalogue. This image and price are for browsing only, not a real product offer.`,
+    gallery: [{ src: category.image, label: "Sample photograph" }, { src: category.image, label: "Detail crop · same sample photograph", detailCrop: true }],
+    variants: category.slug === "rings" ? [{ id: "demo-a", label: "Demo option A", isDemo: true }, { id: "demo-b", label: "Demo option B", isDemo: true }] : undefined,
   })),
 );
 
