@@ -9,6 +9,8 @@ export const Route = createFileRoute("/about")({
       { name: "description", content: "Induka takes its name from Indu, the Sanskrit word for moon — celestial, quiet-luxury 925 silver jewellery." },
       { property: "og:title", content: "Our Story — House of Induka" },
       { property: "og:description", content: "The moonlit house of 925 sterling silver." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: About,

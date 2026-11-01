@@ -10,6 +10,8 @@ export const Route = createFileRoute("/collections/")({
       { name: "description", content: "Chandni, Ardh Chandra, Purnima, Tara, Nakshatra and Chandrika — six moon-inspired silver collections." },
       { property: "og:title", content: "The Collections — INDUKA" },
       { property: "og:description", content: "Six moon-inspired 925 sterling silver collections." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Collections,

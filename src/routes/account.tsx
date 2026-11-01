@@ -9,6 +9,8 @@ export const Route = createFileRoute("/account")({
       { name: "description", content: "Sign in to your INDUKA account." },
       { property: "og:title", content: "Your Account — INDUKA" },
       { property: "og:description", content: "Sign in to your INDUKA account." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { name: "robots", content: "noindex" },
     ],
   }),

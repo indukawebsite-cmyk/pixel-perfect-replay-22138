@@ -19,6 +19,8 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Moon-inspired 925 sterling silver jewellery from House of Induka — gift-ready, meaningful and made to be kept." },
       { property: "og:title", content: "INDUKA — Wear the moon." },
       { property: "og:description", content: "Moon-inspired 925 sterling silver jewellery from House of Induka." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Home,

@@ -12,6 +12,8 @@ export const Route = createFileRoute("/shop")({
       { name: "description", content: "Browse INDUKA's moon-inspired sterling silver earrings, rings, necklaces and bracelets." },
       { property: "og:title", content: "Shop — INDUKA" },
       { property: "og:description", content: "Moon-inspired 925 sterling silver jewellery." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Shop,
