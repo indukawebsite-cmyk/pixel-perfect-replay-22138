@@ -16,3 +16,6 @@
 - Homepage sample rows keep null real prices; a separate typed demo catalogue in catalog.ts uses explicit demoPrice and demo merchandising fields for shopping tests without altering homepage content.
 - Shop and collection grids share ProductExplorer and URL-validated filter/sort/load-more state so navigation and browser history retain the selection.
 - Customer-care and policy routes reuse InformationPage; missing approved policies remain explicit placeholders rather than invented business terms.
+- Product details compose reusable gallery/information/selectors/accordions from the central typed catalogue; specifications render only behind a verified marker to prevent unsupported claims.
+- Demo bag line identity includes an optional variant ID and quantities use shared validation, preserving the existing cart provider across all shopping surfaces.
+- Recently viewed products use a root visit-scoped provider without browser storage; image magnification uses react-zoom-pan-pinch in an accessible gallery dialog.

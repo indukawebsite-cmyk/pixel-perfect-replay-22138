@@ -16,6 +16,17 @@ export type Collection = {
   focus: string;
   image: string;
 };
+export type ProductVariant = { id: string; label: string; isDemo: boolean };
+export type ProductImage = { src: string; label: string; detailCrop?: boolean };
+export type VerifiedSpecifications = {
+  verified: true;
+  material?: string;
+  purity?: string;
+  stone?: string;
+  finish?: string;
+  weight?: string;
+  dimensions?: string;
+};
 export type Product = {
   id: string;
   name: string;
@@ -30,6 +41,10 @@ export type Product = {
   edit?: string; // Demo merchandising label, not a product specification.
   addedOn?: string;
   featuredOrder?: number;
+  description?: string;
+  gallery?: ProductImage[];
+  variants?: ProductVariant[] | undefined;
+  specifications?: VerifiedSpecifications;
 };
 
 export const categories: Category[] = [
@@ -40,26 +55,64 @@ export const categories: Category[] = [
 ];
 
 export const collections: Collection[] = [
-  { slug: "chandni", name: "Chandni", meaning: "Moonlight", focus: "Everyday studs, chains and minimal rings.", image: necklaces },
-  { slug: "ardh-chandra", name: "Ardh Chandra", meaning: "Half moon", focus: "Crescent signature pieces.", image: hero },
-  { slug: "purnima", name: "Purnima", meaning: "Full moon", focus: "Statement and festive pieces.", image: editorial },
-  { slug: "tara", name: "Tara", meaning: "Star", focus: "Sparkle CZ studs and star motifs.", image: earrings },
-  { slug: "nakshatra", name: "Nakshatra", meaning: "Constellation", focus: "Layering sets, charms and zodiac.", image: bracelets },
-  { slug: "chandrika", name: "Chandrika", meaning: "Moonbeam", focus: "Bridal and gifting edit.", image: gifting },
+  {
+    slug: "chandni",
+    name: "Chandni",
+    meaning: "Moonlight",
+    focus: "Everyday studs, chains and minimal rings.",
+    image: necklaces,
+  },
+  {
+    slug: "ardh-chandra",
+    name: "Ardh Chandra",
+    meaning: "Half moon",
+    focus: "Crescent signature pieces.",
+    image: hero,
+  },
+  {
+    slug: "purnima",
+    name: "Purnima",
+    meaning: "Full moon",
+    focus: "Statement and festive pieces.",
+    image: editorial,
+  },
+  {
+    slug: "tara",
+    name: "Tara",
+    meaning: "Star",
+    focus: "Sparkle CZ studs and star motifs.",
+    image: earrings,
+  },
+  {
+    slug: "nakshatra",
+    name: "Nakshatra",
+    meaning: "Constellation",
+    focus: "Layering sets, charms and zodiac.",
+    image: bracelets,
+  },
+  {
+    slug: "chandrika",
+    name: "Chandrika",
+    meaning: "Moonbeam",
+    focus: "Bridal and gifting edit.",
+    image: gifting,
+  },
 ];
 
 const img = { earrings, rings, necklaces, bracelets } as const;
 
-export const sampleProducts: Product[] = ([
-  ["Sample Crescent Stud", "earrings", "ardh-chandra", "Bestseller"],
-  ["Sample Moon Pendant", "necklaces", "chandni", "Bestseller"],
-  ["Sample Stacking Band", "rings", "chandni", "Bestseller"],
-  ["Sample Star Charm Bracelet", "bracelets", "nakshatra", "Bestseller"],
-  ["Sample Tara Stud", "earrings", "tara", "New"],
-  ["Sample Layering Chain", "necklaces", "nakshatra", "New"],
-  ["Sample Pavé Band", "rings", "tara", "New"],
-  ["Sample Fine Chain Bracelet", "bracelets", "chandni", "New"],
-] as const).map(([name, category, collection, tag], i) => ({
+export const sampleProducts: Product[] = (
+  [
+    ["Sample Crescent Stud", "earrings", "ardh-chandra", "Bestseller"],
+    ["Sample Moon Pendant", "necklaces", "chandni", "Bestseller"],
+    ["Sample Stacking Band", "rings", "chandni", "Bestseller"],
+    ["Sample Star Charm Bracelet", "bracelets", "nakshatra", "Bestseller"],
+    ["Sample Tara Stud", "earrings", "tara", "New"],
+    ["Sample Layering Chain", "necklaces", "nakshatra", "New"],
+    ["Sample Pavé Band", "rings", "tara", "New"],
+    ["Sample Fine Chain Bracelet", "bracelets", "chandni", "New"],
+  ] as const
+).map(([name, category, collection, tag], i) => ({
   id: `sample-${i + 1}`,
   name,
   category,
@@ -83,17 +136,32 @@ export const demoProducts: Product[] = collections.flatMap((collection, collecti
     image: category.image,
     price: null,
     demoPrice: ([1200, 1800, 2400, 3200][categoryIndex] ?? 1200) + collectionIndex * 250,
-    edit: ["Minimal", "Celestial", "Statement", "Gifting"][(collectionIndex + categoryIndex) % 4] ?? "Minimal",
+    edit:
+      ["Minimal", "Celestial", "Statement", "Gifting"][(collectionIndex + categoryIndex) % 4] ??
+      "Minimal",
     addedOn: `2026-10-${String(collectionIndex * 4 + categoryIndex + 1).padStart(2, "0")}`,
     featuredOrder: collectionIndex * 4 + categoryIndex,
     isSample: true as const,
+    description: `An illustrative ${collection.name} ${category.name.toLowerCase()} preview from the INDUKA demo catalogue. This image and price are for browsing only, not a real product offer.`,
+    gallery: [
+      { src: category.image, label: "Sample photograph" },
+      { src: category.image, label: "Detail crop · same sample photograph", detailCrop: true },
+    ],
+    variants:
+      category.slug === "rings"
+        ? [
+            { id: "demo-a", label: "Demo option A", isDemo: true },
+            { id: "demo-b", label: "Demo option B", isDemo: true },
+          ]
+        : undefined,
   })),
 );
 
 export const browsingProducts = [...sampleProducts, ...demoProducts];
 export const getProduct = (id: string) => browsingProducts.find((product) => product.id === id);
-export const productPriceLabel = (product: Product) => product.demoPrice === undefined
-  ? formatPrice(product.price)
-  : `${formatPrice(product.demoPrice)} · Demo price`;
+export const productPriceLabel = (product: Product) =>
+  product.demoPrice === undefined
+    ? formatPrice(product.price)
+    : `${formatPrice(product.demoPrice)} · Demo price`;
 export const formatPrice = (p: number | null) =>
   p === null ? "Price to be announced" : `₹${p.toLocaleString("en-IN")}`;
