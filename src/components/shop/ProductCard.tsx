@@ -27,7 +27,7 @@ export function ProductCard({ product, shopping = false }: { product: Product; s
         />
         {product.secondaryImage && <img src={product.secondaryImage} alt={`${product.name} — second demo view`} loading="lazy" className="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-700 group-hover:opacity-100 group-focus-within:opacity-100 motion-reduce:transition-none" />}
         </Link>
-        <div className="absolute left-3 top-3 flex gap-2">
+        <div className={shopping || product.demoPrice !== undefined ? "pointer-events-none absolute bottom-2 left-2 flex gap-2" : "absolute left-3 top-3 flex gap-2"}>
           <SampleBadge />
         </div>
         <Button variant="ghost" size="icon"

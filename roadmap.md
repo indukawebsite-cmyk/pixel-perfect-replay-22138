@@ -8,8 +8,10 @@
 Remaining content: official catalogue/photos/prices, approved policies, contact/social details. Sign-in, purchasing and newsletter delivery intentionally deferred; no services connected.
 
 # Shopping and collections
-- [ ] Central typed demo catalogue, filter/sort/search and pagination logic.
-- [ ] Reusable shop/collection explorer with desktop filters and mobile drawer.
-- [ ] Six collection heroes, breadcrumbs and demo grids.
-- [ ] Demo cards, detail navigation and visit-scoped cart with quantity controls.
-- [ ] Verify filters, sorting, wishlist, cart navigation and responsive layouts.
+- [x] Central typed demo catalogue, filter/sort/search and pagination logic.
+- [x] Reusable shop/collection explorer with desktop filters and mobile drawer.
+- [x] Six collection heroes, breadcrumbs and demo grids.
+- [x] Demo cards, detail navigation and visit-scoped cart with quantity controls.
+- [x] Verify filters, sorting, wishlist, cart navigation and responsive layouts.
+
+Shopping placeholders: illustrative INR prices and demo merchandising labels; official catalogue, specifications and secondary product photos awaiting supply. Demo bag is visit-only; real checkout and integrations remain disabled.
