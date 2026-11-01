@@ -5,13 +5,13 @@ import emblem from "@/assets/induka-logo-emblem.png.asset.json";
 
 const variants = {
   /** Full lockup, black — for ivory/blush backgrounds */
-  dark: { src: dark.url, w: 1640, h: 1013 },
+  dark: { src: dark.url, w: 1991, h: 1195 },
   /** Full lockup, champagne gold — for midnight backgrounds */
-  gold: { src: gold.url, w: 1640, h: 1013 },
+  gold: { src: gold.url, w: 1991, h: 1195 },
   /** Wordmark only, black */
-  wordmark: { src: word.url, w: 1986, h: 330 },
+  wordmark: { src: word.url, w: 1925, h: 257 },
   /** Emblem only, champagne gold */
-  emblem: { src: emblem.url, w: 558, h: 600 },
+  emblem: { src: emblem.url, w: 521, h: 448 },
 } as const;
 
 // Official INDUKA logo assets, extracted unaltered from the Brand Book. Never recreate in text.
