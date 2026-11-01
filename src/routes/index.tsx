@@ -31,7 +31,7 @@ function Home() {
       {/* HERO */}
       <section className="relative overflow-hidden bg-midnight text-ivory">
         <img src={hero} alt="Sterling silver crescent pendant on black velvet (sample image)" width={1920} height={1088} className="absolute inset-0 h-full w-full object-cover object-right" />
-        <div className="absolute inset-0 bg-gradient-to-r from-midnight via-midnight/70 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-midnight via-midnight/40 to-transparent" />
         <div className="container-lux relative flex min-h-[78vh] flex-col justify-center py-24">
           <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }} className="flex max-w-xl flex-col gap-7">
             <span className="eyebrow text-soft-gold">House of Induka · 925 Sterling Silver</span>

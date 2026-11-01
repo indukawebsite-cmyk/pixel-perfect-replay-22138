@@ -43,7 +43,7 @@ export const collections: Collection[] = [
   { slug: "chandrika", name: "Chandrika", meaning: "Moonbeam", focus: "Bridal and gifting edit.", image: gifting },
 ];
 
-const img: Record<string, string> = { earrings, rings, necklaces, bracelets };
+const img = { earrings, rings, necklaces, bracelets } as const;
 
 export const sampleProducts: Product[] = ([
   ["Sample Crescent Stud", "earrings", "ardh-chandra", "Bestseller"],

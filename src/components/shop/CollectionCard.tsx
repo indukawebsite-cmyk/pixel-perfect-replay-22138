@@ -14,7 +14,7 @@ export function CollectionCard({ collection, index }: { collection: Collection; 
         loading="lazy"
         width={800}
         height={1000}
-        className="h-full w-full object-cover opacity-80 transition duration-[1400ms] ease-[var(--ease-lux)] group-hover:scale-105 group-hover:opacity-60"
+        className="h-full w-full object-cover object-[70%_center] opacity-80 transition duration-[1400ms] ease-[var(--ease-lux)] group-hover:scale-105 group-hover:opacity-60"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-midnight/85 via-midnight/10 to-transparent" />
       <div className="absolute inset-x-0 bottom-0 flex flex-col gap-2 p-6 text-ivory">
