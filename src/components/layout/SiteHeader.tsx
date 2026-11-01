@@ -4,8 +4,10 @@ import { useEffect, useState, type ReactNode } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { Logo } from "@/components/brand/Logo";
 import { Button } from "@/components/ui/button";
-import { collections } from "@/lib/catalog";
+import { collections, productPriceLabel } from "@/lib/catalog";
 import { searchProducts } from "@/lib/catalog-search";
+import { DemoBag } from "@/components/shop/DemoBag";
+import { useCart } from "@/components/shop/CartProvider";
 import { useWishlist } from "@/components/shop/WishlistProvider";
 
 const nav = [{ to: "/shop", label: "Shop" }, { to: "/collections", label: "Collections" }, { to: "/about", label: "Our Story" }] as const;
@@ -15,6 +17,8 @@ export function SiteHeader() {
   const [query, setQuery] = useState("");
   const [scrolled, setScrolled] = useState(false);
   const { ids } = useWishlist();
+  const { items } = useCart();
+  const bagCount = items.reduce((total, item) => total + item.quantity, 0);
   const results = searchProducts(query);
   useEffect(() => {
     const on = () => setScrolled(window.scrollY > 8);
@@ -33,18 +37,18 @@ export function SiteHeader() {
         <div className="flex min-w-0 items-center justify-end gap-0 sm:gap-2">
           <Button variant="ghost" size="icon" className="h-11 w-10 shrink-0" aria-label="Search" onClick={() => setPanel("search")}><Search strokeWidth={1.25} /></Button>
           <Button asChild variant="ghost" size="icon" className="hidden h-11 w-11 shrink-0 sm:inline-flex"><Link to="/account" aria-label="Account"><User strokeWidth={1.25} /></Link></Button>
-          <Button variant="ghost" size="icon" className="h-11 w-10 shrink-0" aria-label="Cart, 0 items" onClick={() => setPanel("cart")}><ShoppingBag strokeWidth={1.25} /></Button>
+          <Button variant="ghost" size="icon" className="h-11 w-10 shrink-0" aria-label={`Demo bag, ${bagCount} items`} onClick={() => setPanel("cart")}><ShoppingBag strokeWidth={1.25} />{bagCount > 0 && <span className="text-xs">{bagCount}</span>}</Button>
         </div>
       </div>
     </header>
     <Drawer open={panel !== null} side={panel === "menu" ? "left" : "right"} onClose={close} title={panel === "menu" ? "Menu" : panel === "cart" ? "Your bag" : "Search"}>
       {panel === "menu" && <nav className="flex flex-col gap-5" aria-label="Mobile">{nav.map((n) => <Link key={n.to} to={n.to} onClick={close} className="font-display text-3xl">{n.label}</Link>)}<div className="hairline my-2" /><span className="eyebrow text-cocoa">Collections</span>{collections.map((c) => <Link key={c.slug} to="/collections/$slug" params={{ slug: c.slug }} onClick={close} className="py-1 text-sm uppercase">{c.name}</Link>)}<Link to="/account" onClick={close} className="flex items-center gap-3 py-2 text-sm"><User className="h-4 w-4" />Account</Link><Link to="/wishlist" onClick={close} className="flex items-center gap-3 py-2 text-sm"><Heart className="h-4 w-4" />Wishlist ({ids.length})</Link></nav>}
-      {panel === "cart" && <div className="flex flex-1 flex-col items-center justify-center gap-5 text-center"><ShoppingBag className="h-8 w-8 text-cocoa" strokeWidth={1} /><p className="font-display text-3xl">Your bag is empty</p><p className="max-w-xs text-sm leading-relaxed text-muted-foreground">Our catalogue is not available to purchase yet. Sample pieces cannot be added to your bag.</p><Button asChild variant="lux" size="xl"><Link to="/shop" onClick={close}>Browse the shop</Link></Button><Link to="/wishlist" onClick={close} className="mt-3 text-sm underline underline-offset-4">Your wishlist ({ids.length})</Link></div>}
+      {panel === "cart" && <DemoBag onNavigate={close} />}
       {panel === "search" && <>
         <label className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-3 border-b border-foreground pb-3"><Search className="h-4 w-4" /><span className="sr-only">Search jewellery</span><input autoFocus value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search jewellery or collections" className="min-w-0 bg-transparent py-2 text-base outline-none placeholder:text-muted-foreground" /></label>
         <p role="status" className="my-6 text-xs leading-relaxed text-muted-foreground">{query.trim() ? `${results.length} sample ${results.length === 1 ? "piece" : "pieces"} found` : "Explore sample pieces · Real catalogue coming soon"}</p>
         {results.length === 0 && <div className="py-8"><h2 className="text-2xl">No pieces found</h2><p className="mt-3 text-sm text-muted-foreground">Try a category such as rings or a collection such as Chandni.</p><Button variant="link" onClick={() => setQuery("")}>Clear search</Button></div>}
-        <div className="flex flex-col gap-5">{results.map((product) => <Link key={product.id} to="/products/$productId" params={{ productId: product.id }} onClick={close} className="grid grid-cols-[4rem_minmax(0,1fr)] items-center gap-4"><img src={product.image} alt="Sample jewellery" className="aspect-[4/5] w-full object-cover" /><div className="min-w-0"><p className="text-sm font-medium leading-relaxed">{product.name}</p><p className="mt-1 text-xs text-muted-foreground">Price to be announced</p></div></Link>)}</div>
+        <div className="flex flex-col gap-5">{results.map((product) => <Link key={product.id} to="/products/$productId" params={{ productId: product.id }} onClick={close} className="grid grid-cols-[4rem_minmax(0,1fr)] items-center gap-4"><img src={product.image} alt="Sample jewellery" className="aspect-[4/5] w-full object-cover" /><div className="min-w-0"><p className="text-sm font-medium leading-relaxed">{product.name}</p><p className="mt-1 text-xs text-muted-foreground">{productPriceLabel(product)}</p></div></Link>)}</div>
       </>}
     </Drawer>
   </>;

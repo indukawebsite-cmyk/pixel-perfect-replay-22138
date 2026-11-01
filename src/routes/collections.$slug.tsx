@@ -1,9 +1,13 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { Button } from "@/components/ui/button";
-import { getCollection } from "@/lib/catalog";
+import { getCollection, demoProducts } from "@/lib/catalog";
+import { ProductExplorer } from "@/components/shop/ProductExplorer";
+import { ShoppingError } from "@/components/shop/RouteFeedback";
+import { validateExplorerSearch } from "@/lib/product-explorer";
 import { SampleBadge } from "@/components/brand/primitives";
 
 export const Route = createFileRoute("/collections/$slug")({
+  validateSearch: validateExplorerSearch,
+  errorComponent: ShoppingError,
   loader: ({ params }) => {
     const collection = getCollection(params.slug);
     if (!collection) throw notFound();
@@ -36,18 +40,20 @@ export const Route = createFileRoute("/collections/$slug")({
 
 function CollectionPage() {
   const { collection: c } = Route.useLoaderData();
-  return (
+  const search = Route.useSearch();
+  const navigate = Route.useNavigate();
+  return <>
+    <nav aria-label="Breadcrumb" className="container-lux py-6 text-xs text-muted-foreground"><Link to="/">Home</Link><span aria-hidden="true" className="mx-3">/</span><Link to="/collections">Collections</Link><span aria-hidden="true" className="mx-3">/</span><span aria-current="page">{c.name}</span></nav>
     <section className="relative overflow-hidden bg-midnight text-ivory">
-      <img src={c.image} alt={`${c.name} mood image (sample)`} className="absolute inset-0 h-full w-full object-cover opacity-40" />
-      <div className="absolute inset-0 bg-gradient-to-t from-midnight via-midnight/60 to-midnight/20" />
-      <div className="container-lux relative flex min-h-[70vh] flex-col items-center justify-center gap-6 py-24 text-center">
+      <img src={c.image} alt={`${c.name} collection — sample campaign image`} className={`absolute inset-0 h-full w-full object-cover ${c.slug === "ardh-chandra" ? "object-right" : "object-center"}`} />
+      <div className="absolute inset-0 bg-gradient-to-r from-midnight/90 via-midnight/65 to-midnight/20" />
+      <div className="container-lux relative flex min-h-80 flex-col justify-center gap-5 py-16 md:min-h-96">
         <span className="eyebrow text-soft-gold">{c.meaning}</span>
         <h1 className="max-w-full text-4xl leading-tight uppercase sm:text-6xl md:text-7xl">{c.name}</h1>
-        <p className="editorial text-xl text-soft-gold">{c.focus}</p>
-        <p className="max-w-md text-sm text-ivory/85">This collection is in the making. Its first pieces will appear here at launch.</p>
-        <Button asChild variant="luxLight" size="xl"><Link to="/collections">All collections</Link></Button>
+        <p className="editorial max-w-lg text-lg leading-relaxed text-ivory md:text-xl">{c.focus}</p>
       </div>
       <SampleBadge className="absolute bottom-4 right-4" />
     </section>
-  );
+    <ProductExplorer products={demoProducts.filter((product) => product.collection === c.slug)} search={search} onChange={(next) => { void navigate({ search: next, resetScroll: false }); }} />
+  </>;
 }
