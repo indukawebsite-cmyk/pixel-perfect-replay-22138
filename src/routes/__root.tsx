@@ -16,6 +16,7 @@ import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { WishlistProvider } from "@/components/shop/WishlistProvider";
 import { CartProvider } from "@/components/shop/CartProvider";
+import { RecentlyViewedProvider } from "@/components/shop/RecentlyViewedProvider";
 
 function NotFoundComponent() {
   return (
@@ -129,6 +130,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <WishlistProvider>
       <CartProvider>
+      <RecentlyViewedProvider>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <a href="#main" className="sr-only focus:not-sr-only">Skip to content</a>
       <SiteHeader />
@@ -136,6 +138,7 @@ function RootComponent() {
         <Outlet />
       </main>
       <SiteFooter />
+      </RecentlyViewedProvider>
       </CartProvider>
       </WishlistProvider>
     </QueryClientProvider>
