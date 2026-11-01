@@ -5,7 +5,7 @@ import { categories } from "@/lib/catalog";
 import { searchProducts } from "@/lib/catalog-search";
 
 export const Route = createFileRoute("/shop")({
-  validateSearch: (search: Record<string, unknown>): { category: string } => ({ category: typeof search.category === "string" && categories.some((c) => c.slug === search.category) ? search.category : "all" }),
+  validateSearch: (search: Record<string, unknown>): { category?: string } => ({ category: typeof search["category"] === "string" && categories.some((c) => c.slug === search["category"]) ? search["category"] : "all" }),
   head: () => ({
     meta: [
       { title: "Shop 925 Sterling Silver Jewellery — INDUKA" },
