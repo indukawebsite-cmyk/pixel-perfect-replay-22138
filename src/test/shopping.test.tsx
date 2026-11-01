@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { collections, demoProducts, sampleProducts } from "@/lib/catalog";
 import { filterProducts, PAGE_SIZE, validateExplorerSearch, visibleProductCount } from "@/lib/product-explorer";
 import { addCartItem, cartTotal, setCartQuantity } from "@/lib/demo-cart";
-import { CartProvider, useCart } from "@/components/shop/CartProvider";
+import { CartProvider, DEMO_BAG_KEY, useCart } from "@/components/shop/CartProvider";
 
 describe("Demo shopping catalogue", () => {
   it("provides demo grids for all six collections, without claiming real pricing or stock", () => {
@@ -57,13 +57,19 @@ describe("Visit demo bag", () => {
     expect(addCartItem([], "sample-1")).toEqual([]);
     expect(addCartItem([], "unknown")).toEqual([]);
   });
-  it("keeps quantities when the provider rerenders and clears on a new visit", () => {
+  it("keeps quantities across rerenders and same-tab refresh, clearing with the tab session", () => {
+    sessionStorage.clear();
     const first = renderHook(useCart, { wrapper: CartProvider });
     act(() => first.result.current.add(id));
     first.rerender();
     expect(first.result.current.items).toEqual([{ productId: id, quantity: 1 }]);
     first.unmount();
     const second = renderHook(useCart, { wrapper: CartProvider });
-    expect(second.result.current.items).toEqual([]);
+    expect(second.result.current.items).toEqual([{ productId: id, quantity: 1 }]);
+    second.unmount();
+    sessionStorage.removeItem(DEMO_BAG_KEY);
+    const third = renderHook(useCart, { wrapper: CartProvider });
+    expect(third.result.current.items).toEqual([]);
+    third.unmount();
   });
 });
