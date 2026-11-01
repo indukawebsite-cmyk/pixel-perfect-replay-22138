@@ -12,10 +12,12 @@
 - Catalogue data lives in `src/lib/catalog.ts` as clearly marked sample data until it moves to the database; components read through it so the source can be swapped.
 - Official logo variants are served only via `src/components/brand/Logo.tsx` (CDN asset pointers) so the brand mark is never re-drawn.
 - Wishlist state is shared in a visit-scoped React provider, without persistent storage or backend services, so sample browsing never implies an account or saved subscription.
-- Demo bag state lives in a root-level visit-scoped CartProvider so client navigation preserves quantities without implying a real order or payment.
+- Demo bag state lives in the root CartProvider with schema-validated sessionStorage hydration after mount, preserving demo items across navigation/refresh in the same tab without storing customer details.
 - Homepage sample rows keep null real prices; a separate typed demo catalogue in catalog.ts uses explicit demoPrice and demo merchandising fields for shopping tests without altering homepage content.
 - Shop and collection grids share ProductExplorer and URL-validated filter/sort/load-more state so navigation and browser history retain the selection.
 - Customer-care and policy routes reuse InformationPage; missing approved policies remain explicit placeholders rather than invented business terms.
 - Product details compose reusable gallery/information/selectors/accordions from the central typed catalogue; specifications render only behind a verified marker to prevent unsupported claims.
 - Demo bag line identity includes an optional variant ID and quantities use shared validation, preserving the existing cart provider across all shopping surfaces.
 - Recently viewed products use a root visit-scoped provider without browser storage; image magnification uses react-zoom-pan-pinch in an accessible gallery dialog.
+- Cart, checkout and confirmation reuse CartLines, OrderSummary and shared cart operations; demo totals/coupons/customer validation live in demo-checkout.ts with Zod and no server or service calls.
+- Demo confirmations use a root memory-only provider with item/total snapshots; customer details are validated again at confirmation creation but never retained, transmitted or placed in URLs/storage.

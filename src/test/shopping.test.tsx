@@ -1,22 +1,41 @@
 import { act, renderHook } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { collections, demoProducts, sampleProducts } from "@/lib/catalog";
-import { filterProducts, PAGE_SIZE, validateExplorerSearch, visibleProductCount } from "@/lib/product-explorer";
+import {
+  filterProducts,
+  PAGE_SIZE,
+  validateExplorerSearch,
+  visibleProductCount,
+} from "@/lib/product-explorer";
 import { addCartItem, cartTotal, setCartQuantity } from "@/lib/demo-cart";
-import { CartProvider, useCart } from "@/components/shop/CartProvider";
+import { CartProvider, DEMO_BAG_KEY, useCart } from "@/components/shop/CartProvider";
 
 describe("Demo shopping catalogue", () => {
   it("provides demo grids for all six collections, without claiming real pricing or stock", () => {
-    expect(collections.map((c) => demoProducts.filter((p) => p.collection === c.slug).length)).toEqual([4,4,4,4,4,4]);
+    expect(
+      collections.map((c) => demoProducts.filter((p) => p.collection === c.slug).length),
+    ).toEqual([4, 4, 4, 4, 4, 4]);
     expect(demoProducts.every((p) => p.isSample && p.price === null)).toBe(true);
     expect(demoProducts[0]?.demoPrice).toBe(1200);
     expect(sampleProducts.every((p) => p.price === null && p.demoPrice === undefined)).toBe(true);
   });
   it("combines category, price range, demo attribute and name search", () => {
-    expect(filterProducts(demoProducts, { category: "earrings", min: 1500, max: 2200, edit: "Statement", q: "DEMO purnima" }).map((p) => p.id)).toEqual(["demo-purnima-earrings"]);
+    expect(
+      filterProducts(demoProducts, {
+        category: "earrings",
+        min: 1500,
+        max: 2200,
+        edit: "Statement",
+        q: "DEMO purnima",
+      }).map((p) => p.id),
+    ).toEqual(["demo-purnima-earrings"]);
   });
   it("includes exact price boundaries and excludes unknown prices", () => {
-    expect(filterProducts([...sampleProducts, ...demoProducts], { min: 1200, max: 1200 }).map((p) => p.id)).toEqual(["demo-chandni-earrings"]);
+    expect(
+      filterProducts([...sampleProducts, ...demoProducts], { min: 1200, max: 1200 }).map(
+        (p) => p.id,
+      ),
+    ).toEqual(["demo-chandni-earrings"]);
   });
   it("handles empty search and reversed price bounds", () => {
     expect(filterProducts(demoProducts, { q: "does not exist" })).toEqual([]);
@@ -25,10 +44,14 @@ describe("Demo shopping catalogue", () => {
   });
   it("sorts Featured and Newest by demo merchandising order", () => {
     expect(filterProducts(demoProducts, { sort: "featured" })[0]?.id).toBe("demo-chandni-earrings");
-    expect(filterProducts(demoProducts, { sort: "newest" })[0]?.id).toBe("demo-chandrika-bracelets");
+    expect(filterProducts(demoProducts, { sort: "newest" })[0]?.id).toBe(
+      "demo-chandrika-bracelets",
+    );
   });
   it("sorts prices both ways without changing the source", () => {
-    expect(filterProducts(demoProducts, { sort: "price-asc" }).map((p) => p.demoPrice)).toEqual(demoProducts.map((p) => p.demoPrice).sort((a,b) => (a ?? 0) - (b ?? 0)));
+    expect(filterProducts(demoProducts, { sort: "price-asc" }).map((p) => p.demoPrice)).toEqual(
+      demoProducts.map((p) => p.demoPrice).sort((a, b) => (a ?? 0) - (b ?? 0)),
+    );
     expect(filterProducts(demoProducts, { sort: "price-desc" })[0]?.demoPrice).toBe(4450);
     expect(demoProducts[0]?.id).toBe("demo-chandni-earrings");
   });
@@ -57,13 +80,19 @@ describe("Visit demo bag", () => {
     expect(addCartItem([], "sample-1")).toEqual([]);
     expect(addCartItem([], "unknown")).toEqual([]);
   });
-  it("keeps quantities when the provider rerenders and clears on a new visit", () => {
+  it("keeps quantities across rerenders and same-tab refresh, clearing with the tab session", () => {
+    sessionStorage.clear();
     const first = renderHook(useCart, { wrapper: CartProvider });
     act(() => first.result.current.add(id));
     first.rerender();
     expect(first.result.current.items).toEqual([{ productId: id, quantity: 1 }]);
     first.unmount();
     const second = renderHook(useCart, { wrapper: CartProvider });
-    expect(second.result.current.items).toEqual([]);
+    expect(second.result.current.items).toEqual([{ productId: id, quantity: 1 }]);
+    second.unmount();
+    sessionStorage.removeItem(DEMO_BAG_KEY);
+    const third = renderHook(useCart, { wrapper: CartProvider });
+    expect(third.result.current.items).toEqual([]);
+    third.unmount();
   });
 });

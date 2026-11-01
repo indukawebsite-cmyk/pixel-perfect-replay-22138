@@ -22,3 +22,13 @@ Shopping placeholders: illustrative INR prices and demo merchandising labels; of
 - [x] Verify routing, gallery/zoom, variants, quantities and mobile layouts.
 
 Product-detail limitations: galleries currently use one sample photo plus its explicitly labelled crop; ring options are demo-only, not real variants. Verified specifications, real variants/photos/prices and approved shipping/return policies await supply. PIN checks validate format only; no checkout, payments or services connected.
+
+# Demo cart and checkout
+- [x] Full cart page with shared quantities, variants, removal and summary.
+- [x] Demo coupon validation, illustrative shipping and validated customer/address fields.
+- [x] Local demo confirmation snapshot without retaining customer information.
+- [x] Verify full desktop/mobile flow and existing shopping routes.
+
+Verified: 52 tests pass; desktop/mobile checkout to confirmation, coupon checks, quantities/removal, same-tab bag refresh, empty states and confirmation refresh. No runtime errors or submission requests. Existing homepage, shop, collection and product routes remain working.
+
+Limitations: bag survives refresh in this tab when session storage is available; customer details and demo confirmations are not persisted. DEMO code applies no discount; ₹150 shipping is an illustrative assumption, not approved pricing. Taxes, live shipping, payments and actual orders remain disabled.

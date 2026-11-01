@@ -12,8 +12,11 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AccountRouteImport } from './routes/account'
+import { Route as CartRouteImport } from './routes/cart'
+import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as FaqsRouteImport } from './routes/faqs'
+import { Route as OrderConfirmationRouteImport } from './routes/order-confirmation'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ReturnsRouteImport } from './routes/returns'
 import { Route as ShippingRouteImport } from './routes/shipping'
@@ -40,6 +43,16 @@ const AccountRoute = AccountRouteImport.update({
   path: '/account',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CartRoute = CartRouteImport.update({
+  id: '/cart',
+  path: '/cart',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CheckoutRoute = CheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
@@ -48,6 +61,11 @@ const ContactRoute = ContactRouteImport.update({
 const FaqsRoute = FaqsRouteImport.update({
   id: '/faqs',
   path: '/faqs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OrderConfirmationRoute = OrderConfirmationRouteImport.update({
+  id: '/order-confirmation',
+  path: '/order-confirmation',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrivacyRoute = PrivacyRouteImport.update({
@@ -105,8 +123,11 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/account': typeof AccountRoute
+  '/cart': typeof CartRoute
+  '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
   '/faqs': typeof FaqsRoute
+  '/order-confirmation': typeof OrderConfirmationRoute
   '/privacy': typeof PrivacyRoute
   '/returns': typeof ReturnsRoute
   '/shipping': typeof ShippingRoute
@@ -122,8 +143,11 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/account': typeof AccountRoute
+  '/cart': typeof CartRoute
+  '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
   '/faqs': typeof FaqsRoute
+  '/order-confirmation': typeof OrderConfirmationRoute
   '/privacy': typeof PrivacyRoute
   '/returns': typeof ReturnsRoute
   '/shipping': typeof ShippingRoute
@@ -140,8 +164,11 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/account': typeof AccountRoute
+  '/cart': typeof CartRoute
+  '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
   '/faqs': typeof FaqsRoute
+  '/order-confirmation': typeof OrderConfirmationRoute
   '/privacy': typeof PrivacyRoute
   '/returns': typeof ReturnsRoute
   '/shipping': typeof ShippingRoute
@@ -159,8 +186,11 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/account'
+    | '/cart'
+    | '/checkout'
     | '/contact'
     | '/faqs'
+    | '/order-confirmation'
     | '/privacy'
     | '/returns'
     | '/shipping'
@@ -176,8 +206,11 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/account'
+    | '/cart'
+    | '/checkout'
     | '/contact'
     | '/faqs'
+    | '/order-confirmation'
     | '/privacy'
     | '/returns'
     | '/shipping'
@@ -193,8 +226,11 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/account'
+    | '/cart'
+    | '/checkout'
     | '/contact'
     | '/faqs'
+    | '/order-confirmation'
     | '/privacy'
     | '/returns'
     | '/shipping'
@@ -211,8 +247,11 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   AccountRoute: typeof AccountRoute
+  CartRoute: typeof CartRoute
+  CheckoutRoute: typeof CheckoutRoute
   ContactRoute: typeof ContactRoute
   FaqsRoute: typeof FaqsRoute
+  OrderConfirmationRoute: typeof OrderConfirmationRoute
   PrivacyRoute: typeof PrivacyRoute
   ReturnsRoute: typeof ReturnsRoute
   ShippingRoute: typeof ShippingRoute
@@ -248,6 +287,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AccountRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/cart': {
+      id: '/cart'
+      path: '/cart'
+      fullPath: '/cart'
+      preLoaderRoute: typeof CartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checkout': {
+      id: '/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof CheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/contact': {
       id: '/contact'
       path: '/contact'
@@ -260,6 +313,13 @@ declare module '@tanstack/react-router' {
       path: '/faqs'
       fullPath: '/faqs'
       preLoaderRoute: typeof FaqsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/order-confirmation': {
+      id: '/order-confirmation'
+      path: '/order-confirmation'
+      fullPath: '/order-confirmation'
+      preLoaderRoute: typeof OrderConfirmationRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/privacy': {
@@ -339,8 +399,11 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   AccountRoute: AccountRoute,
+  CartRoute: CartRoute,
+  CheckoutRoute: CheckoutRoute,
   ContactRoute: ContactRoute,
   FaqsRoute: FaqsRoute,
+  OrderConfirmationRoute: OrderConfirmationRoute,
   PrivacyRoute: PrivacyRoute,
   ReturnsRoute: ReturnsRoute,
   ShippingRoute: ShippingRoute,
