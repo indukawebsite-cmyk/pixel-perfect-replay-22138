@@ -35,7 +35,7 @@ export type Product = {
   featuredOrder?: number;
   description?: string;
   gallery?: ProductImage[];
-  variants?: ProductVariant[];
+  variants?: ProductVariant[] | undefined;
   specifications?: VerifiedSpecifications;
 };
 
