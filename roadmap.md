@@ -17,6 +17,8 @@ Remaining content: official catalogue/photos/prices, approved policies, contact/
 Shopping placeholders: illustrative INR prices and demo merchandising labels; official catalogue, specifications and secondary product photos awaiting supply. Demo bag is visit-only; real checkout and integrations remain disabled.
 
 # Product detail experience
-- [ ] Reusable gallery, product information, variants, quantity and accordions.
-- [ ] Existing bag/wishlist integration, related and visit-only recently viewed products.
-- [ ] Verify routing, gallery/zoom, variants, quantities and mobile layouts.
+- [x] Reusable gallery, product information, variants, quantity and accordions.
+- [x] Existing bag/wishlist integration, related and visit-only recently viewed products.
+- [x] Verify routing, gallery/zoom, variants, quantities and mobile layouts.
+
+Product-detail limitations: galleries currently use one sample photo plus its explicitly labelled crop; ring options are demo-only, not real variants. Verified specifications, real variants/photos/prices and approved shipping/return policies await supply. PIN checks validate format only; no checkout, payments or services connected.
