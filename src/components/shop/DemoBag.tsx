@@ -9,7 +9,7 @@ export function DemoBag({ onNavigate }: { onNavigate: () => void }) {
   return (
     <div className="flex flex-1 flex-col gap-6">
       <p className="border-y border-border py-4 text-sm leading-relaxed text-muted-foreground">
-        Demo bag only · Illustrative prices, no orders or payments. Contents last for this visit.
+        Demo bag only · Illustrative prices, no orders or payments. Contents stay in this tab across refreshes.
       </p>
       {!items.length ? (
         <div className="flex flex-1 flex-col items-center justify-center gap-5 py-12 text-center">
@@ -104,11 +104,11 @@ export function DemoBag({ onNavigate }: { onNavigate: () => void }) {
               <span className="text-lg font-medium">{formatPrice(cartTotal(items))}</span>
             </div>
             <p className="text-xs leading-relaxed text-muted-foreground">
-              Illustrative total only. Shipping, taxes and checkout are not available.
+              Illustrative total only. Demo checkout never creates a real order or payment.
             </p>
             <Button asChild variant="lux" size="xl">
-              <Link to="/shop" onClick={onNavigate}>
-                Continue browsing
+              <Link to="/cart" onClick={onNavigate}>
+                View demo bag
               </Link>
             </Button>
           </div>

@@ -17,6 +17,7 @@ import { SiteFooter } from "@/components/layout/SiteFooter";
 import { WishlistProvider } from "@/components/shop/WishlistProvider";
 import { CartProvider } from "@/components/shop/CartProvider";
 import { RecentlyViewedProvider } from "@/components/shop/RecentlyViewedProvider";
+import { DemoOrderProvider } from "@/components/shop/DemoOrderProvider";
 
 function NotFoundComponent() {
   return (
@@ -131,6 +132,7 @@ function RootComponent() {
       <WishlistProvider>
       <CartProvider>
       <RecentlyViewedProvider>
+      <DemoOrderProvider>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <a href="#main" className="sr-only focus:not-sr-only">Skip to content</a>
       <SiteHeader />
@@ -138,6 +140,7 @@ function RootComponent() {
         <Outlet />
       </main>
       <SiteFooter />
+      </DemoOrderProvider>
       </RecentlyViewedProvider>
       </CartProvider>
       </WishlistProvider>
