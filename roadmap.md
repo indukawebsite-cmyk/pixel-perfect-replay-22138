@@ -22,3 +22,9 @@ Shopping placeholders: illustrative INR prices and demo merchandising labels; of
 - [x] Verify routing, gallery/zoom, variants, quantities and mobile layouts.
 
 Product-detail limitations: galleries currently use one sample photo plus its explicitly labelled crop; ring options are demo-only, not real variants. Verified specifications, real variants/photos/prices and approved shipping/return policies await supply. PIN checks validate format only; no checkout, payments or services connected.
+
+# Demo cart and checkout
+- [ ] Full cart page with shared quantities, variants, removal and summary.
+- [ ] Demo coupon validation, illustrative shipping and validated customer/address fields.
+- [ ] Local demo confirmation snapshot without retaining customer information.
+- [ ] Verify full desktop/mobile flow and existing shopping routes.
