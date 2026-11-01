@@ -14,6 +14,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
+import { WishlistProvider } from "@/components/shop/WishlistProvider";
 
 function NotFoundComponent() {
   return (
@@ -125,6 +126,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <WishlistProvider>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <a href="#main" className="sr-only focus:not-sr-only">Skip to content</a>
       <SiteHeader />
@@ -132,6 +134,7 @@ function RootComponent() {
         <Outlet />
       </main>
       <SiteFooter />
+      </WishlistProvider>
     </QueryClientProvider>
   );
 }

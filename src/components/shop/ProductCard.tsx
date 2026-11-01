@@ -1,42 +1,46 @@
 import { Heart } from "lucide-react";
-import { useState } from "react";
+import { Link } from "@tanstack/react-router";
+import { Button } from "@/components/ui/button";
+import { useWishlist } from "@/components/shop/WishlistProvider";
 import { formatPrice, getCollection, type Product } from "@/lib/catalog";
 import { SampleBadge } from "@/components/brand/primitives";
 
 export function ProductCard({ product }: { product: Product }) {
-  const [saved, setSaved] = useState(false);
+  const { ids, toggle } = useWishlist();
+  const saved = ids.includes(product.id);
   const col = getCollection(product.collection);
   return (
     <article className="group flex flex-col">
       <div className="relative aspect-[4/5] overflow-hidden bg-muted">
+        <Link to="/products/$productId" params={{ productId: product.id }} aria-label={`View ${product.name}`} className="block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring">
         <img
           src={product.image}
           alt={`${product.name} — placeholder image`}
           loading="lazy"
           width={800}
           height={1000}
-          className="h-full w-full object-cover transition-transform duration-[1400ms] ease-[var(--ease-lux)] group-hover:scale-[1.04]"
+          className="h-full w-full object-cover object-center transition duration-1000 ease-[var(--ease-lux)] group-hover:scale-[1.025] group-hover:brightness-105 motion-reduce:transform-none motion-reduce:transition-none"
         />
+        </Link>
         <div className="absolute left-3 top-3 flex gap-2">
-          {product.tag && (
-            <span className="eyebrow bg-midnight px-2 py-1 text-[0.55rem] tracking-[0.2em] text-ivory">{product.tag}</span>
-          )}
           <SampleBadge />
         </div>
-        <button
+        <Button variant="ghost" size="icon"
           type="button"
-          onClick={() => setSaved((s) => !s)}
+          onClick={() => toggle(product.id)}
           aria-label={saved ? "Remove from wishlist" : "Add to wishlist"}
           aria-pressed={saved}
-          className="absolute right-3 top-3 grid h-9 w-9 place-items-center rounded-full bg-ivory/80 text-midnight backdrop-blur transition hover:bg-ivory"
+          title={saved ? "Remove from wishlist" : "Add to wishlist"}
+          className="absolute right-2 top-2 h-11 w-11 rounded-full bg-ivory/95 text-midnight backdrop-blur transition hover:bg-ivory"
         >
           <Heart className={`h-4 w-4 ${saved ? "fill-dusty-rose text-dusty-rose" : ""}`} strokeWidth={1.25} />
-        </button>
+        </Button>
       </div>
-      <div className="flex flex-col gap-1 pt-4">
-        {col && <span className="eyebrow text-[0.6rem] text-champagne">{col.name}</span>}
-        <h3 className="font-sans text-sm font-normal tracking-wide text-foreground">{product.name}</h3>
-        <p className="text-xs text-muted-foreground">925 Sterling Silver · {formatPrice(product.price)}</p>
+      <div className="flex min-w-0 flex-col gap-2 pt-5">
+        {col && <span className="eyebrow text-[0.6rem] text-cocoa">{col.name}</span>}
+        <h3 className="font-sans text-sm font-medium leading-relaxed text-foreground"><Link to="/products/$productId" params={{ productId: product.id }} className="hover:underline underline-offset-4">{product.name}</Link></h3>
+        <p className="text-sm font-normal leading-relaxed text-foreground">{formatPrice(product.price)}</p>
+        <p className="text-xs leading-relaxed text-muted-foreground">925 Sterling Silver</p>
       </div>
     </article>
   );
