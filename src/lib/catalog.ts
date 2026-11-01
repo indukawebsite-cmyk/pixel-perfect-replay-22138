@@ -25,6 +25,11 @@ export type Product = {
   price: number | null; // null until real pricing is supplied
   tag?: "New" | "Bestseller";
   isSample: true;
+  demoPrice?: number; // Illustrative INR value, never a real offer.
+  secondaryImage?: string; // Only supplied when a genuine second image is available.
+  edit?: string; // Demo merchandising label, not a product specification.
+  addedOn?: string;
+  featuredOrder?: number;
 };
 
 export const categories: Category[] = [
@@ -66,5 +71,29 @@ export const sampleProducts: Product[] = ([
 }));
 
 export const getCollection = (slug: string) => collections.find((c) => c.slug === slug);
+
+// SHOPPING DEMO ONLY — fictional names and illustrative prices for interaction testing.
+// Existing homepage sample rows above remain unchanged. No stock or purity assertions.
+export const demoProducts: Product[] = collections.flatMap((collection, collectionIndex) =>
+  categories.map((category, categoryIndex) => ({
+    id: `demo-${collection.slug}-${category.slug}`,
+    name: `Demo ${collection.name} ${category.name}`,
+    category: category.slug,
+    collection: collection.slug,
+    image: category.image,
+    price: null,
+    demoPrice: [1200, 1800, 2400, 3200][categoryIndex] + collectionIndex * 250,
+    edit: ["Minimal", "Celestial", "Statement", "Gifting"][(collectionIndex + categoryIndex) % 4],
+    addedOn: `2026-10-${String(collectionIndex * 4 + categoryIndex + 1).padStart(2, "0")}`,
+    featuredOrder: collectionIndex * 4 + categoryIndex,
+    isSample: true as const,
+  })),
+);
+
+export const browsingProducts = [...sampleProducts, ...demoProducts];
+export const getProduct = (id: string) => browsingProducts.find((product) => product.id === id);
+export const productPriceLabel = (product: Product) => product.demoPrice === undefined
+  ? formatPrice(product.price)
+  : `${formatPrice(product.demoPrice)} · Demo price`;
 export const formatPrice = (p: number | null) =>
   p === null ? "Price to be announced" : `₹${p.toLocaleString("en-IN")}`;
