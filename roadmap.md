@@ -15,3 +15,8 @@ Remaining content: official catalogue/photos/prices, approved policies, contact/
 - [x] Verify filters, sorting, wishlist, cart navigation and responsive layouts.
 
 Shopping placeholders: illustrative INR prices and demo merchandising labels; official catalogue, specifications and secondary product photos awaiting supply. Demo bag is visit-only; real checkout and integrations remain disabled.
+
+# Product detail experience
+- [ ] Reusable gallery, product information, variants, quantity and accordions.
+- [ ] Existing bag/wishlist integration, related and visit-only recently viewed products.
+- [ ] Verify routing, gallery/zoom, variants, quantities and mobile layouts.
