@@ -21,8 +21,8 @@ function About() {
       <section className="container-lux flex max-w-2xl flex-col items-center gap-8 py-20 text-center">
         <Logo variant="emblem" className="w-16" />
         <p className="font-display text-3xl leading-snug">For women who want jewellery with meaning — moon-inspired pieces that arrive gift-ready and are made to be kept.</p>
-        <p className="text-muted-foreground">
-          Real 925 silver. Meaningful design. An unboxing worth keeping. Every order includes a signed certificate of authenticity, a care guide and a gift-ready box.
+        <p className="text-base leading-loose text-muted-foreground">
+          Wear the moon. Inspired by Indu — the Sanskrit word for moon — House of Induka celebrates quiet light and meaningful design in 925 sterling silver.
         </p>
       </section>
     </>

@@ -39,9 +39,9 @@ function CollectionPage() {
       <div className="absolute inset-0 bg-gradient-to-t from-midnight via-midnight/60 to-midnight/20" />
       <div className="container-lux relative flex min-h-[70vh] flex-col items-center justify-center gap-6 py-24 text-center">
         <span className="eyebrow text-soft-gold">{c.meaning}</span>
-        <h1 className="text-6xl tracking-[0.12em] uppercase md:text-8xl">{c.name}</h1>
+        <h1 className="max-w-full text-4xl leading-tight uppercase sm:text-6xl md:text-7xl">{c.name}</h1>
         <p className="editorial text-xl text-soft-gold">{c.focus}</p>
-        <p className="max-w-md text-sm text-ivory/60">This collection is in the making. Its first pieces will appear here at launch.</p>
+        <p className="max-w-md text-sm text-ivory/85">This collection is in the making. Its first pieces will appear here at launch.</p>
         <Button asChild variant="luxLight" size="xl"><Link to="/collections">All collections</Link></Button>
       </div>
     </section>
