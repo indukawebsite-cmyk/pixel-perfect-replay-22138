@@ -45,7 +45,7 @@ export const collections: Collection[] = [
 
 const img: Record<string, string> = { earrings, rings, necklaces, bracelets };
 
-export const sampleProducts: Product[] = [
+export const sampleProducts: Product[] = ([
   ["Sample Crescent Stud", "earrings", "ardh-chandra", "Bestseller"],
   ["Sample Moon Pendant", "necklaces", "chandni", "Bestseller"],
   ["Sample Stacking Band", "rings", "chandni", "Bestseller"],
@@ -54,14 +54,14 @@ export const sampleProducts: Product[] = [
   ["Sample Layering Chain", "necklaces", "nakshatra", "New"],
   ["Sample Pavé Band", "rings", "tara", "New"],
   ["Sample Fine Chain Bracelet", "bracelets", "chandni", "New"],
-].map(([name, category, collection, tag], i) => ({
+] as const).map(([name, category, collection, tag], i) => ({
   id: `sample-${i + 1}`,
   name,
   category,
   collection,
   image: img[category],
   price: null,
-  tag: tag as Product["tag"],
+  tag,
   isSample: true as const,
 }));
 
