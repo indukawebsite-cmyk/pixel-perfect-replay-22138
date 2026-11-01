@@ -1,121 +1,55 @@
 import { Link } from "@tanstack/react-router";
-import { Menu, Search, ShoppingBag, User, X } from "lucide-react";
-import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { Heart, Menu, Search, ShoppingBag, User, X } from "lucide-react";
+import { useEffect, useState, type ReactNode } from "react";
+import * as Dialog from "@radix-ui/react-dialog";
 import { Logo } from "@/components/brand/Logo";
+import { Button } from "@/components/ui/button";
 import { collections } from "@/lib/catalog";
+import { searchProducts } from "@/lib/catalog-search";
+import { useWishlist } from "@/components/shop/WishlistProvider";
 
-const nav = [
-  { to: "/shop", label: "Shop" },
-  { to: "/collections", label: "Collections" },
-  { to: "/about", label: "Our Story" },
-] as const;
+const nav = [{ to: "/shop", label: "Shop" }, { to: "/collections", label: "Collections" }, { to: "/about", label: "Our Story" }] as const;
 
 export function SiteHeader() {
-  const [open, setOpen] = useState(false);
-  const [panel, setPanel] = useState<null | "cart" | "search">(null);
+  const [panel, setPanel] = useState<null | "menu" | "cart" | "search">(null);
+  const [query, setQuery] = useState("");
   const [scrolled, setScrolled] = useState(false);
+  const { ids } = useWishlist();
+  const results = searchProducts(query);
   useEffect(() => {
     const on = () => setScrolled(window.scrollY > 8);
     on();
     window.addEventListener("scroll", on, { passive: true });
     return () => window.removeEventListener("scroll", on);
   }, []);
-
-  return (
-    <>
-      <div className="bg-midnight py-2.5 text-center">
-        <p className="eyebrow text-[0.6rem] text-soft-gold">925 Sterling Silver · Gift-ready packaging with every order</p>
-      </div>
-      <header
-        className={`sticky top-0 z-40 border-b transition-colors duration-500 ${scrolled ? "border-border bg-ivory/95 backdrop-blur" : "border-transparent bg-ivory"}`}
-      >
-        <div className="container-lux grid h-20 grid-cols-[1fr_auto_1fr] items-center">
-          <nav className="hidden items-center gap-8 lg:flex" aria-label="Primary">
-            {nav.map((n) => (
-              <Link key={n.to} to={n.to} className="eyebrow link-lux text-[0.65rem] text-foreground" activeProps={{ className: "text-champagne" }}>
-                {n.label}
-              </Link>
-            ))}
-          </nav>
-          <button className="lg:hidden" aria-label="Open menu" onClick={() => setOpen(true)}>
-            <Menu className="h-5 w-5" strokeWidth={1.25} />
-          </button>
-          <Link to="/" aria-label="INDUKA home" className="justify-self-center">
-            <Logo variant="wordmark" className="w-32 md:w-40" />
-          </Link>
-          <div className="flex items-center justify-end gap-5">
-            <button aria-label="Search" onClick={() => setPanel("search")}><Search className="h-[18px] w-[18px]" strokeWidth={1.25} /></button>
-            <Link to="/account" aria-label="Account" className="hidden sm:block"><User className="h-[18px] w-[18px]" strokeWidth={1.25} /></Link>
-            <button aria-label="Cart, 0 items" onClick={() => setPanel("cart")}><ShoppingBag className="h-[18px] w-[18px]" strokeWidth={1.25} /></button>
-          </div>
+  const close = () => setPanel(null);
+  return <>
+    <div className="bg-midnight px-4 py-2.5 text-center"><p className="eyebrow text-[0.55rem] leading-relaxed text-soft-gold">925 Sterling Silver · Gift-ready packaging with every order</p></div>
+    <header className={`sticky top-0 z-40 border-b transition-colors duration-500 ${scrolled ? "border-border bg-ivory/95 backdrop-blur" : "border-transparent bg-ivory"}`}>
+      <div className="container-lux grid h-20 grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-1">
+        <nav className="hidden min-w-0 items-center gap-6 lg:flex" aria-label="Primary">{nav.map((n) => <Link key={n.to} to={n.to} className="eyebrow link-lux text-[0.65rem]" activeProps={{ className: "text-cocoa underline underline-offset-8" }}>{n.label}</Link>)}</nav>
+        <Button variant="ghost" size="icon" className="h-11 w-11 justify-self-start lg:hidden" aria-label="Open menu" onClick={() => setPanel("menu")}><Menu strokeWidth={1.25} /></Button>
+        <Link to="/" aria-label="INDUKA home" className="justify-self-center"><Logo variant="wordmark" className="w-28 sm:w-36 md:w-40" /></Link>
+        <div className="flex min-w-0 items-center justify-end gap-0 sm:gap-2">
+          <Button variant="ghost" size="icon" className="h-11 w-10 shrink-0" aria-label="Search" onClick={() => setPanel("search")}><Search strokeWidth={1.25} /></Button>
+          <Button asChild variant="ghost" size="icon" className="hidden h-11 w-11 shrink-0 sm:inline-flex"><Link to="/account" aria-label="Account"><User strokeWidth={1.25} /></Link></Button>
+          <Button variant="ghost" size="icon" className="h-11 w-10 shrink-0" aria-label="Cart, 0 items" onClick={() => setPanel("cart")}><ShoppingBag strokeWidth={1.25} /></Button>
         </div>
-      </header>
-
-      <AnimatePresence>
-        {open && (
-          <Drawer side="left" onClose={() => setOpen(false)} title="Menu">
-            <nav className="flex flex-col gap-6" aria-label="Mobile">
-              {nav.map((n) => (
-                <Link key={n.to} to={n.to} onClick={() => setOpen(false)} className="font-display text-3xl">{n.label}</Link>
-              ))}
-              <div className="hairline my-2" />
-              <span className="eyebrow text-champagne">Collections</span>
-              {collections.map((c) => (
-                <Link key={c.slug} to="/collections/$slug" params={{ slug: c.slug }} onClick={() => setOpen(false)} className="text-sm tracking-[0.2em] uppercase">
-                  {c.name}
-                </Link>
-              ))}
-              <Link to="/account" onClick={() => setOpen(false)} className="text-sm tracking-[0.2em] uppercase">Account</Link>
-            </nav>
-          </Drawer>
-        )}
-        {panel === "cart" && (
-          <Drawer side="right" onClose={() => setPanel(null)} title="Your bag">
-            <div className="flex flex-1 flex-col items-center justify-center gap-4 text-center">
-              <ShoppingBag className="h-8 w-8 text-champagne" strokeWidth={1} />
-              <p className="font-display text-2xl">Your bag is empty</p>
-              <p className="text-sm text-muted-foreground">Our first pieces are on their way.</p>
-              <Link to="/shop" onClick={() => setPanel(null)} className="eyebrow link-lux mt-2 text-[0.65rem]">Browse the shop</Link>
-            </div>
-          </Drawer>
-        )}
-        {panel === "search" && (
-          <Drawer side="right" onClose={() => setPanel(null)} title="Search">
-            <label className="flex items-center gap-3 border-b border-foreground pb-3">
-              <Search className="h-4 w-4" strokeWidth={1.25} />
-              <input autoFocus placeholder="Search jewellery" className="w-full bg-transparent text-sm outline-none placeholder:text-muted-foreground" />
-            </label>
-            <p className="mt-6 text-sm text-muted-foreground">Search becomes available when the catalogue launches.</p>
-          </Drawer>
-        )}
-      </AnimatePresence>
-    </>
-  );
+      </div>
+    </header>
+    <Drawer open={panel !== null} side={panel === "menu" ? "left" : "right"} onClose={close} title={panel === "menu" ? "Menu" : panel === "cart" ? "Your bag" : "Search"}>
+      {panel === "menu" && <nav className="flex flex-col gap-5" aria-label="Mobile">{nav.map((n) => <Link key={n.to} to={n.to} onClick={close} className="font-display text-3xl">{n.label}</Link>)}<div className="hairline my-2" /><span className="eyebrow text-cocoa">Collections</span>{collections.map((c) => <Link key={c.slug} to="/collections/$slug" params={{ slug: c.slug }} onClick={close} className="py-1 text-sm uppercase">{c.name}</Link>)}<Link to="/account" onClick={close} className="flex items-center gap-3 py-2 text-sm"><User className="h-4 w-4" />Account</Link><Link to="/wishlist" onClick={close} className="flex items-center gap-3 py-2 text-sm"><Heart className="h-4 w-4" />Wishlist ({ids.length})</Link></nav>}
+      {panel === "cart" && <div className="flex flex-1 flex-col items-center justify-center gap-5 text-center"><ShoppingBag className="h-8 w-8 text-cocoa" strokeWidth={1} /><p className="font-display text-3xl">Your bag is empty</p><p className="max-w-xs text-sm leading-relaxed text-muted-foreground">Our catalogue is not available to purchase yet. Sample pieces cannot be added to your bag.</p><Button asChild variant="lux" size="xl"><Link to="/shop" onClick={close}>Browse the shop</Link></Button><Link to="/wishlist" onClick={close} className="mt-3 text-sm underline underline-offset-4">Your wishlist ({ids.length})</Link></div>}
+      {panel === "search" && <>
+        <label className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-3 border-b border-foreground pb-3"><Search className="h-4 w-4" /><span className="sr-only">Search jewellery</span><input autoFocus value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search jewellery or collections" className="min-w-0 bg-transparent py-2 text-base outline-none placeholder:text-muted-foreground" /></label>
+        <p role="status" className="my-6 text-xs leading-relaxed text-muted-foreground">{query.trim() ? `${results.length} sample ${results.length === 1 ? "piece" : "pieces"} found` : "Explore sample pieces · Real catalogue coming soon"}</p>
+        {results.length === 0 && <div className="py-8"><h2 className="text-2xl">No pieces found</h2><p className="mt-3 text-sm text-muted-foreground">Try a category such as rings or a collection such as Chandni.</p><Button variant="link" onClick={() => setQuery("")}>Clear search</Button></div>}
+        <div className="flex flex-col gap-5">{results.map((product) => <Link key={product.id} to="/products/$productId" params={{ productId: product.id }} onClick={close} className="grid grid-cols-[4rem_minmax(0,1fr)] items-center gap-4"><img src={product.image} alt="Sample jewellery" className="aspect-[4/5] w-full object-cover" /><div className="min-w-0"><p className="text-sm font-medium leading-relaxed">{product.name}</p><p className="mt-1 text-xs text-muted-foreground">Price to be announced</p></div></Link>)}</div>
+      </>}
+    </Drawer>
+  </>;
 }
 
-function Drawer({ side, onClose, title, children }: { side: "left" | "right"; onClose: () => void; title: string; children: React.ReactNode }) {
-  useEffect(() => {
-    const k = (e: KeyboardEvent) => e.key === "Escape" && onClose();
-    window.addEventListener("keydown", k);
-    return () => window.removeEventListener("keydown", k);
-  }, [onClose]);
-  return (
-    <div className="fixed inset-0 z-50" role="dialog" aria-modal="true" aria-label={title}>
-      <motion.div className="absolute inset-0 bg-midnight/40" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} />
-      <motion.aside
-        initial={{ x: side === "left" ? "-100%" : "100%" }}
-        animate={{ x: 0 }}
-        exit={{ x: side === "left" ? "-100%" : "100%" }}
-        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        className={`absolute top-0 ${side === "left" ? "left-0" : "right-0"} flex h-full w-[88%] max-w-md flex-col bg-ivory p-8`}
-      >
-        <div className="mb-10 flex items-center justify-between">
-          <span className="eyebrow text-[0.65rem]">{title}</span>
-          <button onClick={onClose} aria-label="Close"><X className="h-5 w-5" strokeWidth={1.25} /></button>
-        </div>
-        {children}
-      </motion.aside>
-    </div>
-  );
+function Drawer({ open, side, onClose, title, children }: { open: boolean; side: "left" | "right"; onClose: () => void; title: string; children: ReactNode }) {
+  return <Dialog.Root open={open} onOpenChange={(next) => { if (!next) onClose(); }}><Dialog.Portal><Dialog.Overlay className="fixed inset-0 z-50 bg-midnight/40 backdrop-blur-sm" /><Dialog.Content aria-describedby={undefined} className={`fixed inset-y-0 z-50 flex w-[92%] max-w-md flex-col overflow-y-auto bg-ivory p-6 outline-none sm:p-8 ${side === "left" ? "left-0" : "right-0"}`}><div className="mb-8 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4"><Dialog.Title className="eyebrow">{title}</Dialog.Title><Dialog.Close asChild><Button variant="ghost" size="icon" className="h-11 w-11" aria-label="Close"><X strokeWidth={1.25} /></Button></Dialog.Close></div>{children}</Dialog.Content></Dialog.Portal></Dialog.Root>;
 }

@@ -13,11 +13,15 @@ export function SiteFooter() {
             Moon-inspired 925 sterling silver jewellery, designed in India and made to be kept.
           </p>
         </div>
-        <FooterCol title="Shop">
-          <Link to="/shop">All jewellery</Link>
-          <Link to="/collections">All collections</Link>
+        <FooterCol title="Customer care">
+          <Link to="/contact">Contact</Link>
+          <Link to="/faqs">FAQs</Link>
+          <Link to="/shipping">Shipping</Link>
+          <Link to="/returns">Returns</Link>
         </FooterCol>
         <FooterCol title="Collections">
+          <Link to="/shop">All jewellery</Link>
+          <Link to="/collections">All collections</Link>
           {collections.map((c) => (
             <Link key={c.slug} to="/collections/$slug" params={{ slug: c.slug }}>{c.name}</Link>
           ))}
@@ -26,6 +30,10 @@ export function SiteFooter() {
           <Link to="/about">Our story</Link>
           <Link to="/contact">Contact</Link>
           <Link to="/account">Account</Link>
+          <Link to="/wishlist">Wishlist</Link>
+          <Link to="/social">Instagram</Link>
+          <Link to="/privacy">Privacy</Link>
+          <Link to="/terms">Terms</Link>
         </FooterCol>
       </div>
       <div className="border-t border-ivory/10">
@@ -40,7 +48,7 @@ export function SiteFooter() {
 
 function FooterCol({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="flex flex-col gap-3 text-sm text-ivory/70 [&_a:hover]:text-soft-gold [&_a]:transition-colors">
+    <div className="flex min-w-0 flex-col gap-3 text-sm text-ivory/85 [&_a:hover]:text-soft-gold [&_a]:py-1 [&_a]:transition-colors">
       <span className="eyebrow mb-2 text-[0.6rem] text-champagne">{title}</span>
       {children}
     </div>

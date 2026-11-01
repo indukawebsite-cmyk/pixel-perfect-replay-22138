@@ -6,7 +6,7 @@ export function CollectionCard({ collection, index }: { collection: Collection; 
     <Link
       to="/collections/$slug"
       params={{ slug: collection.slug }}
-      className="group relative block aspect-[3/4] overflow-hidden bg-midnight"
+       className="group relative block aspect-[3/4] overflow-hidden bg-midnight focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
     >
       <img
         src={collection.image}
@@ -14,16 +14,16 @@ export function CollectionCard({ collection, index }: { collection: Collection; 
         loading="lazy"
         width={800}
         height={1000}
-        className="h-full w-full object-cover object-[70%_center] opacity-80 transition duration-[1400ms] ease-[var(--ease-lux)] group-hover:scale-105 group-hover:opacity-60"
+        className={`h-full w-full object-cover transition duration-1000 ease-[var(--ease-lux)] group-hover:scale-[1.025] motion-reduce:transform-none motion-reduce:transition-none ${collection.slug === "ardh-chandra" ? "object-right" : "object-center"}`}
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-midnight/85 via-midnight/10 to-transparent" />
-      <div className="absolute inset-x-0 bottom-0 flex flex-col gap-2 p-6 text-ivory">
+      <div className="absolute inset-0 bg-gradient-to-t from-midnight via-midnight/35 to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 flex min-h-48 flex-col justify-end gap-3 bg-gradient-to-t from-midnight via-midnight/85 to-transparent p-6 text-ivory">
         <span className="eyebrow text-[0.6rem] text-soft-gold">
           {String(index + 1).padStart(2, "0")} · {collection.meaning}
         </span>
-        <h3 className="text-3xl tracking-[0.12em] uppercase">{collection.name}</h3>
-        <p className="max-w-xs text-sm text-ivory/75">{collection.focus}</p>
-        <span className="eyebrow mt-2 text-[0.6rem] text-ivory/70">Coming soon</span>
+        <h3 className="text-3xl leading-tight uppercase">{collection.name}</h3>
+        <p className="max-w-xs text-sm leading-relaxed text-ivory/90">{collection.focus}</p>
+        <span className="eyebrow mt-1 text-[0.6rem] text-soft-gold">Explore collection →</span>
       </div>
     </Link>
   );

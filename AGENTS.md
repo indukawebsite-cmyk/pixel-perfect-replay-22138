@@ -11,3 +11,5 @@
 
 - Catalogue data lives in `src/lib/catalog.ts` as clearly marked sample data until it moves to the database; components read through it so the source can be swapped.
 - Official logo variants are served only via `src/components/brand/Logo.tsx` (CDN asset pointers) so the brand mark is never re-drawn.
+- Wishlist state is shared in a visit-scoped React provider, without persistent storage or backend services, so sample browsing never implies an account or saved subscription.
+- Customer-care and policy routes reuse InformationPage; missing approved policies remain explicit placeholders rather than invented business terms.
