@@ -4,11 +4,96 @@ import { Button } from "@/components/ui/button";
 import { formatPrice, getProduct } from "@/lib/catalog";
 import type { CartItem } from "@/lib/demo-cart";
 import { validQuantity } from "@/lib/product-detail";
-export function CartLines({ items, onQuantity }: { items: CartItem[]; onQuantity?: ((id: string, quantity: number, variantId?: string) => void) | undefined }) {
-  return <div className="divide-y divide-border">{items.map((item) => {
-    const product = getProduct(item.productId); if (!product) return null;
-    const variant = product.variants?.find((option) => option.id === item.variantId);
-    const label = `${product.name}${variant ? ` · ${variant.label}` : ""}`;
-    return <article key={`${item.productId}-${item.variantId ?? "default"}`} className="grid grid-cols-[5rem_minmax(0,1fr)] gap-4 py-6 md:grid-cols-[7rem_minmax(0,1fr)] md:gap-6"><Link to="/products/$productId" params={{ productId: product.id }}><img src={product.image} alt={`${product.name} — sample image`} className="aspect-[4/5] w-full object-cover" /></Link><div className="min-w-0"><Link to="/products/$productId" params={{ productId: product.id }} className="text-sm font-medium leading-relaxed">{product.name}</Link>{variant && <p className="mt-2 text-xs text-muted-foreground">{variant.label}</p>}<p className="mt-2 text-xs text-muted-foreground">{formatPrice(product.demoPrice ?? null)} · Demo unit price</p>{onQuantity ? <div className="mt-4 flex flex-wrap items-center justify-between gap-3"><div className="flex h-11 items-center border border-border"><Button variant="ghost" size="icon" className="h-10 w-10" aria-label={`Decrease ${label}`} disabled={item.quantity <= 1} onClick={() => onQuantity(product.id, item.quantity - 1, item.variantId)}><Minus /></Button><output aria-label={`Quantity of ${label}`} className="min-w-8 px-1 text-center text-sm">{item.quantity}</output><Button variant="ghost" size="icon" className="h-10 w-10" aria-label={`Increase ${label}`} disabled={!validQuantity(item.quantity + 1)} onClick={() => onQuantity(product.id, item.quantity + 1, item.variantId)}><Plus /></Button></div><Button variant="ghost" size="icon" className="h-11 w-11" aria-label={`Remove ${label}`} title="Remove item" onClick={() => onQuantity(product.id, 0, item.variantId)}><Trash2 /></Button></div> : <p className="mt-3 text-xs">Quantity: {item.quantity}</p>}<p className="mt-3 text-sm font-medium">{formatPrice((product.demoPrice ?? 0) * item.quantity)} <span className="text-xs font-normal text-muted-foreground">· Demo line total</span></p></div></article>;
-  })}</div>;
+export function CartLines({
+  items,
+  onQuantity,
+}: {
+  items: CartItem[];
+  onQuantity?: ((id: string, quantity: number, variantId?: string) => void) | undefined;
+}) {
+  return (
+    <div className="divide-y divide-border">
+      {items.map((item) => {
+        const product = getProduct(item.productId);
+        if (!product) return null;
+        const variant = product.variants?.find((option) => option.id === item.variantId);
+        const label = `${product.name}${variant ? ` · ${variant.label}` : ""}`;
+        return (
+          <article
+            key={`${item.productId}-${item.variantId ?? "default"}`}
+            className="grid grid-cols-[5rem_minmax(0,1fr)] gap-4 py-6 md:grid-cols-[7rem_minmax(0,1fr)] md:gap-6"
+          >
+            <Link to="/products/$productId" params={{ productId: product.id }}>
+              <img
+                src={product.image}
+                alt={`${product.name} — sample image`}
+                className="aspect-[4/5] w-full object-cover"
+              />
+            </Link>
+            <div className="min-w-0">
+              <Link
+                to="/products/$productId"
+                params={{ productId: product.id }}
+                className="text-sm font-medium leading-relaxed"
+              >
+                {product.name}
+              </Link>
+              {variant && <p className="mt-2 text-xs text-muted-foreground">{variant.label}</p>}
+              <p className="mt-2 text-xs text-muted-foreground">
+                {formatPrice(product.demoPrice ?? null)} · Demo unit price
+              </p>
+              {onQuantity ? (
+                <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+                  <div className="flex h-11 items-center border border-border">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-10 w-10"
+                      aria-label={`Decrease ${label}`}
+                      disabled={item.quantity <= 1}
+                      onClick={() => onQuantity(product.id, item.quantity - 1, item.variantId)}
+                    >
+                      <Minus />
+                    </Button>
+                    <output
+                      aria-label={`Quantity of ${label}`}
+                      className="min-w-8 px-1 text-center text-sm"
+                    >
+                      {item.quantity}
+                    </output>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-10 w-10"
+                      aria-label={`Increase ${label}`}
+                      disabled={!validQuantity(item.quantity + 1)}
+                      onClick={() => onQuantity(product.id, item.quantity + 1, item.variantId)}
+                    >
+                      <Plus />
+                    </Button>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-11 w-11"
+                    aria-label={`Remove ${label}`}
+                    title="Remove item"
+                    onClick={() => onQuantity(product.id, 0, item.variantId)}
+                  >
+                    <Trash2 />
+                  </Button>
+                </div>
+              ) : (
+                <p className="mt-3 text-xs">Quantity: {item.quantity}</p>
+              )}
+              <p className="mt-3 text-sm font-medium">
+                {formatPrice((product.demoPrice ?? 0) * item.quantity)}{" "}
+                <span className="text-xs font-normal text-muted-foreground">· Demo line total</span>
+              </p>
+            </div>
+          </article>
+        );
+      })}
+    </div>
+  );
 }

@@ -13,16 +13,30 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const [ready, setReady] = useState(false);
   useEffect(() => {
-    try { const stored = sessionStorage.getItem(DEMO_BAG_KEY); if (stored) setItems(restoreDemoBag(JSON.parse(stored))); } catch { /* Storage unavailable or invalid: keep an empty demo bag. */ }
+    try {
+      const stored = sessionStorage.getItem(DEMO_BAG_KEY);
+      if (stored) setItems(restoreDemoBag(JSON.parse(stored)));
+    } catch {
+      /* Storage unavailable or invalid: keep an empty demo bag. */
+    }
     setReady(true);
   }, []);
-  useEffect(() => { if (!ready) return; try { sessionStorage.setItem(DEMO_BAG_KEY, JSON.stringify(items)); } catch { /* Browsing still works without storage. */ } }, [items, ready]);
+  useEffect(() => {
+    if (!ready) return;
+    try {
+      sessionStorage.setItem(DEMO_BAG_KEY, JSON.stringify(items));
+    } catch {
+      /* Browsing still works without storage. */
+    }
+  }, [items, ready]);
   const add = (id: string, quantity = 1, variantId?: string) =>
     setItems((current) => addCartItem(current, id, quantity, variantId));
   const setQuantity = (id: string, quantity: number, variantId?: string) =>
     setItems((current) => setCartQuantity(current, id, quantity, variantId));
   return (
-    <CartContext.Provider value={{ items, ready, add, setQuantity, clear: () => setItems([]) }}>{children}</CartContext.Provider>
+    <CartContext.Provider value={{ items, ready, add, setQuantity, clear: () => setItems([]) }}>
+      {children}
+    </CartContext.Provider>
   );
 }
 export function useCart() {
