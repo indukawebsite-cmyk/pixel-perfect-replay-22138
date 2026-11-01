@@ -108,7 +108,7 @@ function Drawer({ side, onClose, title, children }: { side: "left" | "right"; on
         animate={{ x: 0 }}
         exit={{ x: side === "left" ? "-100%" : "100%" }}
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        className={`absolute top-0 ${side}-0 flex h-full w-[88%] max-w-md flex-col bg-ivory p-8`}
+        className={`absolute top-0 ${side === "left" ? "left-0" : "right-0"} flex h-full w-[88%] max-w-md flex-col bg-ivory p-8`}
       >
         <div className="mb-10 flex items-center justify-between">
           <span className="eyebrow text-[0.65rem]">{title}</span>
