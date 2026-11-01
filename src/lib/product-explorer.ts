@@ -4,7 +4,7 @@ export const sortOptions = [
   { value: "featured", label: "Featured" }, { value: "newest", label: "Newest" },
   { value: "price-asc", label: "Price Low to High" }, { value: "price-desc", label: "Price High to Low" },
 ] as const;
-export type ExplorerSearch = { category?: string; q?: string; min?: number; max?: number; edit?: string; sort?: string; shown?: number };
+export type ExplorerSearch = { category?: string | undefined; q?: string | undefined; min?: number | undefined; max?: number | undefined; edit?: string | undefined; sort?: string | undefined; shown?: number | undefined };
 export const PAGE_SIZE = 12;
 export function validateExplorerSearch(search: Record<string, unknown>): ExplorerSearch {
   const text = (key: string) => typeof search[key] === "string" ? search[key] : undefined;
