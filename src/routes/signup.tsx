@@ -60,7 +60,11 @@ function SignUpPage() {
                 tone: "error",
                 text: /weak|pwned|leaked/i.test(error.message)
                   ? "This password is too common. Please choose a stronger one."
-                  : "We couldn't create your account. Please check your details and try again.",
+                  : /not allowed|invalid/i.test(error.message)
+                    ? "Please use a real email address you can receive mail at."
+                    : /registered|exists/i.test(error.message)
+                      ? "An account with this email already exists. Please sign in."
+                      : "We couldn't create your account. Please check your details and try again.",
               });
             setMessage({
               tone: "info",
