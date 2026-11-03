@@ -8,7 +8,7 @@ import { fieldErrors, safeRedirect, signInSchema } from "@/lib/auth-validation";
 
 export const Route = createFileRoute("/auth")({
   validateSearch: (search: Record<string, unknown>): { redirect?: string } =>
-    typeof search.redirect === "string" ? { redirect: search.redirect } : {},
+    typeof search["redirect"] === "string" ? { redirect: search["redirect"] } : {},
   head: () => authHead("Sign in", "Sign in to your House of Induka account."),
   component: SignInPage,
 });
