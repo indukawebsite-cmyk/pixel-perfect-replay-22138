@@ -32,6 +32,11 @@ describe("App routing", () => {
     "/cart",
     "/checkout",
     "/order-confirmation",
+    "/auth",
+    "/signup",
+    "/forgot-password",
+    "/reset-password",
+    "/admin",
   ])("matches the linked destination %s", (path) => {
     const router = createRouter({ routeTree, context: { queryClient: new QueryClient() } });
     const match = router.matchRoutes(path).at(-1);
