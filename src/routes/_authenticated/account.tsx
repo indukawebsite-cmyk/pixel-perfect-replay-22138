@@ -98,8 +98,8 @@ function AccountPage() {
             >
               {saved && <AuthMessage tone="info">Your details are saved.</AuthMessage>}
               {save.isError && <AuthMessage tone="error">We couldn't save your details. Please try again.</AuthMessage>}
-              <AuthField id="full_name" label="Full name" defaultValue={customer.data?.full_name ?? ""} maxLength={100} error={errors.full_name} />
-              <AuthField id="phone" label="Mobile number (optional)" inputMode="tel" defaultValue={customer.data?.phone ?? ""} maxLength={10} error={errors.phone} />
+              <AuthField id="full_name" label="Full name" defaultValue={customer.data?.full_name ?? ""} maxLength={100} error={errors["full_name"]} />
+              <AuthField id="phone" label="Mobile number (optional)" inputMode="tel" defaultValue={customer.data?.phone ?? ""} maxLength={10} error={errors["phone"]} />
               <Button variant="lux" type="submit" disabled={save.isPending}>
                 {save.isPending ? "Saving…" : "Save details"}
               </Button>

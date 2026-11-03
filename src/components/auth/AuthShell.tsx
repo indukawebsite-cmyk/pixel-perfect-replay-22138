@@ -29,7 +29,7 @@ export function AuthField({
   label,
   error,
   ...props
-}: { id: string; label: string; error?: string } & InputHTMLAttributes<HTMLInputElement>) {
+}: { id: string; label: string; error?: string | undefined } & InputHTMLAttributes<HTMLInputElement>) {
   return (
     <div>
       <label htmlFor={id} className="mb-2 block text-xs font-medium">

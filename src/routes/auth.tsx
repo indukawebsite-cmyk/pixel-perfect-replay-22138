@@ -59,8 +59,8 @@ function SignInPage() {
         }}
       >
         {message && <AuthMessage tone="error">{message}</AuthMessage>}
-        <AuthField id="email" label="Email" type="email" autoComplete="email" maxLength={255} error={errors.email} />
-        <AuthField id="password" label="Password" type="password" autoComplete="current-password" maxLength={72} error={errors.password} />
+        <AuthField id="email" label="Email" type="email" autoComplete="email" maxLength={255} error={errors["email"]} />
+        <AuthField id="password" label="Password" type="password" autoComplete="current-password" maxLength={72} error={errors["password"]} />
         <div className="text-right text-sm">
           <Link to="/forgot-password" className="underline underline-offset-4">
             Forgot password?

@@ -69,9 +69,9 @@ function SignUpPage() {
           }}
         >
           {message && <AuthMessage tone="error">{message.text}</AuthMessage>}
-          <AuthField id="fullName" label="Full name" autoComplete="name" maxLength={100} error={errors.fullName} />
-          <AuthField id="email" label="Email" type="email" autoComplete="email" maxLength={255} error={errors.email} />
-          <AuthField id="password" label="Password (8+ characters)" type="password" autoComplete="new-password" maxLength={72} error={errors.password} />
+          <AuthField id="fullName" label="Full name" autoComplete="name" maxLength={100} error={errors["fullName"]} />
+          <AuthField id="email" label="Email" type="email" autoComplete="email" maxLength={255} error={errors["email"]} />
+          <AuthField id="password" label="Password (8+ characters)" type="password" autoComplete="new-password" maxLength={72} error={errors["password"]} />
           <Button variant="lux" type="submit" className="h-13 w-full" disabled={busy}>
             {busy ? "Creating…" : "Create account"}
             <ArrowRight />
