@@ -21,3 +21,4 @@
 - Recently viewed products use a root visit-scoped provider without browser storage; image magnification uses react-zoom-pan-pinch in an accessible gallery dialog.
 - Cart, checkout and confirmation reuse CartLines, OrderSummary and shared cart operations; demo totals/coupons/customer validation live in demo-checkout.ts with Zod and no server or service calls.
 - Demo confirmations use a root memory-only provider with item/total snapshots; customer details are validated again at confirmation creation but never retained, transmitted or placed in URLs/storage.
+- Production schema: catalogue tables are public-read only when active; orders/items/payments/shipments are read-only to their owning customer and written only by server code (service role), so totals and payment states can't be forged from the browser. Frontend still reads the sample catalogue until data is migrated.
