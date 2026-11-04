@@ -153,12 +153,12 @@ function Home() {
           <Sparkle className="h-4 w-4 text-champagne" />
           <span className="eyebrow text-champagne">On Instagram</span>
           <h2 className="text-3xl sm:text-4xl">House of Induka</h2>
-          <p className="text-xs text-muted-foreground">Sample gallery · Official Instagram account and posts awaiting confirmation.</p>
+          <p className="text-xs text-muted-foreground">INDUKA product photography · Official Instagram account and posts awaiting confirmation.</p>
         </div>
         <div className="mt-10 grid grid-cols-3 gap-2 md:grid-cols-6">
           {[...categories.map((c) => c.image), editorial, gifting].map((src, i) => (
             <Button asChild key={i} variant="ghost" className="group relative block h-auto aspect-square overflow-hidden rounded-none bg-muted p-0"><Link to="/social" aria-label={`Instagram sample ${i + 1}`}>
-              <img src={src} alt="Instagram placeholder" loading="lazy" className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
+              <img src={src} alt="INDUKA sterling silver jewellery" loading="lazy" decoding="async" className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
               <Instagram className="absolute inset-0 m-auto h-5 w-5 text-ivory opacity-0 transition group-hover:opacity-100" strokeWidth={1.25} />
             </Link></Button>
           ))}
