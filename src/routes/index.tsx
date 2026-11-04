@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Gift, Instagram, ShieldCheck, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/brand/Logo";
-import { Reveal, SampleBadge, SectionHeading, Sparkle } from "@/components/brand/primitives";
+import { Reveal, SectionHeading, Sparkle } from "@/components/brand/primitives";
 import { ProductCard } from "@/components/shop/ProductCard";
 import { CollectionCard } from "@/components/shop/CollectionCard";
 import { Newsletter } from "@/components/brand/Newsletter";
@@ -64,7 +64,6 @@ function Home() {
             </div>
           </motion.div>
         </div>
-        <SampleBadge className="absolute bottom-4 right-4" />
       </section>
 
       {/* CATEGORIES */}
@@ -76,7 +75,6 @@ function Home() {
               <Link to="/shop" search={{ category: c.slug }} className="group block">
                 <div className="relative aspect-[4/5] overflow-hidden bg-muted">
                   <img src={c.image} alt={`${c.name} (sample image)`} decoding="async" loading="lazy" width={800} height={1000} className="h-full w-full object-cover transition-transform duration-[1400ms] ease-[var(--ease-lux)] group-hover:scale-105" />
-                  <SampleBadge className="absolute left-3 top-3" />
                 </div>
                 <div className="mt-4 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
                   <span className="min-w-0 font-display text-xl sm:text-2xl">{c.name}</span>
@@ -106,7 +104,7 @@ function Home() {
       {/* EDITORIAL BANNER */}
       <section className="relative overflow-hidden bg-midnight text-ivory">
         <div className="grid md:grid-cols-2">
-          <div className="relative"><img src={editorial} alt="Layered silver moon and star chains worn on skin (sample image)" loading="lazy" decoding="async" width={1600} height={1008} className="h-full min-h-[420px] w-full object-cover" /><SampleBadge className="absolute left-3 top-3" /></div>
+          <div className="relative"><img src={editorial} alt="Layered silver moon and star chains worn on skin (sample image)" loading="lazy" decoding="async" width={1600} height={1008} className="h-full min-h-[420px] w-full object-cover" /></div>
           <div className="flex flex-col justify-center gap-6 p-10 md:p-20">
             <span className="eyebrow text-soft-gold">Nakshatra · The layering edit</span>
             <h2 className="text-4xl leading-[1.15] md:text-6xl">Your own <span className="editorial text-champagne">constellation.</span></h2>
@@ -151,7 +149,6 @@ function Home() {
         <div className="container-lux grid items-center gap-12 py-20 md:grid-cols-2 md:py-28">
           <Reveal className="relative">
             <img src={gifting} alt="Ivory and midnight INDUKA-style gift box on blush satin (sample image)" loading="lazy" decoding="async" width={1200} height={1200} className="aspect-square w-full object-cover" />
-            <SampleBadge className="absolute left-3 top-3" />
           </Reveal>
           <Reveal delay={0.1} className="flex flex-col gap-6">
             <span className="eyebrow text-cocoa">The unboxing</span>
@@ -174,7 +171,6 @@ function Home() {
           {[...sampleTiles.map((c) => c.image), editorial, gifting].map((src, i) => (
             <Button asChild key={i} variant="ghost" className="group relative block h-auto aspect-square overflow-hidden rounded-none bg-muted p-0"><Link to="/social" aria-label={`Instagram sample ${i + 1}`}>
               <img src={src} alt="Instagram placeholder (sample image)" loading="lazy" decoding="async" className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
-              <SampleBadge className="absolute left-1.5 top-1.5 !px-1.5 !py-0.5 !text-[0.5rem]" />
               <Instagram className="absolute inset-0 m-auto h-5 w-5 text-ivory opacity-0 transition group-hover:opacity-100" strokeWidth={1.25} />
             </Link></Button>
           ))}
