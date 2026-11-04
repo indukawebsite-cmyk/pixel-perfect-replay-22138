@@ -44,7 +44,7 @@ export function Confirm({ trigger, title, description, action, onConfirm }: { tr
   );
 }
 
-export function Field({ label, hint, children }: { label: string; hint?: string; children: ReactNode }) {
+export function Field({ label, hint, children }: { label: string; hint?: string | undefined; children: ReactNode }) {
   return (
     <label className="flex flex-col gap-1.5 text-sm">
       <span className="font-medium">{label}</span>

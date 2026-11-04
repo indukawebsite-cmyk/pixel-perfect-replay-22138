@@ -6,7 +6,7 @@ import { PRODUCT_IMAGE_BUCKET, thumbPath } from "@/lib/catalog-source";
 export const LOW_STOCK = 1;
 export const CATEGORIES = ["pendants", "earrings", "rings", "necklaces", "bracelets"] as const;
 
-export type AdminImage = { id: string; image_url: string; alt_text: string; display_order: number; url?: string; thumb?: string };
+export type AdminImage = { id: string; image_url: string; alt_text: string; display_order: number; url?: string | undefined; thumb?: string | undefined };
 export type AdminProduct = {
   id: string; name: string; slug: string; sku: string | null; price: number; compare_at_price: number | null;
   category: string; collection_id: string | null; is_active: boolean; description: string | null; tagline: string | null;
@@ -22,7 +22,7 @@ export type AdminCollection = {
 
 export const slugify = (value: string) =>
   value.toLowerCase().normalize("NFKD").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
-export const stockOf = (p: Pick<AdminProduct, "product_variants">) =>
+export const stockOf = (p: { product_variants: { stock_quantity: number }[] }) =>
   p.product_variants.reduce((sum, v) => sum + v.stock_quantity, 0);
 
 async function sign(paths: string[]) {
