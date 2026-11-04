@@ -36,7 +36,7 @@ function CollectionEditor() {
     if (!current || loadedId === current.id) return;
     setLoadedId(current.id);
     setForm({ name: current.name, slug: current.slug, subtitle: current.subtitle ?? "", description: current.description ?? "", is_active: current.is_active });
-  }, [current]);
+  }, [current, loadedId]);
   useEffect(() => {
     if (products.data && !isNew) setSelected(new Set(products.data.filter((p) => p.collection_id === collectionId).map((p) => p.id)));
   }, [products.data, collectionId, isNew]);
