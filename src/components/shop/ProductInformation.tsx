@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Heart, ShoppingBag, MapPin } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import { getCollection, productPriceLabel, type Product } from "@/lib/catalog";
+import { availabilityLabel, getCollection, productPriceLabel, type Product } from "@/lib/catalog";
 import { validPin, validQuantity } from "@/lib/product-detail";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/components/shop/CartProvider";
@@ -19,9 +19,11 @@ export function ProductInformation({ product }: { product: Product }) {
   const [pin, setPin] = useState("");
   const [pinFeedback, setPinFeedback] = useState("");
   const saved = ids.includes(product.id);
+  const stock = product.stock ?? 0;
   const canAdd =
-    product.demoPrice !== undefined &&
+    product.price !== null &&
     validQuantity(Number(quantity)) &&
+    Number(quantity) <= stock &&
     (!product.variants?.length || product.variants.some((option) => option.id === variant));
   return (
     <div className="min-w-0 space-y-6 lg:py-3">
@@ -36,13 +38,32 @@ export function ProductInformation({ product }: { product: Product }) {
       )}
       <div>
         <h1 className="text-4xl leading-tight md:text-5xl">{product.name}</h1>
+        {product.tagline && <p className="editorial mt-3 text-lg text-cocoa">{product.tagline}</p>}
         <p className="mt-4 text-xl">{productPriceLabel(product)}</p>
-        <p className="mt-2 text-xs text-muted-foreground">Demo piece · Not for sale</p>
+        <p className="mt-2 text-xs text-muted-foreground">
+          {availabilityLabel(product)}
+          {product.sku ? ` · SKU ${product.sku}` : ""}
+        </p>
       </div>
-      <p className="text-sm leading-loose text-muted-foreground">
-        {product.description ??
-          "Sample preview only. Official photography, description, materials and pricing are awaiting confirmation. This is not a purchasable product."}
-      </p>
+      {product.description && (
+        <p className="text-sm leading-loose text-muted-foreground">{product.description}</p>
+      )}
+      {product.highlights?.length ? (
+        <ul className="space-y-2 border-y border-border py-5 text-sm leading-relaxed">
+          {product.highlights.map((item) => (
+            <li key={item} className="flex gap-3">
+              <span aria-hidden="true" className="text-champagne">✦</span>
+              {item}
+            </li>
+          ))}
+        </ul>
+      ) : null}
+      {product.size && (
+        <p className="text-sm">
+          <span className="text-muted-foreground">Size · </span>
+          {product.size}
+        </p>
+      )}
       <VariantSelector
         variants={product.variants}
         selected={variant}
@@ -67,12 +88,12 @@ export function ProductInformation({ product }: { product: Product }) {
             onClick={() => {
               add(product.id, Number(quantity), variant);
               setFeedback(
-                `${quantity} added to your demo bag${variant ? ` · ${product.variants?.find((option) => option.id === variant)?.label}` : ""}. No order placed.`,
+                `${quantity} added to your bag${variant ? ` · ${product.variants?.find((option) => option.id === variant)?.label}` : ""}. Checkout is not live yet.`,
               );
             }}
           >
             <ShoppingBag />
-            Add to demo bag
+            {stock > 0 ? "Add to bag" : "Currently unavailable"}
           </Button>
           <Button
             variant="outline"
@@ -92,17 +113,19 @@ export function ProductInformation({ product }: { product: Product }) {
           disabled={!canAdd}
           onClick={() =>
             setFeedback(
-              "Demo only: checkout and payments are not connected. No order has been placed.",
+              "Checkout and payments are not live yet. No order has been placed.",
             )
           }
         >
-          Buy now · Demo only
+          Buy now
         </Button>
         <p role="status" className="min-h-5 text-xs leading-relaxed text-muted-foreground">
           {feedback ||
             (saved
               ? "Saved to your wishlist for this visit."
-              : "Visit-only demo bag. No checkout or payment.")}
+              : Number(quantity) > stock && stock > 0
+                ? `Only ${stock} available.`
+                : "Checkout is not live yet. No order or payment is taken.")}
         </p>
       </div>
       <form
