@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { productGallery } from "@/lib/product-detail";
 import type { Product } from "@/lib/catalog";
+import { SafeImage } from "@/components/shop/SafeImage";
 export function ProductGallery({ product }: { product: Product }) {
   const images = productGallery(product);
   const [active, setActive] = useState(0);
@@ -22,7 +23,7 @@ export function ProductGallery({ product }: { product: Product }) {
           onClick={() => setOpen(true)}
           className="block h-full w-full rounded-none p-0"
         >
-          <img
+          <SafeImage
             src={image.src}
             alt={`${product.name} — ${image.label}`}
             className={
@@ -32,9 +33,6 @@ export function ProductGallery({ product }: { product: Product }) {
             }
           />
         </Button>
-        <span className="pointer-events-none absolute left-4 top-4 bg-background/95 px-3 py-2 text-[0.6rem] uppercase">
-          Sample image
-        </span>
         <Button
           variant="outline"
           size="icon"
@@ -46,7 +44,7 @@ export function ProductGallery({ product }: { product: Product }) {
           <Expand />
         </Button>
       </div>
-      <div className="mt-4 flex gap-3">
+      <div className="mt-4 flex gap-3 overflow-x-auto pb-1">
         {images.map((item, index) => (
           <Button
             key={`${item.label}-${index}`}
@@ -56,9 +54,9 @@ export function ProductGallery({ product }: { product: Product }) {
             aria-pressed={active === index}
             className={`h-20 w-16 shrink-0 overflow-hidden rounded-none border p-0 ${active === index ? "border-primary ring-1 ring-primary" : "border-border"}`}
           >
-            <img
+            <SafeImage
               src={item.src}
-              alt=""
+              alt={`${product.name} thumbnail ${index + 1}`}
               className={
                 item.detailCrop
                   ? "h-full w-full scale-150 object-cover"
@@ -69,14 +67,14 @@ export function ProductGallery({ product }: { product: Product }) {
         ))}
       </div>
       <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
-        {image.label}. Official product photography is pending.
+        {image.label} · {active + 1} of {images.length}
       </p>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="flex h-dvh max-h-dvh w-screen max-w-none flex-col rounded-none border-0 p-4 sm:rounded-none md:p-8">
           <DialogTitle className="pr-10 font-sans text-sm leading-relaxed">
             {product.name}
           </DialogTitle>
-          <DialogDescription className="text-xs">{image.label} · Sample image</DialogDescription>
+          <DialogDescription className="text-xs">{image.label} · {active + 1} of {images.length}</DialogDescription>
           <TransformWrapper
             key={active}
             minScale={1}
@@ -89,7 +87,7 @@ export function ProductGallery({ product }: { product: Product }) {
                 <div className="gallery-zoom flex min-h-0 flex-1 items-center justify-center overflow-hidden bg-muted">
                   <TransformComponent wrapperClass="!h-full !w-full" contentClass="!h-full !w-full">
                     <div className="flex h-full w-full items-center justify-center overflow-hidden">
-                      <img
+                      <SafeImage
                         src={image.src}
                         alt={`${product.name} — enlarged ${image.label}`}
                         className={

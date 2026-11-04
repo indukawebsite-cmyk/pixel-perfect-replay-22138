@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { addCartItem, setCartQuantity, type CartItem } from "@/lib/demo-cart";
 import { restoreDemoBag } from "@/lib/demo-checkout";
+import { useLiveCatalog } from "@/lib/live-catalog";
 export const DEMO_BAG_KEY = "induka-demo-bag-v1";
 const CartContext = createContext<{
   items: CartItem[];
@@ -12,7 +13,11 @@ const CartContext = createContext<{
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const [ready, setReady] = useState(false);
+  const { status } = useLiveCatalog();
+  const catalogSettled = status === "ready" || status === "error";
   useEffect(() => {
+    // Restore only after the catalogue loads, so saved lines can be checked against real products.
+    if (!catalogSettled || ready) return;
     try {
       const stored = sessionStorage.getItem(DEMO_BAG_KEY);
       if (stored) setItems(restoreDemoBag(JSON.parse(stored)));
@@ -20,7 +25,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       /* Storage unavailable or invalid: keep an empty demo bag. */
     }
     setReady(true);
-  }, []);
+  }, [catalogSettled, ready]);
   useEffect(() => {
     if (!ready) return;
     try {
