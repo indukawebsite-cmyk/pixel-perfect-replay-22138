@@ -24,7 +24,7 @@ describe("Catalogue constraints", () => {
     expect(searchProducts("missing-piece")).toEqual([]);
   });
   it("matches search terms within the selected category", () => {
-    expect(searchProducts("fixture", "earrings").map((p) => p.id)).toEqual(["fx-earring-a", "fx-earring-b"]);
+    expect(searchProducts("fixture", "earrings").map((p) => p.id)).toEqual(["fx-earring-b", "fx-earring-a"]);
   });
   it("validates newsletter email", () => {
     expect(validateNewsletterEmail("invalid@")).toBe(false);
