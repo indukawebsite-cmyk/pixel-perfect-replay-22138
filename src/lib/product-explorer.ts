@@ -1,4 +1,4 @@
-import { categories, type Product } from "@/lib/catalog";
+import { shopCategories as categories, type Product } from "@/lib/catalog";
 
 export const sortOptions = [
   { value: "featured", label: "Featured" }, { value: "newest", label: "Newest" },
@@ -16,7 +16,7 @@ export function filterProducts(products: Product[], search: ExplorerSearch) {
   const terms = (search.q ?? "").trim().toLowerCase().split(/\s+/).filter(Boolean);
   const category = categories.some((item) => item.slug === search.category) ? search.category : undefined;
   const filtered = products.filter((product) => {
-    const price = product.demoPrice ?? product.price;
+    const price = product.price;
     return (!category || product.category === category)
       && (!search.edit || product.edit === search.edit)
       && terms.every((term) => product.name.toLowerCase().includes(term))
@@ -26,8 +26,8 @@ export function filterProducts(products: Product[], search: ExplorerSearch) {
   return filtered.sort((a, b) => {
     if (search.sort === "newest") return (b.addedOn ?? "").localeCompare(a.addedOn ?? "");
     if (search.sort === "price-asc" || search.sort === "price-desc") {
-      const left = a.demoPrice ?? a.price;
-      const right = b.demoPrice ?? b.price;
+      const left = a.price;
+      const right = b.price;
       if (left == null) return right == null ? 0 : 1;
       if (right == null) return -1;
       return search.sort === "price-asc" ? left - right : right - left;
