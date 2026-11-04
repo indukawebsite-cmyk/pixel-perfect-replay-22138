@@ -4,20 +4,23 @@ import { Button } from "@/components/ui/button";
 import { useCart } from "@/components/shop/CartProvider";
 import { formatPrice, getProduct, productPriceLabel } from "@/lib/catalog";
 import { cartTotal } from "@/lib/demo-cart";
+import { useLiveCatalog } from "@/lib/live-catalog";
+import { SafeImage } from "@/components/shop/SafeImage";
 export function DemoBag({ onNavigate }: { onNavigate: () => void }) {
   const { items, setQuantity } = useCart();
+  useLiveCatalog();
   return (
     <div className="flex flex-1 flex-col gap-6">
       <p className="border-y border-border py-4 text-sm leading-relaxed text-muted-foreground">
-        Demo bag only · Illustrative prices, no orders or payments. Contents stay in this tab across refreshes.
+        Checkout is not live yet · No orders or payments are taken. Your bag stays in this tab across refreshes.
       </p>
       {!items.length ? (
         <div className="flex flex-1 flex-col items-center justify-center gap-5 py-12 text-center">
           <ShoppingBag className="h-8 w-8 text-cocoa" strokeWidth={1} />
-          <h2 className="text-3xl">Your demo bag is empty</h2>
+          <h2 className="text-3xl">Your bag is empty</h2>
           <Button asChild variant="lux" size="xl">
             <Link to="/shop" onClick={onNavigate}>
-              Browse demo pieces
+              Browse jewellery
             </Link>
           </Button>
         </div>
@@ -36,7 +39,7 @@ export function DemoBag({ onNavigate }: { onNavigate: () => void }) {
                   params={{ productId: product.id }}
                   onClick={onNavigate}
                 >
-                  <img
+                  <SafeImage
                     src={product.image}
                     alt={product.name}
                     className="aspect-[4/5] w-full object-cover"
