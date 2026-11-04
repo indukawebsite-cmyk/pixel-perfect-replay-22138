@@ -43,8 +43,8 @@ export function SectionHeading({
 /** Visible marker on any sample/placeholder content so it is never mistaken for real product data. */
 export function SampleBadge({ className }: { className?: string }) {
   return (
-    <span className={`eyebrow bg-ivory/90 px-2 py-1 text-[0.55rem] tracking-[0.2em] text-cocoa ${className ?? ""}`}>
-      Sample image
+    <span className={`pointer-events-none z-10 border border-cocoa/20 bg-ivory px-2.5 py-1 text-[0.6rem] font-medium uppercase tracking-[0.22em] text-midnight shadow-sm ${className ?? ""}`}>
+      SAMPLE IMAGE
     </span>
   );
 }
