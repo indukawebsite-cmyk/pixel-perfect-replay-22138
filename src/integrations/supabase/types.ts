@@ -23,6 +23,7 @@ export type Database = {
           is_active: boolean
           name: string
           slug: string
+          subtitle: string | null
           updated_at: string
         }
         Insert: {
@@ -33,6 +34,7 @@ export type Database = {
           is_active?: boolean
           name: string
           slug: string
+          subtitle?: string | null
           updated_at?: string
         }
         Update: {
@@ -43,6 +45,7 @@ export type Database = {
           is_active?: boolean
           name?: string
           slug?: string
+          subtitle?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -330,15 +333,21 @@ export type Database = {
           compare_at_price: number | null
           created_at: string
           description: string | null
+          highlights: string[]
           id: string
           is_active: boolean
+          length_cm: number | null
           material: string | null
+          meta_description: string | null
+          meta_title: string | null
           name: string
           price: number
           purity: string | null
           sku: string | null
           slug: string
+          tagline: string | null
           updated_at: string
+          width_cm: number | null
         }
         Insert: {
           category: string
@@ -346,15 +355,21 @@ export type Database = {
           compare_at_price?: number | null
           created_at?: string
           description?: string | null
+          highlights?: string[]
           id?: string
           is_active?: boolean
+          length_cm?: number | null
           material?: string | null
+          meta_description?: string | null
+          meta_title?: string | null
           name: string
           price: number
           purity?: string | null
           sku?: string | null
           slug: string
+          tagline?: string | null
           updated_at?: string
+          width_cm?: number | null
         }
         Update: {
           category?: string
@@ -362,15 +377,21 @@ export type Database = {
           compare_at_price?: number | null
           created_at?: string
           description?: string | null
+          highlights?: string[]
           id?: string
           is_active?: boolean
+          length_cm?: number | null
           material?: string | null
+          meta_description?: string | null
+          meta_title?: string | null
           name?: string
           price?: number
           purity?: string | null
           sku?: string | null
           slug?: string
+          tagline?: string | null
           updated_at?: string
+          width_cm?: number | null
         }
         Relationships: [
           {
