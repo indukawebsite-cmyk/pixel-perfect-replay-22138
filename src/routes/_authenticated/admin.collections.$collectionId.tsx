@@ -31,8 +31,10 @@ function CollectionEditor() {
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [term, setTerm] = useState("");
 
+  const [loadedId, setLoadedId] = useState<string | null>(null);
   useEffect(() => {
-    if (!current) return;
+    if (!current || loadedId === current.id) return;
+    setLoadedId(current.id);
     setForm({ name: current.name, slug: current.slug, subtitle: current.subtitle ?? "", description: current.description ?? "", is_active: current.is_active });
   }, [current]);
   useEffect(() => {

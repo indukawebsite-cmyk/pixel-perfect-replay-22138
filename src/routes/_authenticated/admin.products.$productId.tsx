@@ -34,14 +34,18 @@ function ProductEditor() {
   const [highlights, setHighlights] = useState("");
   const [images, setImages] = useState<AdminImage[]>([]);
 
+  const [loadedId, setLoadedId] = useState<string | null>(null);
   useEffect(() => {
     const p = product.data;
     if (!p) return;
-    const { id: _id, updated_at: _u, product_variants, product_images, ...rest } = p;
+    setImages(p.product_images);
+    // Fill the form once per product so photo refreshes never overwrite unsaved edits.
+    if (loadedId === p.id) return;
+    const { id: _id, updated_at: _u, product_variants, product_images: _i, ...rest } = p;
     setForm({ ...rest, stock: stockOf({ product_variants }) });
     setHighlights(p.highlights.join("\n"));
-    setImages(product_images);
-  }, [product.data]);
+    setLoadedId(p.id);
+  }, [product.data, loadedId]);
 
   const set = <K extends keyof ProductInput>(key: K, value: ProductInput[K]) => setForm((f) => ({ ...f, [key]: value }));
   const refresh = () => qc.invalidateQueries({ queryKey: ["admin"] });
