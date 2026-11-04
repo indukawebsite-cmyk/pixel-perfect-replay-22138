@@ -55,7 +55,9 @@ export function ProductGallery({ product }: { product: Product }) {
             className={`h-20 w-16 shrink-0 overflow-hidden rounded-none border p-0 ${active === index ? "border-primary ring-1 ring-primary" : "border-border"}`}
           >
             <SafeImage
-              src={item.src}
+              src={item.thumb || item.src}
+              loading="lazy"
+              decoding="async"
               alt={`${product.name} thumbnail ${index + 1}`}
               className={
                 item.detailCrop

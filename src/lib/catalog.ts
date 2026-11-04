@@ -1,13 +1,15 @@
 // Static brand structure (categories, collection names, campaign images). Product records are
 // loaded from the database — see live-catalog.ts and catalog-source.ts.
 import { getCatalog } from "@/lib/live-catalog";
-import earrings from "@/assets/cat-earrings.jpg";
-import rings from "@/assets/cat-rings.jpg";
-import necklaces from "@/assets/cat-necklaces.jpg";
-import bracelets from "@/assets/cat-bracelets.jpg";
-import editorial from "@/assets/editorial-layering.jpg";
-import gifting from "@/assets/gifting-blush.jpg";
-import hero from "@/assets/hero-crescent-velvet.jpg";
+// Campaign imagery is cut from real INDUKA product photography (see src/assets/real).
+import earrings from "@/assets/real/cat-earrings.jpg";
+import pendants from "@/assets/real/cat-pendants.jpg";
+import chandni from "@/assets/real/col-chandni.jpg";
+import ardhChand from "@/assets/real/col-ardh-chand.jpg";
+import purnima from "@/assets/real/col-purnima.jpg";
+import tara from "@/assets/real/col-tara.jpg";
+import nakshatra from "@/assets/real/col-nakshatra.jpg";
+import chandrika from "@/assets/real/col-chandrika.jpg";
 
 export type Category = { slug: string; name: string; image: string };
 export type Collection = {
@@ -18,7 +20,7 @@ export type Collection = {
   image: string;
 };
 export type ProductVariant = { id: string; label: string; isDemo: boolean };
-export type ProductImage = { src: string; label: string; alt?: string; detailCrop?: boolean };
+export type ProductImage = { src: string; thumb?: string; label: string; alt?: string; detailCrop?: boolean };
 export type VerifiedSpecifications = {
   verified: true;
   material?: string;
@@ -34,6 +36,8 @@ export type Product = {
   category: string;
   collection: string;
   image: string;
+  /** Lighter grid-sized copy of the primary photo; falls back to `image`. */
+  thumbnail?: string;
   price: number | null;
   sku?: string | undefined;
   stock?: number;
@@ -52,16 +56,17 @@ export type Product = {
   specifications?: VerifiedSpecifications;
 };
 
+/** Homepage tiles: only categories that have real INDUKA pieces and photography. */
 export const categories: Category[] = [
+  { slug: "pendants", name: "Pendants", image: pendants },
   { slug: "earrings", name: "Earrings", image: earrings },
-  { slug: "rings", name: "Rings", image: rings },
-  { slug: "necklaces", name: "Necklaces", image: necklaces },
-  { slug: "bracelets", name: "Bracelets", image: bracelets },
 ];
-/** Categories offered in shop filters, including those without homepage tiles. */
+/** Categories offered in shop filters, including those without homepage tiles yet. */
 export const shopCategories: Category[] = [
-  { slug: "pendants", name: "Pendants", image: necklaces },
   ...categories,
+  { slug: "rings", name: "Rings", image: "" },
+  { slug: "necklaces", name: "Necklaces", image: "" },
+  { slug: "bracelets", name: "Bracelets", image: "" },
 ];
 
 export const collections: Collection[] = [
@@ -70,42 +75,42 @@ export const collections: Collection[] = [
     name: "Chandni",
     meaning: "The Moonlight Collection",
     focus: "Everyday studs, chains and minimal rings.",
-    image: necklaces,
+    image: chandni,
   },
   {
     slug: "ardh-chand",
     name: "Ardh Chand",
     meaning: "The Crescent Collection",
     focus: "Crescent signature pieces.",
-    image: hero,
+    image: ardhChand,
   },
   {
     slug: "purnima",
     name: "Purnima",
     meaning: "The Full Moon Collection",
     focus: "Statement and festive pieces.",
-    image: editorial,
+    image: purnima,
   },
   {
     slug: "tara",
     name: "Tara",
     meaning: "The Starlight Collection",
     focus: "Sparkle CZ studs and star motifs.",
-    image: earrings,
+    image: tara,
   },
   {
     slug: "nakshatra",
     name: "Nakshatra",
     meaning: "The Constellation Collection",
     focus: "Layering sets, charms and zodiac.",
-    image: bracelets,
+    image: nakshatra,
   },
   {
     slug: "chandrika",
     name: "Chandrika",
     meaning: "The Lunar Radiance Collection",
     focus: "Bridal and gifting edit.",
-    image: gifting,
+    image: chandrika,
   },
 ];
 

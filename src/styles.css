@@ -67,9 +67,19 @@
   --color-blush: var(--blush);
   --color-dusty-rose: var(--dusty-rose);
   --color-cocoa: var(--cocoa);
-  --font-display: "Italiana", serif;
+  --font-display: "Induka Punctuation", "Italiana", "Cormorant Garamond", Georgia, serif;
   --font-editorial: "Lora", serif;
   --font-sans: "Poppins", system-ui, sans-serif;
+}
+
+/* Italiana draws dashes as hairlines that vanish on screen; this tiny subset supplies only
+   dashes, the rupee sign and arrows, and every other character still renders in Italiana. */
+@font-face {
+  font-family: "Induka Punctuation";
+  src: url("./assets/fonts/induka-punctuation.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+  unicode-range: U+2010-2015, U+20B9, U+2192;
 }
 
 :root {
