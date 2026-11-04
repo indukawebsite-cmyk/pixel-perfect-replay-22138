@@ -1,0 +1,12 @@
+ALTER TABLE public.products DROP CONSTRAINT products_category_check;
+ALTER TABLE public.products ADD CONSTRAINT products_category_check CHECK (category = ANY (ARRAY['earrings','rings','necklaces','bracelets','pendants']));
+ALTER TABLE public.products ADD COLUMN IF NOT EXISTS tagline text;
+ALTER TABLE public.products ADD COLUMN IF NOT EXISTS highlights text[] NOT NULL DEFAULT '{}';
+ALTER TABLE public.products ADD COLUMN IF NOT EXISTS length_cm numeric CHECK (length_cm IS NULL OR length_cm > 0);
+ALTER TABLE public.products ADD COLUMN IF NOT EXISTS width_cm numeric CHECK (width_cm IS NULL OR width_cm > 0);
+ALTER TABLE public.products ADD COLUMN IF NOT EXISTS meta_title text;
+ALTER TABLE public.products ADD COLUMN IF NOT EXISTS meta_description text;
+ALTER TABLE public.collections ADD COLUMN IF NOT EXISTS subtitle text;
+CREATE UNIQUE INDEX IF NOT EXISTS product_images_product_url_key ON public.product_images(product_id, image_url);
+CREATE POLICY "Public reads product images" ON storage.objects FOR SELECT TO anon, authenticated USING (bucket_id = 'product-images');
+CREATE POLICY "Admins manage product images" ON storage.objects FOR ALL TO authenticated USING (bucket_id = 'product-images' AND public.has_role(auth.uid(), 'admin')) WITH CHECK (bucket_id = 'product-images' AND public.has_role(auth.uid(), 'admin'));
