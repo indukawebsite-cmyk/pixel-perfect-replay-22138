@@ -18,3 +18,7 @@ Object.defineProperty(window, "matchMedia", {
     dispatchEvent: () => {},
   }),
 });
+
+import { beforeEach } from "vitest";
+import { loadFixtures } from "./fixtures";
+beforeEach(() => loadFixtures());

@@ -3,6 +3,8 @@ import { Minus, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { formatPrice, getProduct } from "@/lib/catalog";
 import type { CartItem } from "@/lib/demo-cart";
+import { SafeImage } from "@/components/shop/SafeImage";
+import { useLiveCatalog } from "@/lib/live-catalog";
 import { validQuantity } from "@/lib/product-detail";
 export function CartLines({
   items,
@@ -11,6 +13,7 @@ export function CartLines({
   items: CartItem[];
   onQuantity?: ((id: string, quantity: number, variantId?: string) => void) | undefined;
 }) {
+  useLiveCatalog();
   return (
     <div className="divide-y divide-border">
       {items.map((item) => {
@@ -24,9 +27,9 @@ export function CartLines({
             className="grid grid-cols-[5rem_minmax(0,1fr)] gap-4 py-6 md:grid-cols-[7rem_minmax(0,1fr)] md:gap-6"
           >
             <Link to="/products/$productId" params={{ productId: product.id }}>
-              <img
+              <SafeImage
                 src={product.image}
-                alt={`${product.name} — sample image`}
+                alt={product.name}
                 className="aspect-[4/5] w-full object-cover"
               />
             </Link>
@@ -40,7 +43,7 @@ export function CartLines({
               </Link>
               {variant && <p className="mt-2 text-xs text-muted-foreground">{variant.label}</p>}
               <p className="mt-2 text-xs text-muted-foreground">
-                {formatPrice(product.demoPrice ?? null)} · Demo unit price
+                {formatPrice(product.price)} · Unit price
               </p>
               {onQuantity ? (
                 <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
@@ -87,8 +90,7 @@ export function CartLines({
                 <p className="mt-3 text-xs">Quantity: {item.quantity}</p>
               )}
               <p className="mt-3 text-sm font-medium">
-                {formatPrice((product.demoPrice ?? 0) * item.quantity)}{" "}
-                <span className="text-xs font-normal text-muted-foreground">· Demo line total</span>
+                {formatPrice((product.price ?? 0) * item.quantity)}
               </p>
             </div>
           </article>

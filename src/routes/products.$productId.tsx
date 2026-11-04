@@ -1,6 +1,7 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { ChevronRight } from "lucide-react";
-import { getProduct, getCollection } from "@/lib/catalog";
+import { getProduct, getCollection, type Product } from "@/lib/catalog";
+import { useLiveCatalog } from "@/lib/live-catalog";
 import { ProductGallery } from "@/components/shop/ProductGallery";
 import { ProductInformation } from "@/components/shop/ProductInformation";
 import { RelatedProducts } from "@/components/shop/RelatedProducts";
@@ -10,15 +11,9 @@ import { ShoppingError, ProductNotFound } from "@/components/shop/RouteFeedback"
 import { useEffect } from "react";
 
 export const Route = createFileRoute("/products/$productId")({
-  loader: ({ params }) => {
-    const product = getProduct(params.productId);
-    if (!product) throw notFound();
-    return { product };
-  },
-  head: ({ loaderData }) => {
-    const title = `${loaderData?.product.name ?? "Piece not found"} — INDUKA`;
-    const description =
-      "Sample jewellery preview from House of Induka. Actual specifications and pricing will be confirmed at launch.";
+  head: () => {
+    const title = "Jewellery — House of Induka";
+    const description = "925 sterling silver jewellery from House of Induka, inspired by the moon.";
     return {
       meta: [
         { title },
@@ -36,10 +31,24 @@ export const Route = createFileRoute("/products/$productId")({
   component: ProductPage,
 });
 function ProductPage() {
-  const { product } = Route.useLoaderData();
+  const { productId } = Route.useParams();
+  const { status } = useLiveCatalog();
+  const product = getProduct(productId);
+  if (!product && (status === "idle" || status === "loading"))
+    return (
+      <section role="status" aria-label="Loading piece" className="container-lux grid gap-8 py-12 md:grid-cols-2">
+        <div className="aspect-[4/5] animate-pulse bg-muted motion-reduce:animate-none" />
+        <div className="space-y-4"><div className="h-10 w-2/3 bg-muted" /><div className="h-6 w-1/3 bg-muted" /></div>
+      </section>
+    );
+  if (!product) return <ProductNotFound />;
+  return <ProductView product={product} />;
+}
+function ProductView({ product }: { product: Product }) {
   const collection = getCollection(product.collection);
   const { ids, record } = useRecentlyViewed();
   useEffect(() => {
+    document.title = `${product.name} — House of Induka`;
     record(product.id);
   }, [product.id, record]);
   const recent = ids
@@ -77,7 +86,7 @@ function ProductPage() {
       </section>
       <RelatedProducts
         title="From the same moon"
-        note="Related demo pieces · Not for sale"
+        note="More from House of Induka"
         products={relatedProducts(product)}
       />
       <RelatedProducts title="Recently viewed" note="For this visit only" products={recent} />

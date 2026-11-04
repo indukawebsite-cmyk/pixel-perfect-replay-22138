@@ -16,6 +16,7 @@ import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { WishlistProvider } from "@/components/shop/WishlistProvider";
 import { CartProvider } from "@/components/shop/CartProvider";
+import { CatalogProvider } from "@/components/shop/CatalogProvider";
 import { RecentlyViewedProvider } from "@/components/shop/RecentlyViewedProvider";
 import { DemoOrderProvider } from "@/components/shop/DemoOrderProvider";
 import { supabase } from "@/integrations/supabase/client";
@@ -139,6 +140,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <CatalogProvider>
       <WishlistProvider>
       <CartProvider>
       <RecentlyViewedProvider>
@@ -154,6 +156,7 @@ function RootComponent() {
       </RecentlyViewedProvider>
       </CartProvider>
       </WishlistProvider>
+      </CatalogProvider>
     </QueryClientProvider>
   );
 }

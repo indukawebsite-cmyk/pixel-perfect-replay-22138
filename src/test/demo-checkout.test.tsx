@@ -53,11 +53,11 @@ describe("Demo checkout", () => {
     expect(validateCoupon("SALE").accepted).toBe(false);
     expect(validateCoupon("<script>").accepted).toBe(false);
     expect(validateCoupon("a".repeat(25)).accepted).toBe(false);
-    expect(orderTotals(addCartItem([], "demo-chandni-earrings"))).toEqual({
-      subtotal: 1200,
+    expect(orderTotals(addCartItem([], "fx-earring-a"))).toEqual({
+      subtotal: 2099,
       discount: 0,
       shipping: 150,
-      total: 1350,
+      total: 2249,
     });
     expect(orderTotals([])).toEqual({ subtotal: 0, discount: 0, shipping: 0, total: 0 });
   });
@@ -69,28 +69,27 @@ describe("Demo checkout", () => {
       ]),
     ).toEqual([]);
     expect(
-      restoreDemoBag([{ productId: "demo-chandni-rings", quantity: 1, variantId: "fake" }]),
+      restoreDemoBag([{ productId: "fx-earring-a", quantity: 1, variantId: "fake" }]),
     ).toEqual([]);
-    expect(restoreDemoBag([{ productId: "demo-chandni-rings", quantity: 1 }])).toEqual([]);
-    expect(restoreDemoBag([{ productId: "demo-chandni-earrings", quantity: 1.5 }])).toEqual([]);
+    expect(restoreDemoBag([{ productId: "fx-earring-a", quantity: 1.5 }])).toEqual([]);
     expect(restoreDemoBag("bad")).toEqual([]);
   });
   it("handles corrupt tab storage and clears the bag after confirmation", () => {
     sessionStorage.setItem(DEMO_BAG_KEY, "invalid json");
     const hook = renderHook(useCart, { wrapper: CartProvider });
     expect(hook.result.current.items).toEqual([]);
-    act(() => hook.result.current.add("demo-chandni-earrings", 2));
+    act(() => hook.result.current.add("fx-earring-a", 2));
     expect(JSON.parse(sessionStorage.getItem(DEMO_BAG_KEY) ?? "[]")[0].quantity).toBe(2);
     act(() => hook.result.current.clear());
     expect(hook.result.current.items).toEqual([]);
   });
   it("creates an item and total snapshot without retaining customer details", () => {
-    const items = addCartItem([], "demo-chandni-rings", 2, "demo-b");
+    const items = addCartItem([], "fx-earring-a", 2);
     const order = createDemoOrder(items, customer, "DEMO-TEST1234");
     expect(order).toEqual({
       reference: "DEMO-TEST1234",
-      items: [{ productId: "demo-chandni-rings", quantity: 2, variantId: "demo-b" }],
-      totals: { subtotal: 3600, discount: 0, shipping: 150, total: 3750 },
+      items: [{ productId: "fx-earring-a", quantity: 2 }],
+      totals: { subtotal: 4198, discount: 0, shipping: 150, total: 4348 },
     });
     expect(JSON.stringify(order)).not.toContain(customer.email);
     expect(createDemoOrder([], customer, "DEMO-TEST1234")).toBeNull();
@@ -101,7 +100,7 @@ describe("Demo checkout", () => {
   });
   it("keeps confirmation in memory only and removes it on refresh", () => {
     const order = createDemoOrder(
-      addCartItem([], "demo-chandni-earrings"),
+      addCartItem([], "fx-earring-a"),
       customer,
       "DEMO-TEST1234",
     );

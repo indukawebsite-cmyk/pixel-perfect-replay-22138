@@ -8,7 +8,7 @@ export function addCartItem(
   variantId?: string,
 ): CartItem[] {
   const product = getProduct(productId);
-  if (!product || product.demoPrice === undefined || !validQuantity(quantity)) return items;
+  if (!product || product.price === null || !validQuantity(quantity)) return items;
   const selected = variantId ?? product.variants?.[0]?.id;
   if (selected && !product.variants?.some((variant) => variant.id === selected)) return items;
   const matches = (item: CartItem) => item.productId === productId && item.variantId === selected;
@@ -32,7 +32,7 @@ export function setCartQuantity(
 }
 export function cartTotal(items: CartItem[]) {
   return items.reduce(
-    (total, item) => total + (getProduct(item.productId)?.demoPrice ?? 0) * item.quantity,
+    (total, item) => total + (getProduct(item.productId)?.price ?? 0) * item.quantity,
     0,
   );
 }

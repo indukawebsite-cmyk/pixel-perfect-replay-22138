@@ -7,7 +7,8 @@ import { Reveal, SampleBadge, SectionHeading, Sparkle } from "@/components/brand
 import { ProductCard } from "@/components/shop/ProductCard";
 import { CollectionCard } from "@/components/shop/CollectionCard";
 import { Newsletter } from "@/components/brand/Newsletter";
-import { categories, collections, sampleProducts } from "@/lib/catalog";
+import { categories, collections, type Product } from "@/lib/catalog";
+import { useLiveCatalog } from "@/lib/live-catalog";
 import hero from "@/assets/hero-crescent-velvet.jpg";
 import editorial from "@/assets/editorial-layering.jpg";
 import gifting from "@/assets/gifting-blush.jpg";
@@ -27,8 +28,9 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
-  const best = sampleProducts.filter((p) => p.tag === "Bestseller");
-  const fresh = sampleProducts.filter((p) => p.tag === "New");
+  const { products } = useLiveCatalog();
+  const best = products.slice(0, 4);
+  const fresh = products.slice(4, 8);
   return (
     <>
       {/* HERO */}
@@ -171,14 +173,14 @@ function Home() {
   );
 }
 
-function ProductRow({ eyebrow, title, accent, products }: { eyebrow: string; title: string; accent: string; products: typeof sampleProducts }) {
+function ProductRow({ eyebrow, title, accent, products }: { eyebrow: string; title: string; accent: string; products: Product[] }) {
   return (
     <section className="container-lux py-24 md:py-32">
       <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
         <SectionHeading eyebrow={eyebrow} title={title} accent={accent} align="left" />
         <Link to="/shop" className="eyebrow link-lux text-[0.65rem]">View all</Link>
       </div>
-      <p className="mt-6 text-sm leading-relaxed text-muted-foreground">Sample selection only — {eyebrow.toLowerCase()} will be confirmed with the official catalogue.</p>
+      {!products.length && <p className="mt-6 text-sm leading-relaxed text-muted-foreground">New pieces are being prepared for launch.</p>}
       <div className="mt-10 grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-4 md:gap-x-6">
         {products.map((p, i) => (
           <Reveal key={p.id} delay={i * 0.06}><ProductCard product={p} /></Reveal>

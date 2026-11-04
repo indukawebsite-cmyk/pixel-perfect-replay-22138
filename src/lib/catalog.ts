@@ -1,5 +1,6 @@
-// SAMPLE CONTENT — replace with real catalogue data (Supabase in Phase 3).
-// Nothing here represents a real, purchasable product. Prices are intentionally null.
+// Static brand structure (categories, collection names, campaign images). Product records are
+// loaded from the database — see live-catalog.ts and catalog-source.ts.
+import { getCatalog } from "@/lib/live-catalog";
 import earrings from "@/assets/cat-earrings.jpg";
 import rings from "@/assets/cat-rings.jpg";
 import necklaces from "@/assets/cat-necklaces.jpg";
@@ -17,7 +18,7 @@ export type Collection = {
   image: string;
 };
 export type ProductVariant = { id: string; label: string; isDemo: boolean };
-export type ProductImage = { src: string; label: string; detailCrop?: boolean };
+export type ProductImage = { src: string; label: string; alt?: string; detailCrop?: boolean };
 export type VerifiedSpecifications = {
   verified: true;
   material?: string;
@@ -33,15 +34,19 @@ export type Product = {
   category: string;
   collection: string;
   image: string;
-  price: number | null; // null until real pricing is supplied
+  price: number | null;
+  sku?: string | undefined;
+  stock?: number;
+  tagline?: string | undefined;
+  highlights?: string[];
+  size?: string | undefined;
   tag?: "New" | "Bestseller";
-  isSample: true;
-  demoPrice?: number; // Illustrative INR value, never a real offer.
+  isSample: boolean;
   secondaryImage?: string; // Only supplied when a genuine second image is available.
   edit?: string; // Demo merchandising label, not a product specification.
   addedOn?: string;
   featuredOrder?: number;
-  description?: string;
+  description?: string | undefined;
   gallery?: ProductImage[];
   variants?: ProductVariant[] | undefined;
   specifications?: VerifiedSpecifications;
@@ -53,115 +58,64 @@ export const categories: Category[] = [
   { slug: "necklaces", name: "Necklaces", image: necklaces },
   { slug: "bracelets", name: "Bracelets", image: bracelets },
 ];
+/** Categories offered in shop filters, including those without homepage tiles. */
+export const shopCategories: Category[] = [
+  { slug: "pendants", name: "Pendants", image: necklaces },
+  ...categories,
+];
 
 export const collections: Collection[] = [
   {
     slug: "chandni",
     name: "Chandni",
-    meaning: "Moonlight",
+    meaning: "The Moonlight Collection",
     focus: "Everyday studs, chains and minimal rings.",
     image: necklaces,
   },
   {
-    slug: "ardh-chandra",
-    name: "Ardh Chandra",
-    meaning: "Half moon",
+    slug: "ardh-chand",
+    name: "Ardh Chand",
+    meaning: "The Crescent Collection",
     focus: "Crescent signature pieces.",
     image: hero,
   },
   {
     slug: "purnima",
     name: "Purnima",
-    meaning: "Full moon",
+    meaning: "The Full Moon Collection",
     focus: "Statement and festive pieces.",
     image: editorial,
   },
   {
     slug: "tara",
     name: "Tara",
-    meaning: "Star",
+    meaning: "The Starlight Collection",
     focus: "Sparkle CZ studs and star motifs.",
     image: earrings,
   },
   {
     slug: "nakshatra",
     name: "Nakshatra",
-    meaning: "Constellation",
+    meaning: "The Constellation Collection",
     focus: "Layering sets, charms and zodiac.",
     image: bracelets,
   },
   {
     slug: "chandrika",
     name: "Chandrika",
-    meaning: "Moonbeam",
+    meaning: "The Lunar Radiance Collection",
     focus: "Bridal and gifting edit.",
     image: gifting,
   },
 ];
 
-const img = { earrings, rings, necklaces, bracelets } as const;
-
-export const sampleProducts: Product[] = (
-  [
-    ["Sample Crescent Stud", "earrings", "ardh-chandra", "Bestseller"],
-    ["Sample Moon Pendant", "necklaces", "chandni", "Bestseller"],
-    ["Sample Stacking Band", "rings", "chandni", "Bestseller"],
-    ["Sample Star Charm Bracelet", "bracelets", "nakshatra", "Bestseller"],
-    ["Sample Tara Stud", "earrings", "tara", "New"],
-    ["Sample Layering Chain", "necklaces", "nakshatra", "New"],
-    ["Sample Pavé Band", "rings", "tara", "New"],
-    ["Sample Fine Chain Bracelet", "bracelets", "chandni", "New"],
-  ] as const
-).map(([name, category, collection, tag], i) => ({
-  id: `sample-${i + 1}`,
-  name,
-  category,
-  collection,
-  image: img[category],
-  price: null,
-  tag,
-  isSample: true as const,
-}));
-
 export const getCollection = (slug: string) => collections.find((c) => c.slug === slug);
 
-// SHOPPING DEMO ONLY — fictional names and illustrative prices for interaction testing.
-// Existing homepage sample rows above remain unchanged. No stock or purity assertions.
-export const demoProducts: Product[] = collections.flatMap((collection, collectionIndex) =>
-  categories.map((category, categoryIndex) => ({
-    id: `demo-${collection.slug}-${category.slug}`,
-    name: `Demo ${collection.name} ${category.name}`,
-    category: category.slug,
-    collection: collection.slug,
-    image: category.image,
-    price: null,
-    demoPrice: ([1200, 1800, 2400, 3200][categoryIndex] ?? 1200) + collectionIndex * 250,
-    edit:
-      ["Minimal", "Celestial", "Statement", "Gifting"][(collectionIndex + categoryIndex) % 4] ??
-      "Minimal",
-    addedOn: `2026-10-${String(collectionIndex * 4 + categoryIndex + 1).padStart(2, "0")}`,
-    featuredOrder: collectionIndex * 4 + categoryIndex,
-    isSample: true as const,
-    description: `An illustrative ${collection.name} ${category.name.toLowerCase()} preview from the INDUKA demo catalogue. This image and price are for browsing only, not a real product offer.`,
-    gallery: [
-      { src: category.image, label: "Sample photograph" },
-      { src: category.image, label: "Detail crop · same sample photograph", detailCrop: true },
-    ],
-    variants:
-      category.slug === "rings"
-        ? [
-            { id: "demo-a", label: "Demo option A", isDemo: true },
-            { id: "demo-b", label: "Demo option B", isDemo: true },
-          ]
-        : undefined,
-  })),
-);
-
-export const browsingProducts = [...sampleProducts, ...demoProducts];
-export const getProduct = (id: string) => browsingProducts.find((product) => product.id === id);
-export const productPriceLabel = (product: Product) =>
-  product.demoPrice === undefined
-    ? formatPrice(product.price)
-    : `${formatPrice(product.demoPrice)} · Demo price`;
+// Live catalogue: products come from Lovable Cloud via the CatalogProvider store.
+export const allProducts = () => getCatalog().products;
+export const getProduct = (id: string) => allProducts().find((product) => product.id === id);
+export const productPriceLabel = (product: Product) => formatPrice(product.price);
+export const availabilityLabel = (product: Product) =>
+  product.stock === undefined ? "" : product.stock > 0 ? "In stock" : "Currently unavailable";
 export const formatPrice = (p: number | null) =>
   p === null ? "Price to be announced" : `₹${p.toLocaleString("en-IN")}`;
