@@ -28,7 +28,9 @@ export function CartLines({
           >
             <Link to="/products/$productId" params={{ productId: product.id }}>
               <SafeImage
-                src={product.image}
+                src={product.thumbnail || product.image}
+                loading="lazy"
+                decoding="async"
                 alt={product.name}
                 className="aspect-[4/5] w-full object-cover"
               />

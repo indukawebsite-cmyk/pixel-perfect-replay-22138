@@ -10,11 +10,12 @@ export function CollectionCard({ collection, index }: { collection: Collection; 
     >
       <img
         src={collection.image}
-        alt={`${collection.name} collection mood image (sample)`}
+        alt={`${collection.name} collection — INDUKA sterling silver`}
+        decoding="async"
         loading="lazy"
         width={800}
         height={1000}
-        className={`h-full w-full object-cover transition duration-1000 ease-[var(--ease-lux)] group-hover:scale-[1.025] motion-reduce:transform-none motion-reduce:transition-none ${collection.slug === "ardh-chand" ? "object-right" : "object-center"}`}
+        className={`h-full w-full object-cover transition duration-1000 ease-[var(--ease-lux)] group-hover:scale-[1.025] motion-reduce:transform-none motion-reduce:transition-none object-center`}
       />
       <div className="absolute inset-0 bg-gradient-to-t from-midnight via-midnight/35 to-transparent" />
       <div className="absolute inset-x-0 bottom-0 flex min-h-48 flex-col justify-end gap-3 bg-gradient-to-t from-midnight via-midnight/85 to-transparent p-6 text-ivory">

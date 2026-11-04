@@ -14,20 +14,22 @@ export function ProductCard({ product, shopping = false }: { product: Product; s
   const saved = ids.includes(product.id);
   const col = getCollection(product.collection);
   const available = product.price !== null && (product.stock ?? 0) > 0;
-  const second = product.gallery?.[1]?.src;
+  const second = product.gallery?.[1]?.thumb || product.gallery?.[1]?.src;
   return (
     <article className="group flex flex-col">
       <div className="relative aspect-[4/5] overflow-hidden bg-muted">
         <Link to="/products/$productId" params={{ productId: product.id }} aria-label={`View ${product.name}`} className="block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring">
           <SafeImage
-            src={product.image}
+            src={product.thumbnail || product.image}
             alt={product.gallery?.[0]?.alt ?? product.name}
             loading="lazy"
+            decoding="async"
+            sizes="(min-width: 768px) 25vw, 50vw"
             width={800}
             height={1000}
             className="h-full w-full object-cover object-center transition duration-1000 ease-[var(--ease-lux)] group-hover:scale-[1.025] group-hover:brightness-105 motion-reduce:transform-none motion-reduce:transition-none"
           />
-          {second && <img src={second} alt="" aria-hidden="true" loading="lazy" onError={(e) => { e.currentTarget.style.display = "none"; }} className="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-700 group-hover:opacity-100 motion-reduce:transition-none" />}
+          {second && <img src={second} alt="" aria-hidden="true" loading="lazy" decoding="async" onError={(e) => { e.currentTarget.style.display = "none"; }} className="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-700 group-hover:opacity-100 motion-reduce:transition-none" />}
         </Link>
         <Button variant="ghost" size="icon"
           type="button"
