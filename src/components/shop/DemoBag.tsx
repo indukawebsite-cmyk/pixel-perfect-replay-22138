@@ -103,15 +103,15 @@ export function DemoBag({ onNavigate }: { onNavigate: () => void }) {
           })}
           <div className="mt-auto flex flex-col gap-4 border-t border-border pt-6">
             <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4">
-              <span className="text-sm">Demo subtotal</span>
+              <span className="text-sm">Subtotal</span>
               <span className="text-lg font-medium">{formatPrice(cartTotal(items))}</span>
             </div>
             <p className="text-xs leading-relaxed text-muted-foreground">
-              Illustrative total only. Demo checkout never creates a real order or payment.
+              Checkout is not live yet, so no real order or payment is created.
             </p>
             <Button asChild variant="lux" size="xl">
               <Link to="/cart" onClick={onNavigate}>
-                View demo bag
+                View bag
               </Link>
             </Button>
           </div>

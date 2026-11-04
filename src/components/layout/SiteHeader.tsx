@@ -6,6 +6,8 @@ import { Logo } from "@/components/brand/Logo";
 import { Button } from "@/components/ui/button";
 import { collections, productPriceLabel } from "@/lib/catalog";
 import { searchProducts } from "@/lib/catalog-search";
+import { useLiveCatalog } from "@/lib/live-catalog";
+import { SafeImage } from "@/components/shop/SafeImage";
 import { DemoBag } from "@/components/shop/DemoBag";
 import { useCart } from "@/components/shop/CartProvider";
 import { useWishlist } from "@/components/shop/WishlistProvider";
@@ -19,6 +21,7 @@ export function SiteHeader() {
   const { ids } = useWishlist();
   const { items } = useCart();
   const bagCount = items.reduce((total, item) => total + item.quantity, 0);
+  useLiveCatalog();
   const results = searchProducts(query);
   useEffect(() => {
     const on = () => setScrolled(window.scrollY > 8);
@@ -46,9 +49,9 @@ export function SiteHeader() {
       {panel === "cart" && <DemoBag onNavigate={close} />}
       {panel === "search" && <>
         <label className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-3 border-b border-foreground pb-3"><Search className="h-4 w-4" /><span className="sr-only">Search jewellery</span><input autoFocus value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search jewellery or collections" className="min-w-0 bg-transparent py-2 text-base outline-none placeholder:text-muted-foreground" /></label>
-        <p role="status" className="my-6 text-xs leading-relaxed text-muted-foreground">{query.trim() ? `${results.length} sample ${results.length === 1 ? "piece" : "pieces"} found` : "Explore sample pieces · Real catalogue coming soon"}</p>
-        {results.length === 0 && <div className="py-8"><h2 className="text-2xl">No pieces found</h2><p className="mt-3 text-sm text-muted-foreground">Try a category such as rings or a collection such as Chandni.</p><Button variant="link" onClick={() => setQuery("")}>Clear search</Button></div>}
-        <div className="flex flex-col gap-5">{results.map((product) => <Link key={product.id} to="/products/$productId" params={{ productId: product.id }} onClick={close} className="grid grid-cols-[4rem_minmax(0,1fr)] items-center gap-4"><img src={product.image} alt="Sample jewellery" className="aspect-[4/5] w-full object-cover" /><div className="min-w-0"><p className="text-sm font-medium leading-relaxed">{product.name}</p><p className="mt-1 text-xs text-muted-foreground">{productPriceLabel(product)}</p></div></Link>)}</div>
+        <p role="status" className="my-6 text-xs leading-relaxed text-muted-foreground">{query.trim() ? `${results.length} ${results.length === 1 ? "piece" : "pieces"} found` : "Search by name, category or collection"}</p>
+        {results.length === 0 && <div className="py-8"><h2 className="text-2xl">No pieces found</h2><p className="mt-3 text-sm text-muted-foreground">Try a category such as pendants or a collection such as Chandni.</p><Button variant="link" onClick={() => setQuery("")}>Clear search</Button></div>}
+        <div className="flex flex-col gap-5">{results.map((product) => <Link key={product.id} to="/products/$productId" params={{ productId: product.id }} onClick={close} className="grid grid-cols-[4rem_minmax(0,1fr)] items-center gap-4"><SafeImage src={product.image} alt={product.name} className="aspect-[4/5] w-full object-cover" /><div className="min-w-0"><p className="text-sm font-medium leading-relaxed">{product.name}</p><p className="mt-1 text-xs text-muted-foreground">{productPriceLabel(product)}</p></div></Link>)}</div>
       </>}
     </Drawer>
   </>;
