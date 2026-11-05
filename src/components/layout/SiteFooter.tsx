@@ -1,6 +1,5 @@
 import { Link } from "@tanstack/react-router";
 import { Logo } from "@/components/brand/Logo";
-import { collections } from "@/lib/catalog";
 
 export function SiteFooter() {
   return (
@@ -8,26 +7,26 @@ export function SiteFooter() {
       <div className="container-lux grid gap-14 py-20 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
         <div className="flex flex-col gap-6">
           <Logo variant="gold" className="w-44" />
-          <p className="editorial max-w-xs text-lg text-soft-gold">Wear the moon.</p>
+          <p className="editorial max-w-xs text-lg text-soft-gold">Pure silver. Distinctive style.</p>
           <p className="max-w-xs text-sm text-ivory/60">
-            Moon-inspired 925 sterling silver jewellery, designed in India and made to be kept.
+            Pure 925 sterling silver jewellery for men and women. Easy returns and exchanges. Gift-worthy packaging with every order.
           </p>
         </div>
         <FooterCol title="Customer care">
           <Link to="/contact">Contact</Link>
           <Link to="/faqs">FAQs</Link>
           <Link to="/shipping">Shipping</Link>
-          <Link to="/returns">Returns</Link>
+          <Link to="/returns">Returns &amp; exchanges</Link>
         </FooterCol>
-        <FooterCol title="Collections">
+        <FooterCol title="Shop">
+          <Link to="/men">Shop Men</Link>
+          <Link to="/women">Shop Women</Link>
+          <Link to="/bestsellers">Bestsellers</Link>
           <Link to="/shop">All jewellery</Link>
-          <Link to="/collections">All collections</Link>
-          {collections.map((c) => (
-            <Link key={c.slug} to="/collections/$slug" params={{ slug: c.slug }}>{c.name}</Link>
-          ))}
         </FooterCol>
         <FooterCol title="House">
-          <Link to="/about">Our story</Link>
+          <Link to="/about">About us</Link>
+          <Link to="/silver-care">Silver policy &amp; care</Link>
           <Link to="/contact">Contact</Link>
           <Link to="/account">Account</Link>
           <Link to="/wishlist">Wishlist</Link>
