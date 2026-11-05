@@ -26,11 +26,9 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const { products } = useLiveCatalog();
-  const men = forGender(products, "men");
-  const women = forGender(products, "women");
   const gifts = products.filter((p) => (p.stock ?? 0) > 0).slice(0, 4);
-  const [m1, m2, m3, m4] = menImagery;
-  const [w1, w2] = womenImagery;
+  const [m1] = menImagery;
+  const [w1] = womenImagery;
   return (
     <>
       {/* 1 · HERO */}
