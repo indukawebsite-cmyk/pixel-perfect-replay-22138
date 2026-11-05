@@ -56,7 +56,8 @@ function SlideContent({ slide, align }: { slide: Slide; align: "left" | "right" 
       )}
     >
       <span className={cn("eyebrow", dark ? "text-soft-gold" : "text-cocoa")}>
-        {slide.index} · {slide.eyebrow}
+        {slide.index} · {slide.eyebrow.split(" · ")[0]}
+        <span className="hidden sm:inline"> · {slide.eyebrow.split(" · ")[1]}</span>
       </span>
       <h2
         className={cn(
@@ -70,7 +71,7 @@ function SlideContent({ slide, align }: { slide: Slide; align: "left" | "right" 
       <span
         className={cn(
           buttonVariants({ variant: dark ? "luxLight" : "lux", size: "xl" }),
-          "pointer-events-none mt-2 inline-flex items-center gap-3",
+          "pointer-events-none mt-2 inline-flex w-fit items-center gap-3",
         )}
       >
         {slide.cta}
