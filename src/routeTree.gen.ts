@@ -13,11 +13,13 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as BestsellersRouteImport } from './routes/bestsellers'
 import { Route as CartRouteImport } from './routes/cart'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as FaqsRouteImport } from './routes/faqs'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
+import { Route as MenRouteImport } from './routes/men'
 import { Route as OrderConfirmationRouteImport } from './routes/order-confirmation'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
@@ -25,9 +27,11 @@ import { Route as ReturnsRouteImport } from './routes/returns'
 import { Route as ShippingRouteImport } from './routes/shipping'
 import { Route as ShopRouteImport } from './routes/shop'
 import { Route as SignupRouteImport } from './routes/signup'
+import { Route as SilverCareRouteImport } from './routes/silver-care'
 import { Route as SocialRouteImport } from './routes/social'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as WishlistRouteImport } from './routes/wishlist'
+import { Route as WomenRouteImport } from './routes/women'
 import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated/account'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as CollectionsIndexRouteImport } from './routes/collections.index'
@@ -60,6 +64,11 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BestsellersRoute = BestsellersRouteImport.update({
+  id: '/bestsellers',
+  path: '/bestsellers',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CartRoute = CartRouteImport.update({
   id: '/cart',
   path: '/cart',
@@ -83,6 +92,11 @@ const FaqsRoute = FaqsRouteImport.update({
 const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
   id: '/forgot-password',
   path: '/forgot-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MenRoute = MenRouteImport.update({
+  id: '/men',
+  path: '/men',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OrderConfirmationRoute = OrderConfirmationRouteImport.update({
@@ -120,6 +134,11 @@ const SignupRoute = SignupRouteImport.update({
   path: '/signup',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SilverCareRoute = SilverCareRouteImport.update({
+  id: '/silver-care',
+  path: '/silver-care',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SocialRoute = SocialRouteImport.update({
   id: '/social',
   path: '/social',
@@ -133,6 +152,11 @@ const TermsRoute = TermsRouteImport.update({
 const WishlistRoute = WishlistRouteImport.update({
   id: '/wishlist',
   path: '/wishlist',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WomenRoute = WomenRouteImport.update({
+  id: '/women',
+  path: '/women',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedAccountRoute = AuthenticatedAccountRouteImport.update({
@@ -206,11 +230,13 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
+  '/bestsellers': typeof BestsellersRoute
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
   '/faqs': typeof FaqsRoute
   '/forgot-password': typeof ForgotPasswordRoute
+  '/men': typeof MenRoute
   '/order-confirmation': typeof OrderConfirmationRoute
   '/privacy': typeof PrivacyRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -218,9 +244,11 @@ export interface FileRoutesByFullPath {
   '/shipping': typeof ShippingRoute
   '/shop': typeof ShopRoute
   '/signup': typeof SignupRoute
+  '/silver-care': typeof SilverCareRoute
   '/social': typeof SocialRoute
   '/terms': typeof TermsRoute
   '/wishlist': typeof WishlistRoute
+  '/women': typeof WomenRoute
   '/account': typeof AuthenticatedAccountRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/collections/$slug': typeof CollectionsSlugRoute
@@ -238,11 +266,13 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
+  '/bestsellers': typeof BestsellersRoute
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
   '/faqs': typeof FaqsRoute
   '/forgot-password': typeof ForgotPasswordRoute
+  '/men': typeof MenRoute
   '/order-confirmation': typeof OrderConfirmationRoute
   '/privacy': typeof PrivacyRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -250,9 +280,11 @@ export interface FileRoutesByTo {
   '/shipping': typeof ShippingRoute
   '/shop': typeof ShopRoute
   '/signup': typeof SignupRoute
+  '/silver-care': typeof SilverCareRoute
   '/social': typeof SocialRoute
   '/terms': typeof TermsRoute
   '/wishlist': typeof WishlistRoute
+  '/women': typeof WomenRoute
   '/account': typeof AuthenticatedAccountRoute
   '/collections/$slug': typeof CollectionsSlugRoute
   '/products/$productId': typeof ProductsProductIdRoute
@@ -271,11 +303,13 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
+  '/bestsellers': typeof BestsellersRoute
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
   '/faqs': typeof FaqsRoute
   '/forgot-password': typeof ForgotPasswordRoute
+  '/men': typeof MenRoute
   '/order-confirmation': typeof OrderConfirmationRoute
   '/privacy': typeof PrivacyRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -283,9 +317,11 @@ export interface FileRoutesById {
   '/shipping': typeof ShippingRoute
   '/shop': typeof ShopRoute
   '/signup': typeof SignupRoute
+  '/silver-care': typeof SilverCareRoute
   '/social': typeof SocialRoute
   '/terms': typeof TermsRoute
   '/wishlist': typeof WishlistRoute
+  '/women': typeof WomenRoute
   '/_authenticated/account': typeof AuthenticatedAccountRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/collections/$slug': typeof CollectionsSlugRoute
@@ -305,11 +341,13 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/auth'
+    | '/bestsellers'
     | '/cart'
     | '/checkout'
     | '/contact'
     | '/faqs'
     | '/forgot-password'
+    | '/men'
     | '/order-confirmation'
     | '/privacy'
     | '/reset-password'
@@ -317,9 +355,11 @@ export interface FileRouteTypes {
     | '/shipping'
     | '/shop'
     | '/signup'
+    | '/silver-care'
     | '/social'
     | '/terms'
     | '/wishlist'
+    | '/women'
     | '/account'
     | '/admin'
     | '/collections/$slug'
@@ -337,11 +377,13 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/auth'
+    | '/bestsellers'
     | '/cart'
     | '/checkout'
     | '/contact'
     | '/faqs'
     | '/forgot-password'
+    | '/men'
     | '/order-confirmation'
     | '/privacy'
     | '/reset-password'
@@ -349,9 +391,11 @@ export interface FileRouteTypes {
     | '/shipping'
     | '/shop'
     | '/signup'
+    | '/silver-care'
     | '/social'
     | '/terms'
     | '/wishlist'
+    | '/women'
     | '/account'
     | '/collections/$slug'
     | '/products/$productId'
@@ -369,11 +413,13 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/about'
     | '/auth'
+    | '/bestsellers'
     | '/cart'
     | '/checkout'
     | '/contact'
     | '/faqs'
     | '/forgot-password'
+    | '/men'
     | '/order-confirmation'
     | '/privacy'
     | '/reset-password'
@@ -381,9 +427,11 @@ export interface FileRouteTypes {
     | '/shipping'
     | '/shop'
     | '/signup'
+    | '/silver-care'
     | '/social'
     | '/terms'
     | '/wishlist'
+    | '/women'
     | '/_authenticated/account'
     | '/_authenticated/admin'
     | '/collections/$slug'
@@ -403,11 +451,13 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
   AuthRoute: typeof AuthRoute
+  BestsellersRoute: typeof BestsellersRoute
   CartRoute: typeof CartRoute
   CheckoutRoute: typeof CheckoutRoute
   ContactRoute: typeof ContactRoute
   FaqsRoute: typeof FaqsRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
+  MenRoute: typeof MenRoute
   OrderConfirmationRoute: typeof OrderConfirmationRoute
   PrivacyRoute: typeof PrivacyRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
@@ -415,9 +465,11 @@ export interface RootRouteChildren {
   ShippingRoute: typeof ShippingRoute
   ShopRoute: typeof ShopRoute
   SignupRoute: typeof SignupRoute
+  SilverCareRoute: typeof SilverCareRoute
   SocialRoute: typeof SocialRoute
   TermsRoute: typeof TermsRoute
   WishlistRoute: typeof WishlistRoute
+  WomenRoute: typeof WomenRoute
   CollectionsSlugRoute: typeof CollectionsSlugRoute
   ProductsProductIdRoute: typeof ProductsProductIdRoute
   CollectionsIndexRoute: typeof CollectionsIndexRoute
@@ -453,6 +505,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/bestsellers': {
+      id: '/bestsellers'
+      path: '/bestsellers'
+      fullPath: '/bestsellers'
+      preLoaderRoute: typeof BestsellersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/cart': {
       id: '/cart'
       path: '/cart'
@@ -486,6 +545,13 @@ declare module '@tanstack/react-router' {
       path: '/forgot-password'
       fullPath: '/forgot-password'
       preLoaderRoute: typeof ForgotPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/men': {
+      id: '/men'
+      path: '/men'
+      fullPath: '/men'
+      preLoaderRoute: typeof MenRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/order-confirmation': {
@@ -537,6 +603,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignupRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/silver-care': {
+      id: '/silver-care'
+      path: '/silver-care'
+      fullPath: '/silver-care'
+      preLoaderRoute: typeof SilverCareRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/social': {
       id: '/social'
       path: '/social'
@@ -556,6 +629,13 @@ declare module '@tanstack/react-router' {
       path: '/wishlist'
       fullPath: '/wishlist'
       preLoaderRoute: typeof WishlistRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/women': {
+      id: '/women'
+      path: '/women'
+      fullPath: '/women'
+      preLoaderRoute: typeof WomenRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/account': {
@@ -689,11 +769,13 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AboutRoute: AboutRoute,
   AuthRoute: AuthRoute,
+  BestsellersRoute: BestsellersRoute,
   CartRoute: CartRoute,
   CheckoutRoute: CheckoutRoute,
   ContactRoute: ContactRoute,
   FaqsRoute: FaqsRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
+  MenRoute: MenRoute,
   OrderConfirmationRoute: OrderConfirmationRoute,
   PrivacyRoute: PrivacyRoute,
   ResetPasswordRoute: ResetPasswordRoute,
@@ -701,9 +783,11 @@ const rootRouteChildren: RootRouteChildren = {
   ShippingRoute: ShippingRoute,
   ShopRoute: ShopRoute,
   SignupRoute: SignupRoute,
+  SilverCareRoute: SilverCareRoute,
   SocialRoute: SocialRoute,
   TermsRoute: TermsRoute,
   WishlistRoute: WishlistRoute,
+  WomenRoute: WomenRoute,
   CollectionsSlugRoute: CollectionsSlugRoute,
   ProductsProductIdRoute: ProductsProductIdRoute,
   CollectionsIndexRoute: CollectionsIndexRoute,

@@ -16,7 +16,7 @@ export const Route = createFileRoute("/_authenticated/admin/products/$productId"
 });
 
 const empty: ProductInput = {
-  name: "", slug: "", sku: "", price: 0, compare_at_price: null, category: "pendants", collection_id: null, is_active: false,
+  name: "", slug: "", sku: "", price: 0, compare_at_price: null, category: "pendants", collection_id: null, gender: null, is_active: false,
   description: "", tagline: "", highlights: [], material: "", purity: "", length_cm: null, width_cm: null,
   meta_title: "", meta_description: "", stock: 0,
 };
@@ -122,7 +122,12 @@ function ProductEditor() {
                 {CATEGORIES.map((c) => <option key={c} value={c}>{c[0]!.toUpperCase() + c.slice(1)}</option>)}
               </select>
             </Field>
-            <Field label="Collection">
+            <Field label="Shop (Men / Women)" hint="Leave unassigned until confirmed.">
+              <select className={inputClass} value={form.gender ?? ""} onChange={(e) => set("gender", e.target.value || null)}>
+                <option value="">Unassigned</option><option value="men">Men</option><option value="women">Women</option><option value="unisex">Both (unisex)</option>
+              </select>
+            </Field>
+            <Field label="Collection (internal, not shown to customers)">
               <select className={inputClass} value={form.collection_id ?? ""} onChange={(e) => set("collection_id", e.target.value || null)}>
                 <option value="">No collection</option>
                 {(collections.data ?? []).map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}

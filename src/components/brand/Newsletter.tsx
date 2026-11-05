@@ -10,9 +10,9 @@ export function Newsletter() {
   return (
     <section className="bg-midnight py-20 text-ivory md:py-24">
       <div className="container-lux flex max-w-2xl flex-col items-center gap-6 text-center">
-        <span className="eyebrow text-soft-gold">The moonlit letter</span>
+        <span className="eyebrow text-soft-gold">The INDUKA letter</span>
         <h2 className="text-4xl md:text-5xl">First light, <span className="editorial text-champagne">first look.</span></h2>
-        <p className="text-sm leading-relaxed text-ivory/80">Be first to know when our debut collections launch.</p>
+        <p className="text-sm leading-relaxed text-ivory/80">Be first to know when new pieces launch.</p>
         <form noValidate className="w-full max-w-md" onSubmit={(event) => {
           event.preventDefault();
           const valid = validateNewsletterEmail(email);

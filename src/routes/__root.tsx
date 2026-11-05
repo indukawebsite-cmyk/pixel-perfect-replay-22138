@@ -88,7 +88,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "INDUKA — 925 Sterling Silver Jewellery" },
-      { name: "description", content: "House of Induka: moon-inspired 925 sterling silver jewellery. Wear the moon." },
+      { name: "description", content: "House of Induka: pure 925 sterling silver jewellery for men and women." },
       { name: "author", content: "House of Induka" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

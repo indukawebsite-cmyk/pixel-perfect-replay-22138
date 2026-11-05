@@ -19,8 +19,8 @@ describe("Catalogue constraints", () => {
     expect(allProducts()).toEqual([]);
     expect(searchProducts("")).toEqual([]);
   });
-  it("searches names and collections without case sensitivity", () => {
-    expect(searchProducts(" CHANDNI ").map((p) => p.id)).toEqual(["fx-pendant-b", "fx-earring-a"]);
+  it("no longer finds pieces by retired collection names", () => {
+    expect(searchProducts(" CHANDNI ")).toEqual([]);
     expect(searchProducts("missing-piece")).toEqual([]);
   });
   it("matches search terms within the selected category", () => {
@@ -29,5 +29,29 @@ describe("Catalogue constraints", () => {
   it("validates newsletter email", () => {
     expect(validateNewsletterEmail("invalid@")).toBe(false);
     expect(validateNewsletterEmail("guest@example.com")).toBe(true);
+  });
+});
+
+import { forGender, categoryMatches } from "@/lib/catalog";
+describe("Men's and Women's shops", () => {
+  const base = allProducts()[0]!;
+  const list = [
+    { ...base, id: "m", gender: "men" as const },
+    { ...base, id: "w", gender: "women" as const },
+    { ...base, id: "u", gender: "unisex" as const },
+    { ...base, id: "x", gender: undefined },
+  ];
+  it("lists only confirmed men's and unisex pieces in Shop Men", () => {
+    expect(forGender(list, "men").map((p) => p.id)).toEqual(["m", "u"]);
+  });
+  it("lists only confirmed women's and unisex pieces in Shop Women", () => {
+    expect(forGender(list, "women").map((p) => p.id)).toEqual(["w", "u"]);
+  });
+  it("never places unassigned pieces in either shop", () => {
+    expect([...forGender(list, "men"), ...forGender(list, "women")].some((p) => p.id === "x")).toBe(false);
+  });
+  it("groups pendants under Necklaces / Chains", () => {
+    expect(categoryMatches("necklaces", "pendants")).toBe(true);
+    expect(categoryMatches("necklaces", "earrings")).toBe(false);
   });
 });

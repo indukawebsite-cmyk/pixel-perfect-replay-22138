@@ -10,6 +10,8 @@ import purnima from "@/assets/real/col-purnima.jpg";
 import tara from "@/assets/real/col-tara.jpg";
 import nakshatra from "@/assets/real/col-nakshatra.jpg";
 import chandrika from "@/assets/real/col-chandrika.jpg";
+import sampleBracelets from "@/assets/sample/cat-bracelets.jpg";
+import sampleRings from "@/assets/sample/cat-rings.jpg";
 
 export type Category = { slug: string; name: string; image: string };
 export type Collection = {
@@ -45,6 +47,8 @@ export type Product = {
   highlights?: string[];
   size?: string | undefined;
   tag?: "New" | "Bestseller";
+  /** Confirmed shop: undefined = awaiting confirmation (never inferred from looks). */
+  gender?: "men" | "women" | "unisex" | undefined;
   isSample: boolean;
   secondaryImage?: string; // Only supplied when a genuine second image is available.
   edit?: string; // Demo merchandising label, not a product specification.
@@ -56,18 +60,28 @@ export type Product = {
   specifications?: VerifiedSpecifications;
 };
 
-/** Homepage tiles: only categories that have real INDUKA pieces and photography. */
-export const categories: Category[] = [
-  { slug: "pendants", name: "Pendants", image: pendants },
-  { slug: "earrings", name: "Earrings", image: earrings },
+/** Customer-facing category groups. `matches` lists the stored categories each group covers. */
+export type CategoryGroup = { slug: string; name: string; image: string; matches: string[] };
+export const categoryGroups: CategoryGroup[] = [
+  { slug: "necklaces", name: "Necklaces / Chains", image: pendants, matches: ["necklaces", "pendants", "chains"] },
+  { slug: "bracelets", name: "Bracelets", image: sampleBracelets, matches: ["bracelets"] },
+  { slug: "earrings", name: "Tops / Earrings", image: earrings, matches: ["earrings"] },
+  { slug: "rings", name: "Rings", image: sampleRings, matches: ["rings"] },
 ];
-/** Categories offered in shop filters, including those without homepage tiles yet. */
+export const categoryMatches = (slug: string, category: string) =>
+  categoryGroups.find((g) => g.slug === slug)?.matches.includes(category) ?? slug === category;
+
+/** Shop filters. */
+export const categories: Category[] = categoryGroups;
 export const shopCategories: Category[] = [
-  ...categories,
-  { slug: "rings", name: "Rings", image: "" },
-  { slug: "necklaces", name: "Necklaces", image: "" },
-  { slug: "bracelets", name: "Bracelets", image: "" },
+  categoryGroups[0]!,
+  { slug: "pendants", name: "Pendants", image: pendants },
+  ...categoryGroups.slice(1),
 ];
+
+/** Men's shop: confirmed men's and unisex pieces. Women's: confirmed women's and unisex. */
+export const forGender = (products: Product[], gender: "men" | "women") =>
+  products.filter((p) => p.gender === gender || p.gender === "unisex");
 
 export const collections: Collection[] = [
   {
