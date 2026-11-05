@@ -13,7 +13,7 @@ export const Route = createFileRoute("/contact")({
     ],
   }),
   component: () => (
-    <PageIntro eyebrow="Contact" title="Write to" accent="us.">
+    <PageIntro eyebrow="Contact" title="Contact" accent="us.">
       Official email, WhatsApp and studio details will be added here once supplied.
     </PageIntro>
   ),
