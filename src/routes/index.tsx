@@ -50,52 +50,10 @@ function Home() {
         </div>
       </section>
 
-      {/* 2 · SHOP MEN — the larger share of the page */}
-      <section className="bg-cocoa text-ivory">
-        <div className="container-lux py-24 md:py-32">
-          <div className="grid gap-12 lg:grid-cols-[1fr_1.6fr] lg:items-center">
-            <Reveal className="flex flex-col gap-6">
-              <span className="eyebrow text-soft-gold">Shop Men</span>
-              <h2 className="text-5xl uppercase leading-[1.05] md:text-7xl">Designed with character.</h2>
-              <p className="editorial text-2xl text-champagne">Made to last.</p>
-              <p className="max-w-md text-sm leading-loose text-ivory/80">Pendants and chains in pure 925 sterling silver — engraved, oxidised and built with presence.</p>
-              <div className="flex flex-wrap gap-3">
-                <Button asChild variant="luxLight" size="xl"><Link to="/men">Explore Men</Link></Button>
-                <Button asChild variant="luxOutline" size="xl" className="text-ivory"><Link to="/men" search={{ category: "necklaces" }}>Pendants &amp; Chains</Link></Button>
-              </div>
-            </Reveal>
-            <div className="grid grid-cols-2 grid-rows-2 gap-3 md:gap-4">
-              {[m2, m3, m4].map((img, i) => (
-                <Reveal key={img!.src} delay={i * 0.06} className={i === 0 ? "row-span-2" : ""}>
-                  <Link to="/men" className="group block h-full overflow-hidden bg-midnight">
-                    <img src={img!.src} alt={img!.alt} loading="lazy" decoding="async" className={`w-full object-cover transition-transform duration-[1400ms] ease-[var(--ease-lux)] group-hover:scale-105 h-full ${i === 0 ? "min-h-[22rem] md:min-h-[36rem]" : ""}`} />
-                  </Link>
-                </Reveal>
-              ))}
-            </div>
-          </div>
-          {men.length > 0 && <ProductGrid products={men.slice(0, 4)} tone="dark" />}
-        </div>
-      </section>
+      {/* 2 · MEN / WOMEN CAMPAIGN — 60:40 editorial split, swipeable on mobile */}
+      <GenderCampaign />
 
-      {/* 3 · SHOP WOMEN */}
-      <section className="bg-card">
-        <div className="container-lux grid gap-10 py-20 md:grid-cols-[1.2fr_1fr] md:items-center md:py-24">
-          <div className="grid grid-cols-2 gap-3">
-            {[w1, w2].map((img) => <Reveal key={img!.src}><Link to="/women" className="group block overflow-hidden bg-muted"><img src={img!.src} alt={img!.alt} loading="lazy" decoding="async" className="aspect-[4/5] w-full object-cover transition-transform duration-[1400ms] group-hover:scale-105" /></Link></Reveal>)}
-          </div>
-          <Reveal className="flex flex-col gap-5">
-            <span className="eyebrow text-cocoa">Shop Women</span>
-            <h2 className="text-4xl uppercase leading-[1.1] md:text-5xl">Quiet light. Pure silver.</h2>
-            <p className="editorial text-xl text-champagne">Effortless elegance.</p>
-            <p className="max-w-md text-sm leading-loose text-muted-foreground">Earrings and fine silver pieces with colour, sparkle and detail — made to be cherished.</p>
-            <div><Button asChild variant="lux" size="xl"><Link to="/women">Explore Women</Link></Button></div>
-          </Reveal>
-        </div>
-        {women.length > 0 && <div className="container-lux pb-20"><ProductGrid products={women.slice(0, 4)} tone="light" /></div>}
-      </section>
-
-      {/* 4 · SHOP BY CATEGORY */}
+      {/* 3 · SHOP BY CATEGORY */}
       <section className="container-lux py-24 md:py-28">
         <SectionHeading eyebrow="Shop by category" title="Find your" accent="piece." />
         <div className="mt-14 grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
