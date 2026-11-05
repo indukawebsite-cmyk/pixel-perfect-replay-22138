@@ -19,7 +19,7 @@ import { WishlistProvider } from "@/components/shop/WishlistProvider";
 import { CartProvider } from "@/components/shop/CartProvider";
 import { CatalogProvider } from "@/components/shop/CatalogProvider";
 import { RecentlyViewedProvider } from "@/components/shop/RecentlyViewedProvider";
-import { DemoOrderProvider } from "@/components/shop/DemoOrderProvider";
+
 import { supabase } from "@/integrations/supabase/client";
 
 function NotFoundComponent() {
@@ -145,7 +145,6 @@ function RootComponent() {
       <WishlistProvider>
       <CartProvider>
       <RecentlyViewedProvider>
-      <DemoOrderProvider>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <a href="#main" className="sr-only focus:not-sr-only">Skip to content</a>
       <SiteHeader />
@@ -154,7 +153,6 @@ function RootComponent() {
       </main>
       <SiteFooter />
       <Toaster position="bottom-right" />
-      </DemoOrderProvider>
       </RecentlyViewedProvider>
       </CartProvider>
       </WishlistProvider>

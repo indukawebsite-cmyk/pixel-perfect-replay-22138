@@ -43,6 +43,13 @@
       "when": 1793897606070,
       "tag": "0005_add_product_gender",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1793907343488,
+      "tag": "0006_checkout_hardening",
+      "breakpoints": true
     }
   ]
 }

@@ -6,11 +6,7 @@ import { CartLines } from "@/components/shop/CartLines";
 import { CheckoutSteps, EmptyCart } from "@/components/shop/CheckoutShell";
 import { checkoutHead } from "@/lib/demo-checkout";
 export const Route = createFileRoute("/checkout")({
-  head: () =>
-    checkoutHead(
-      "Demo checkout",
-      "Preview the INDUKA checkout with fictional details. No payments or real orders.",
-    ),
+  head: () => checkoutHead("Checkout", "Place your INDUKA order with secure payment or cash on delivery."),
   component: CheckoutPage,
 });
 function CheckoutPage() {
@@ -18,10 +14,10 @@ function CheckoutPage() {
   return (
     <section className="container-lux py-8 md:py-12">
       <CheckoutSteps active="checkout" />
-      <h1 className="text-4xl md:text-5xl">Demo checkout</h1>
+      <h1 className="text-4xl md:text-5xl">Checkout</h1>
       {!ready ? (
         <p role="status" className="py-16">
-          Loading demo bag…
+          Loading your bag…
         </p>
       ) : !items.length ? (
         <EmptyCart />
@@ -31,7 +27,7 @@ function CheckoutPage() {
           <OrderSummary items={items}>
             <CartLines items={items} />
             <Link to="/cart" className="inline-block text-sm underline underline-offset-4">
-              Edit demo bag
+              Edit bag
             </Link>
           </OrderSummary>
         </div>

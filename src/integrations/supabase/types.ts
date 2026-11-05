@@ -145,6 +145,7 @@ export type Database = {
           customer_id: string
           discount: number
           id: string
+          idempotency_key: string | null
           order_number: string
           pin_code: string
           shipping: number
@@ -152,6 +153,7 @@ export type Database = {
           shipping_phone: string
           state: string
           status: Database["public"]["Enums"]["order_status"]
+          stock_deducted: boolean
           subtotal: number
           total: number
           updated_at: string
@@ -165,13 +167,15 @@ export type Database = {
           customer_id: string
           discount?: number
           id?: string
-          order_number: string
+          idempotency_key?: string | null
+          order_number?: string
           pin_code: string
           shipping?: number
           shipping_name: string
           shipping_phone: string
           state: string
           status?: Database["public"]["Enums"]["order_status"]
+          stock_deducted?: boolean
           subtotal: number
           total: number
           updated_at?: string
@@ -185,6 +189,7 @@ export type Database = {
           customer_id?: string
           discount?: number
           id?: string
+          idempotency_key?: string | null
           order_number?: string
           pin_code?: string
           shipping?: number
@@ -192,6 +197,7 @@ export type Database = {
           shipping_phone?: string
           state?: string
           status?: Database["public"]["Enums"]["order_status"]
+          stock_deducted?: boolean
           subtotal?: number
           total?: number
           updated_at?: string
@@ -476,6 +482,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      finalize_order: {
+        Args: {
+          p_mark_paid: boolean
+          p_order_id: string
+          p_razorpay_payment_id?: string
+        }
+        Returns: Json
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]

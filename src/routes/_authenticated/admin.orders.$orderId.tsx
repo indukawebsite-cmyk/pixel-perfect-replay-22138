@@ -1,9 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import { Button } from "@/components/ui/button";
 import { AdminHeader } from "@/components/admin/AdminUi";
 import { getOrder } from "@/lib/admin/api";
+import { updateOrderStatus } from "@/lib/admin/orders.functions";
 import { formatPrice } from "@/lib/catalog";
+
+const ORDER_STATUSES = ["pending", "confirmed", "processing", "shipped", "delivered", "cancelled", "refunded"] as const;
 
 export const Route = createFileRoute("/_authenticated/admin/orders/$orderId")({
   component: OrderDetail,
@@ -12,6 +16,7 @@ export const Route = createFileRoute("/_authenticated/admin/orders/$orderId")({
 function OrderDetail() {
   const { orderId } = Route.useParams();
   const q = useQuery({ queryKey: ["admin", "order", orderId], queryFn: () => getOrder(orderId) });
+  const setStatus = useServerFn(updateOrderStatus);
   if (q.isLoading) return <p role="status">Loading order…</p>;
   const o = q.data;
   if (!o) return <p role="alert">Order not found. <Link to="/admin/orders" className="link-lux">Back to orders</Link></p>;
@@ -57,7 +62,20 @@ function OrderDetail() {
             <p className="mt-2 leading-relaxed">{o.shipping_name}<br />{o.address_line1}{o.address_line2 && <><br />{o.address_line2}</>}<br />{o.city}, {o.state} {o.pin_code}<br />{o.country}</p>
           </div>
           {o.shipments[0]?.tracking_url && <a href={o.shipments[0].tracking_url} target="_blank" rel="noreferrer" className="link-lux">Track shipment</a>}
-          <p className="text-xs text-muted-foreground">Order, payment and shipping updates are recorded automatically by the checkout and courier systems once they are switched on.</p>
+          <div className="border border-border p-5">
+            <label htmlFor="order-status" className="eyebrow text-[0.6rem] text-champagne">Order status</label>
+            <select
+              id="order-status"
+              value={o.status}
+              onChange={(event) => {
+                const status = event.target.value;
+                void setStatus({ data: { orderId: o.id, status: status as (typeof ORDER_STATUSES)[number] } }).then(() => q.refetch());
+              }}
+              className="mt-3 h-11 w-full border border-input bg-background px-3 text-sm"
+            >
+              {ORDER_STATUSES.map((s) => <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>)}
+            </select>
+          </div>
         </aside>
       </div>
     </>

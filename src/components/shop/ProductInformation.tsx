@@ -78,7 +78,7 @@ export function ProductInformation({ product }: { product: Product }) {
             onClick={() => {
               add(product.id, Number(quantity), variant);
               setFeedback(
-                `${quantity} added to your bag${variant ? ` · ${product.variants?.find((option) => option.id === variant)?.label}` : ""}. Checkout is not live yet.`,
+                `${quantity} added to your bag${variant ? ` · ${product.variants?.find((option) => option.id === variant)?.label}` : ""}.`,
               );
             }}
           >
@@ -101,11 +101,10 @@ export function ProductInformation({ product }: { product: Product }) {
           variant="luxOutline"
           className="h-13 w-full tracking-normal"
           disabled={!canAdd}
-          onClick={() =>
-            setFeedback(
-              "Checkout and payments are not live yet. No order has been placed.",
-            )
-          }
+          onClick={() => {
+            add(product.id, Number(quantity), variant);
+            setFeedback("Added to your bag — continue to checkout when you are ready.");
+          }}
         >
           Buy now
         </Button>
@@ -115,7 +114,7 @@ export function ProductInformation({ product }: { product: Product }) {
               ? "Saved to your wishlist for this visit."
               : Number(quantity) > stock && stock > 0
                 ? `Only ${stock} available.`
-                : "Checkout is not live yet. No order or payment is taken.")}
+                : "Secure checkout with online payment or cash on delivery.")}
         </p>
       </div>
       <form
@@ -124,14 +123,14 @@ export function ProductInformation({ product }: { product: Product }) {
           e.preventDefault();
           setPinFeedback(
             validPin(pin)
-              ? "Valid format. Delivery availability cannot be checked yet; shipping is not connected."
+              ? "Delivery availability is confirmed when your order is placed."
               : "Enter a valid 6-digit Indian PIN code.",
           );
         }}
       >
         <label htmlFor="delivery-pin" className="flex items-center gap-2 text-xs font-medium">
           <MapPin className="h-4 w-4" />
-          Delivery PIN code · Non-live
+          Delivery PIN code
         </label>
         <div className="mt-3 flex gap-2">
           <input
@@ -152,7 +151,7 @@ export function ProductInformation({ product }: { product: Product }) {
           </Button>
         </div>
         <p role="status" className="mt-2 text-xs leading-relaxed text-muted-foreground">
-          {pinFeedback || "Demo format check only. No delivery promise."}
+          {pinFeedback || "We currently deliver within India."}
         </p>
       </form>
       <ProductAccordion product={product} />
