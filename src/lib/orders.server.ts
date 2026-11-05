@@ -25,13 +25,16 @@ export async function priceAndCheckStock(
   items: CheckoutItem[],
   allowInactive: boolean,
 ): Promise<Quote> {
-  const productIds = [...new Set(items.map((item) => item.productId))];
+  const slugs = [...new Set(items.map((item) => item.productId))];
   const { data: products, error } = await admin
     .from("products")
-    .select("id,name,sku,price,is_active")
-    .in("id", productIds);
+    .select("id,slug,name,sku,price,is_active")
+    .in("slug", slugs);
   if (error) throw new CheckoutError("Unable to validate your bag right now. Please try again.");
-  const productById = new Map((products ?? []).map((p: { id: string }) => [p.id, p]));
+  const productBySlug = new Map(
+    (products ?? []).map((p: { id: string; slug: string }) => [p.slug, p]),
+  );
+  const productIds = (products ?? []).map((p: { id: string }) => p.id);
 
   const { data: variants } = await admin
     .from("product_variants")
@@ -51,7 +54,7 @@ export async function priceAndCheckStock(
   const lines: PricedLine[] = [];
   for (const item of items) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const product = productById.get(item.productId) as any;
+    const product = productBySlug.get(item.productId) as any;
     if (!product) throw new CheckoutError("One of the pieces in your bag is no longer available.");
     if (!product.is_active && !allowInactive)
       throw new CheckoutError(`${product.name} is not available for purchase yet.`);
