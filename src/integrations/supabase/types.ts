@@ -333,6 +333,7 @@ export type Database = {
           compare_at_price: number | null
           created_at: string
           description: string | null
+          gender: string | null
           highlights: string[]
           id: string
           is_active: boolean
@@ -355,6 +356,7 @@ export type Database = {
           compare_at_price?: number | null
           created_at?: string
           description?: string | null
+          gender?: string | null
           highlights?: string[]
           id?: string
           is_active?: boolean
@@ -377,6 +379,7 @@ export type Database = {
           compare_at_price?: number | null
           created_at?: string
           description?: string | null
+          gender?: string | null
           highlights?: string[]
           id?: string
           is_active?: boolean
