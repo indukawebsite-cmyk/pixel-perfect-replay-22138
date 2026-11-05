@@ -1,4 +1,10 @@
 # Refinement pass
+# Netlify SSR deployment preparation
+- [x] Inspect the current build configuration, installed versions and SSR entry.
+- [x] Confirm Nitro's Netlify preset, output paths and integration portability requirements.
+- [x] Prepare the proposed configuration and exact Netlify settings for review.
+- [ ] Implement and validate Netlify SSR preparation after user approval; external privileged backend access remains a deployment blocker.
+
 - [x] Refine product cards, product navigation and session wishlist.
 - [x] Refine collection contrast, navigation and functional catalogue search.
 - [x] Refine homepage, newsletter feedback and social placeholders.
