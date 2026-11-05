@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import { signCatalogImages } from "@/lib/catalog-images.functions";
 import type { Product } from "@/lib/catalog";
 
 export const PRODUCT_IMAGE_BUCKET = "product-images";
