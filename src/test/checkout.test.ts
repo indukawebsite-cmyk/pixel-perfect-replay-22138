@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { shippingCharge, SHIPPING_POLICY } from "@/lib/shipping-policy";
 import { verifyPaymentSignature, verifyWebhookSignature } from "@/lib/razorpay.server";
-import { checkoutAddressSchema } from "@/lib/checkout-schema";
+import { checkoutAddressSchema, checkoutItemSchema } from "@/lib/checkout-schema";
 
 describe("shipping rule (free above threshold, flat fee below)", () => {
   it("charges the flat fee below the free-shipping threshold", () => {
@@ -51,6 +51,33 @@ describe("Razorpay signature verification", () => {
         "wrong_secret",
       ),
     ).toBe(false);
+  });
+});
+
+describe("cart item validation", () => {
+  it("accepts a real catalogue slug", () => {
+    expect(
+      checkoutItemSchema.safeParse({ productId: "jaguar-noir-925-sterling-silver-pendant", quantity: 1 }).success,
+    ).toBe(true);
+  });
+  it("rejects empty, malformed and oversized product references", () => {
+    expect(checkoutItemSchema.safeParse({ productId: "", quantity: 1 }).success).toBe(false);
+    expect(checkoutItemSchema.safeParse({ productId: "DROP TABLE--", quantity: 1 }).success).toBe(false);
+    expect(checkoutItemSchema.safeParse({ productId: "a".repeat(200), quantity: 1 }).success).toBe(false);
+  });
+  it("rejects zero, negative and bulk quantities", () => {
+    expect(checkoutItemSchema.safeParse({ productId: "jaguar-noir", quantity: 0 }).success).toBe(false);
+    expect(checkoutItemSchema.safeParse({ productId: "jaguar-noir", quantity: -2 }).success).toBe(false);
+    expect(checkoutItemSchema.safeParse({ productId: "jaguar-noir", quantity: 11 }).success).toBe(false);
+  });
+});
+
+describe("confirmed shipping rule: ₹149 below ₹2,999, free at or above", () => {
+  it("charges ₹149 at ₹2,998", () => {
+    expect(shippingCharge(2998)).toBe(149);
+  });
+  it("is free at exactly ₹2,999 (threshold uses the pre-shipping subtotal)", () => {
+    expect(shippingCharge(2999)).toBe(0);
   });
 });
 

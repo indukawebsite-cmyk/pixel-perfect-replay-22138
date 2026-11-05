@@ -30,7 +30,15 @@ export const checkoutAddressSchema = z.object({
 });
 
 export const checkoutItemSchema = z.object({
-  productId: z.string().uuid(),
+  // The storefront identifies products by their public slug (also used in
+  // product URLs). The server resolves the slug to the real database row and
+  // re-validates availability, price and stock — the browser is never trusted.
+  productId: z
+    .string()
+    .trim()
+    .min(2)
+    .max(160)
+    .regex(/^[a-z0-9][a-z0-9-]*$/, "Invalid product reference."),
   quantity: z.number().int().min(1).max(10),
   variantId: z.string().uuid().optional(),
 });
