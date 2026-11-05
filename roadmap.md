@@ -3,7 +3,9 @@
 - [x] Inspect the current build configuration, installed versions and SSR entry.
 - [x] Confirm Nitro's Netlify preset, output paths and integration portability requirements.
 - [x] Prepare the proposed configuration and exact Netlify settings for review.
-- [ ] Implement and validate Netlify SSR preparation after user approval; external privileged backend access remains a deployment blocker.
+- [ ] Before configuration edits, verify the existing asset-host rule and installed Nitro SSR output contract.
+- [ ] Add only the approved Netlify build script, configuration and deployment documentation; preserve Lovable builds and all application logic/assets.
+- [ ] Report exact diffs and available validation results; do not deploy. External privileged backend access remains a deployment blocker.
 
 - [x] Refine product cards, product navigation and session wishlist.
 - [x] Refine collection contrast, navigation and functional catalogue search.
