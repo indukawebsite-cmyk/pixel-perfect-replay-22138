@@ -44,6 +44,7 @@ import { Route as AuthenticatedAdminOrdersIndexRouteImport } from './routes/_aut
 import { Route as AuthenticatedAdminOrdersOrderIdRouteImport } from './routes/_authenticated/admin.orders.$orderId'
 import { Route as AuthenticatedAdminProductsIndexRouteImport } from './routes/_authenticated/admin.products.index'
 import { Route as AuthenticatedAdminProductsProductIdRouteImport } from './routes/_authenticated/admin.products.$productId'
+import { Route as ApiPublicWebhooksRazorpayRouteImport } from './routes/api/public/webhooks/razorpay'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -225,6 +226,12 @@ const AuthenticatedAdminProductsProductIdRoute =
     path: '/products/$productId',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const ApiPublicWebhooksRazorpayRoute =
+  ApiPublicWebhooksRazorpayRouteImport.update({
+    id: '/api/public/webhooks/razorpay',
+    path: '/api/public/webhooks/razorpay',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -258,6 +265,7 @@ export interface FileRoutesByFullPath {
   '/admin/collections/$collectionId': typeof AuthenticatedAdminCollectionsCollectionIdRoute
   '/admin/orders/$orderId': typeof AuthenticatedAdminOrdersOrderIdRoute
   '/admin/products/$productId': typeof AuthenticatedAdminProductsProductIdRoute
+  '/api/public/webhooks/razorpay': typeof ApiPublicWebhooksRazorpayRoute
   '/admin/collections/': typeof AuthenticatedAdminCollectionsIndexRoute
   '/admin/orders/': typeof AuthenticatedAdminOrdersIndexRoute
   '/admin/products/': typeof AuthenticatedAdminProductsIndexRoute
@@ -293,6 +301,7 @@ export interface FileRoutesByTo {
   '/admin/collections/$collectionId': typeof AuthenticatedAdminCollectionsCollectionIdRoute
   '/admin/orders/$orderId': typeof AuthenticatedAdminOrdersOrderIdRoute
   '/admin/products/$productId': typeof AuthenticatedAdminProductsProductIdRoute
+  '/api/public/webhooks/razorpay': typeof ApiPublicWebhooksRazorpayRoute
   '/admin/collections': typeof AuthenticatedAdminCollectionsIndexRoute
   '/admin/orders': typeof AuthenticatedAdminOrdersIndexRoute
   '/admin/products': typeof AuthenticatedAdminProductsIndexRoute
@@ -331,6 +340,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/collections/$collectionId': typeof AuthenticatedAdminCollectionsCollectionIdRoute
   '/_authenticated/admin/orders/$orderId': typeof AuthenticatedAdminOrdersOrderIdRoute
   '/_authenticated/admin/products/$productId': typeof AuthenticatedAdminProductsProductIdRoute
+  '/api/public/webhooks/razorpay': typeof ApiPublicWebhooksRazorpayRoute
   '/_authenticated/admin/collections/': typeof AuthenticatedAdminCollectionsIndexRoute
   '/_authenticated/admin/orders/': typeof AuthenticatedAdminOrdersIndexRoute
   '/_authenticated/admin/products/': typeof AuthenticatedAdminProductsIndexRoute
@@ -369,6 +379,7 @@ export interface FileRouteTypes {
     | '/admin/collections/$collectionId'
     | '/admin/orders/$orderId'
     | '/admin/products/$productId'
+    | '/api/public/webhooks/razorpay'
     | '/admin/collections/'
     | '/admin/orders/'
     | '/admin/products/'
@@ -404,6 +415,7 @@ export interface FileRouteTypes {
     | '/admin/collections/$collectionId'
     | '/admin/orders/$orderId'
     | '/admin/products/$productId'
+    | '/api/public/webhooks/razorpay'
     | '/admin/collections'
     | '/admin/orders'
     | '/admin/products'
@@ -441,6 +453,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/collections/$collectionId'
     | '/_authenticated/admin/orders/$orderId'
     | '/_authenticated/admin/products/$productId'
+    | '/api/public/webhooks/razorpay'
     | '/_authenticated/admin/collections/'
     | '/_authenticated/admin/orders/'
     | '/_authenticated/admin/products/'
@@ -473,6 +486,7 @@ export interface RootRouteChildren {
   CollectionsSlugRoute: typeof CollectionsSlugRoute
   ProductsProductIdRoute: typeof ProductsProductIdRoute
   CollectionsIndexRoute: typeof CollectionsIndexRoute
+  ApiPublicWebhooksRazorpayRoute: typeof ApiPublicWebhooksRazorpayRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -722,6 +736,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminProductsProductIdRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/api/public/webhooks/razorpay': {
+      id: '/api/public/webhooks/razorpay'
+      path: '/api/public/webhooks/razorpay'
+      fullPath: '/api/public/webhooks/razorpay'
+      preLoaderRoute: typeof ApiPublicWebhooksRazorpayRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -791,6 +812,7 @@ const rootRouteChildren: RootRouteChildren = {
   CollectionsSlugRoute: CollectionsSlugRoute,
   ProductsProductIdRoute: ProductsProductIdRoute,
   CollectionsIndexRoute: CollectionsIndexRoute,
+  ApiPublicWebhooksRazorpayRoute: ApiPublicWebhooksRazorpayRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
