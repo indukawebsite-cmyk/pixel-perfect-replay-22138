@@ -73,7 +73,7 @@ function OrderDetail() {
               }}
               className="mt-3 h-11 w-full border border-input bg-background px-3 text-sm"
             >
-              {ORDER_STATUSES.map((s) => <option key={s} value={s}>{s[0].toUpperCase() + s.slice(1)}</option>)}
+              {ORDER_STATUSES.map((s) => <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>)}
             </select>
           </div>
         </aside>
