@@ -38,10 +38,10 @@ export const giftingImage: CampaignImage = {
 // luxury fashion campaign rather than a catalogue.
 export const menCampaignImage: CampaignImage = {
   src: mensCampaign,
-  alt: "Male model in a deep chocolate overcoat and black knitwear with a subtle silver chain, luxury fashion campaign photograph",
+  alt: "Close-up of a man's neck and shoulders wearing the Jaguar Noir panther pendant on a silver chain, dark luxury campaign photograph",
 };
 
 export const womenCampaignImage: CampaignImage = {
   src: womensCampaign,
-  alt: "Female model in an ivory silk blouse and champagne tailored trousers in soft window light, luxury fashion campaign photograph",
+  alt: "Close-up of a woman's ear wearing the Oceanic Wings iridescent blue-green butterfly stud, dark luxury campaign photograph",
 };
