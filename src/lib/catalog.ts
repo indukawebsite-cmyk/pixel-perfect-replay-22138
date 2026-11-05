@@ -45,6 +45,8 @@ export type Product = {
   highlights?: string[];
   size?: string | undefined;
   tag?: "New" | "Bestseller";
+  /** Confirmed shop: undefined = awaiting confirmation (never inferred from looks). */
+  gender?: "men" | "women" | "unisex" | undefined;
   isSample: boolean;
   secondaryImage?: string; // Only supplied when a genuine second image is available.
   edit?: string; // Demo merchandising label, not a product specification.

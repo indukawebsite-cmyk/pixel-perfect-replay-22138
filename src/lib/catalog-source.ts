@@ -42,6 +42,7 @@ type Row = {
   length_cm: number | null;
   width_cm: number | null;
   created_at: string;
+  gender?: string | null;
   collections: { slug: string } | null;
   product_variants: { stock_quantity: number }[];
   product_images: { image_url: string; alt_text: string; display_order: number }[];
@@ -76,6 +77,7 @@ export function toProduct(row: Row, urls: Map<string, string>): Product {
     size: sizeLabel(row.length_cm, row.width_cm),
     addedOn: row.created_at,
     featuredOrder: skuOrder(row.sku),
+    gender: row.gender === "men" || row.gender === "women" || row.gender === "unisex" ? row.gender : undefined,
     isSample: false,
   };
 }
@@ -84,7 +86,7 @@ export async function fetchCatalog(): Promise<Product[]> {
   const { data, error } = await supabase
     .from("products")
     .select(
-      "slug, sku, name, category, price, description, tagline, highlights, length_cm, width_cm, created_at, collections(slug), product_variants(stock_quantity), product_images(image_url, alt_text, display_order)",
+      "slug, sku, name, category, price, description, tagline, highlights, length_cm, width_cm, created_at, gender, collections(slug), product_variants(stock_quantity), product_images(image_url, alt_text, display_order)",
     );
   if (error) throw error;
   const rows = (data ?? []) as unknown as Row[];

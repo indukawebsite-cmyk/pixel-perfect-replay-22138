@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Heart, ShoppingBag, MapPin } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import { availabilityLabel, getCollection, productPriceLabel, type Product } from "@/lib/catalog";
+import { availabilityLabel, productPriceLabel, type Product } from "@/lib/catalog";
 import { validPin, validQuantity } from "@/lib/product-detail";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/components/shop/CartProvider";
@@ -10,7 +10,6 @@ import { QuantitySelector } from "@/components/shop/QuantitySelector";
 import { VariantSelector } from "@/components/shop/VariantSelector";
 import { ProductAccordion } from "@/components/shop/ProductAccordion";
 export function ProductInformation({ product }: { product: Product }) {
-  const collection = getCollection(product.collection);
   const { add } = useCart();
   const { ids, toggle } = useWishlist();
   const [quantity, setQuantity] = useState("1");
@@ -27,15 +26,6 @@ export function ProductInformation({ product }: { product: Product }) {
     (!product.variants?.length || product.variants.some((option) => option.id === variant));
   return (
     <div className="min-w-0 space-y-6 lg:py-3">
-      {collection && (
-        <Link
-          to="/collections/$slug"
-          params={{ slug: collection.slug }}
-          className="eyebrow text-cocoa"
-        >
-          {collection.name}
-        </Link>
-      )}
       <div>
         <h1 className="text-4xl leading-tight md:text-5xl">{product.name}</h1>
         {product.tagline && <p className="editorial mt-3 text-lg text-cocoa">{product.tagline}</p>}

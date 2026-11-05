@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { useWishlist } from "@/components/shop/WishlistProvider";
-import { availabilityLabel, productPriceLabel, getCollection, type Product } from "@/lib/catalog";
+import { availabilityLabel, productPriceLabel, type Product } from "@/lib/catalog";
 import { useCart } from "@/components/shop/CartProvider";
 import { SafeImage } from "@/components/shop/SafeImage";
 
@@ -12,7 +12,6 @@ export function ProductCard({ product, shopping = false }: { product: Product; s
   const { add } = useCart();
   const [added, setAdded] = useState(false);
   const saved = ids.includes(product.id);
-  const col = getCollection(product.collection);
   const available = product.price !== null && (product.stock ?? 0) > 0;
   const second = product.gallery?.[1]?.thumb || product.gallery?.[1]?.src;
   return (
@@ -43,7 +42,6 @@ export function ProductCard({ product, shopping = false }: { product: Product; s
         </Button>
       </div>
       <div className="flex min-w-0 flex-col gap-2 pt-5">
-        {col && <span className="eyebrow text-[0.6rem] text-cocoa">{col.name}</span>}
         <h3 className="font-sans text-sm font-medium leading-relaxed text-foreground"><Link to="/products/$productId" params={{ productId: product.id }} className="hover:underline underline-offset-4">{product.name}</Link></h3>
         <p className="text-sm font-normal leading-relaxed text-foreground">{productPriceLabel(product)}</p>
         <p className="text-xs leading-relaxed text-muted-foreground">{availabilityLabel(product)}</p>

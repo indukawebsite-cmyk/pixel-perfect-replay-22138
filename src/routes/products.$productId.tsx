@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ChevronRight } from "lucide-react";
-import { getProduct, getCollection, type Product } from "@/lib/catalog";
+import { getProduct, type Product } from "@/lib/catalog";
 import { useLiveCatalog } from "@/lib/live-catalog";
 import { ProductGallery } from "@/components/shop/ProductGallery";
 import { ProductInformation } from "@/components/shop/ProductInformation";
@@ -13,7 +13,7 @@ import { useEffect } from "react";
 export const Route = createFileRoute("/products/$productId")({
   head: () => {
     const title = "Jewellery — House of Induka";
-    const description = "925 sterling silver jewellery from House of Induka, inspired by the moon.";
+    const description = "925 sterling silver jewellery from House of Induka.";
     return {
       meta: [
         { title },
@@ -45,7 +45,6 @@ function ProductPage() {
   return <ProductView product={product} />;
 }
 function ProductView({ product }: { product: Product }) {
-  const collection = getCollection(product.collection);
   const { ids, record } = useRecentlyViewed();
   useEffect(() => {
     document.title = `${product.name} — House of Induka`;
@@ -66,14 +65,6 @@ function ProductView({ product }: { product: Product }) {
           <Link to="/">Home</Link>
           <ChevronRight className="h-3 w-3" />
           <Link to="/shop">All jewellery</Link>
-          {collection && (
-            <>
-              <ChevronRight className="h-3 w-3" />
-              <Link to="/collections/$slug" params={{ slug: collection.slug }}>
-                {collection.name}
-              </Link>
-            </>
-          )}
           <ChevronRight className="h-3 w-3" />
           <span aria-current="page" className="text-foreground">
             {product.name}
@@ -85,7 +76,7 @@ function ProductView({ product }: { product: Product }) {
         </div>
       </section>
       <RelatedProducts
-        title="From the same moon"
+        title="You may also like"
         note="More from House of Induka"
         products={relatedProducts(product)}
       />

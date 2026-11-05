@@ -11,7 +11,7 @@ export type AdminProduct = {
   id: string; name: string; slug: string; sku: string | null; price: number; compare_at_price: number | null;
   category: string; collection_id: string | null; is_active: boolean; description: string | null; tagline: string | null;
   highlights: string[]; material: string | null; purity: string | null; length_cm: number | null; width_cm: number | null;
-  meta_title: string | null; meta_description: string | null; updated_at: string;
+  meta_title: string | null; meta_description: string | null; gender: string | null; updated_at: string;
   product_variants: { id: string; stock_quantity: number }[];
   product_images: AdminImage[];
 };
@@ -34,7 +34,7 @@ async function sign(paths: string[]) {
 }
 
 const PRODUCT_SELECT =
-  "id, name, slug, sku, price, compare_at_price, category, collection_id, is_active, description, tagline, highlights, material, purity, length_cm, width_cm, meta_title, meta_description, updated_at, product_variants(id, stock_quantity), product_images(id, image_url, alt_text, display_order)";
+  "id, name, slug, sku, price, compare_at_price, category, collection_id, is_active, description, tagline, highlights, material, purity, length_cm, width_cm, meta_title, meta_description, gender, updated_at, product_variants(id, stock_quantity), product_images(id, image_url, alt_text, display_order)";
 
 export async function listProducts(): Promise<AdminProduct[]> {
   const { data, error } = await supabase.from("products").select(PRODUCT_SELECT).order("sku");
