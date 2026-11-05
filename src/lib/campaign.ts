@@ -8,7 +8,7 @@ import butterflyBlue from "@/assets/real/cat-earrings.jpg";
 import butterflyPink from "@/assets/real/col-chandni.jpg";
 import butterflyGreen from "@/assets/real/col-chandrika.jpg";
 import butterflyStuds from "@/assets/real/col-tara.jpg";
-import gifting from "@/assets/sample/gifting-blush.jpg";
+import giftingPackaging from "@/assets/induka-gifting-packaging.jpg.asset.json";
 import mensCampaign from "@/assets/campaign/mens-campaign.jpg";
 import womensCampaign from "@/assets/campaign/womens-campaign.jpg";
 
@@ -28,17 +28,20 @@ export const womenImagery: CampaignImage[] = [
   { src: butterflyStuds, alt: "Blue butterfly stud earrings in sterling silver" },
 ];
 
-export const giftingImage: CampaignImage = { src: gifting, alt: "Gift box with silver earrings on satin" };
+export const giftingImage: CampaignImage = {
+  src: giftingPackaging.url,
+  alt: "INDUKA gift box with the Jaguar Noir pendant and blue butterfly stud earrings on satin",
+};
 
 // AI-generated fashion campaign editorials for the homepage Men/Women sections.
 // Deliberately model-led (no product photography) so the sections read as a
 // luxury fashion campaign rather than a catalogue.
 export const menCampaignImage: CampaignImage = {
   src: mensCampaign,
-  alt: "Male model in a deep chocolate overcoat and black knitwear with a subtle silver chain, luxury fashion campaign photograph",
+  alt: "Close-up of a man's neck and shoulders wearing the Jaguar Noir panther pendant on a silver chain, dark luxury campaign photograph",
 };
 
 export const womenCampaignImage: CampaignImage = {
   src: womensCampaign,
-  alt: "Female model in an ivory silk blouse and champagne tailored trousers in soft window light, luxury fashion campaign photograph",
+  alt: "Close-up of a woman's ear wearing the Oceanic Wings iridescent blue-green butterfly stud, dark luxury campaign photograph",
 };
