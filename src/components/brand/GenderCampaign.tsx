@@ -170,7 +170,7 @@ function MobileCarousel() {
 
       <div className="pointer-events-none absolute inset-x-0 top-6 flex items-center justify-between px-6">
         <motion.span
-          animate={reduce ? undefined : { x: [0, 8, 0] }}
+          animate={reduce ? { x: 0 } : { x: [0, 8, 0] }}
           transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
           className={cn("eyebrow", slides[active]?.tone === "dark" ? "text-ivory/90" : "text-midnight/80")}
         >
