@@ -7,11 +7,7 @@ import { OrderSummary } from "@/components/shop/OrderSummary";
 import { CheckoutSteps, EmptyCart } from "@/components/shop/CheckoutShell";
 import { checkoutHead } from "@/lib/demo-checkout";
 export const Route = createFileRoute("/cart")({
-  head: () =>
-    checkoutHead(
-      "Your demo bag",
-      "Review sample jewellery and illustrative totals in your INDUKA demo bag.",
-    ),
+  head: () => checkoutHead("Your bag", "Review your INDUKA pieces before checkout."),
   component: CartPage,
 });
 function CartPage() {
@@ -19,13 +15,10 @@ function CartPage() {
   return (
     <section className="container-lux py-8 md:py-12">
       <CheckoutSteps active="cart" />
-      <h1 className="text-4xl md:text-5xl">Your demo bag</h1>
-      <p className="mt-4 text-sm leading-loose text-muted-foreground">
-        DEMO ONLY · No purchases or payments. Demo pieces stay in this tab across refreshes.
-      </p>
+      <h1 className="text-4xl md:text-5xl">Your bag</h1>
       {!ready ? (
         <p role="status" className="py-16">
-          Loading demo bag…
+          Loading your bag…
         </p>
       ) : !items.length ? (
         <EmptyCart />
@@ -43,7 +36,7 @@ function CartPage() {
           <OrderSummary items={items}>
             <Button asChild variant="lux" className="h-13 w-full tracking-normal">
               <Link to="/checkout">
-                Continue to demo checkout
+                Continue to checkout
                 <ArrowRight />
               </Link>
             </Button>
