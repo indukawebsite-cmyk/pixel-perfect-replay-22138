@@ -12,7 +12,7 @@ export function DemoBag({ onNavigate }: { onNavigate: () => void }) {
   return (
     <div className="flex flex-1 flex-col gap-6">
       <p className="border-y border-border py-4 text-sm leading-relaxed text-muted-foreground">
-        Checkout is not live yet · No orders or payments are taken. Your bag stays in this tab across refreshes.
+        Your bag stays saved in this tab across refreshes.
       </p>
       {!items.length ? (
         <div className="flex flex-1 flex-col items-center justify-center gap-5 py-12 text-center">
@@ -109,7 +109,7 @@ export function DemoBag({ onNavigate }: { onNavigate: () => void }) {
               <span className="text-lg font-medium">{formatPrice(cartTotal(items))}</span>
             </div>
             <p className="text-xs leading-relaxed text-muted-foreground">
-              Checkout is not live yet, so no real order or payment is created.
+              Free delivery above ₹2,999. Shipping is confirmed securely at checkout.
             </p>
             <Button asChild variant="lux" size="xl">
               <Link to="/cart" onClick={onNavigate}>
