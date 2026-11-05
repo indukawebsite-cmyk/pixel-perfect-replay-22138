@@ -73,7 +73,7 @@ function Home() {
         </div>
       </section>
 
-      {/* 5 · GIFTS WORTH KEEPING */}
+      {/* 4 · GIFTS WORTH KEEPING */}
       <section className="bg-midnight text-ivory">
         <div className="container-lux grid items-center gap-12 py-20 md:grid-cols-2 md:py-28">
           <Reveal><img src={giftingImage.src} alt={giftingImage.alt} loading="lazy" decoding="async" width={1200} height={1200} className="aspect-square w-full object-cover" /></Reveal>
