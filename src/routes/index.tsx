@@ -39,7 +39,7 @@ function Home() {
             width={1920}
             height={1152}
             fetchPriority="high"
-            className="absolute inset-0 h-full w-full object-cover object-[24%_center] md:object-[center_18%]"
+            className="absolute inset-0 h-full w-full object-cover object-[16%_center] md:object-[center_18%]"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-midnight/85 via-midnight/30 to-transparent" />
           <div className="absolute inset-0 bg-gradient-to-t from-midnight/70 via-transparent to-midnight/20" />
