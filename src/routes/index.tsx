@@ -65,11 +65,11 @@ function Home() {
                 <Button asChild variant="luxOutline" size="xl" className="text-ivory"><Link to="/men" search={{ category: "necklaces" }}>Pendants &amp; Chains</Link></Button>
               </div>
             </Reveal>
-            <div className="grid grid-cols-2 gap-3 md:gap-4">
-              {[m2, m3, m4, m1].map((img, i) => (
+            <div className="grid grid-cols-2 grid-rows-2 gap-3 md:gap-4">
+              {[m2, m3, m4].map((img, i) => (
                 <Reveal key={img!.src} delay={i * 0.06} className={i === 0 ? "row-span-2" : ""}>
                   <Link to="/men" className="group block h-full overflow-hidden bg-midnight">
-                    <img src={img!.src} alt={img!.alt} loading="lazy" decoding="async" className={`w-full object-cover transition-transform duration-[1400ms] ease-[var(--ease-lux)] group-hover:scale-105 ${i === 0 ? "h-full min-h-[28rem]" : "aspect-[4/3]"}`} />
+                    <img src={img!.src} alt={img!.alt} loading="lazy" decoding="async" className={`w-full object-cover transition-transform duration-[1400ms] ease-[var(--ease-lux)] group-hover:scale-105 h-full ${i === 0 ? "min-h-[22rem] md:min-h-[36rem]" : ""}`} />
                   </Link>
                 </Reveal>
               ))}
