@@ -97,14 +97,13 @@ export async function fetchCatalog(): Promise<Product[]> {
   const cached = readUrlCache(owner);
   const missing = paths.filter((path) => !cached[path]);
   if (missing.length) {
-    const { data: signed, error: signError } = await supabase.storage
-      .from(PRODUCT_IMAGE_BUCKET)
-      .createSignedUrls(missing, SIGNED_URL_SECONDS);
-    if (signError) throw signError;
+    // Signing happens server-side: the bucket has no public read policy, and the
+    // server only signs paths that belong to active products or collections.
+    const { urls: signed } = await signCatalogImages({ data: { paths: missing } });
     const expires = Date.now() + SIGNED_URL_SECONDS * 1000;
-    signed?.forEach((item) => {
-      if (item.path && item.signedUrl) cached[item.path] = { url: item.signedUrl, expires };
-    });
+    for (const [path, url] of Object.entries(signed)) {
+      cached[path] = { url, expires };
+    }
     writeUrlCache(owner, cached);
   }
   const urls = new Map(Object.entries(cached).map(([path, v]) => [path, v.url]));
