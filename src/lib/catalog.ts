@@ -65,7 +65,7 @@ export type CategoryGroup = { slug: string; name: string; image: string; matches
 export const categoryGroups: CategoryGroup[] = [
   { slug: "necklaces", name: "Necklaces / Chains", image: pendants, matches: ["necklaces", "pendants", "chains"] },
   { slug: "bracelets", name: "Bracelets", image: sampleBracelets, matches: ["bracelets"] },
-  { slug: "earrings", name: "Tops / Earrings", image: earrings, matches: ["earrings"] },
+  { slug: "earrings", name: "Tops / Earrings", image: chandrika, matches: ["earrings"] },
   { slug: "rings", name: "Rings", image: sampleRings, matches: ["rings"] },
 ];
 export const categoryMatches = (slug: string, category: string) =>

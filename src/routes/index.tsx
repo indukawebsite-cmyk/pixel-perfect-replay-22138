@@ -67,8 +67,8 @@ function Home() {
               <div className="relative aspect-[4/5] overflow-hidden bg-muted">
                 <img src={c.image} alt={c.name} loading="lazy" decoding="async" className={`h-full w-full object-cover transition-transform duration-[1400ms] ease-[var(--ease-lux)] ${count ? "group-hover:scale-105" : "opacity-50 grayscale"}`} />
               </div>
-              <div className="mt-4 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
-                <span className="min-w-0 font-display text-xl sm:text-2xl">{c.name}</span>
+              <div className="mt-4 flex flex-col gap-1.5">
+                <span className="font-display text-xl leading-tight sm:text-2xl">{c.name}</span>
                 <span className={`eyebrow text-[0.6rem] ${count ? "text-champagne" : "text-muted-foreground"}`}>{count ? "Shop →" : "Coming soon"}</span>
               </div>
             </>;
