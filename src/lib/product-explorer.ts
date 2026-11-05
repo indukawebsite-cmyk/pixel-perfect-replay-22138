@@ -1,4 +1,4 @@
-import { shopCategories as categories, type Product } from "@/lib/catalog";
+import { categoryMatches, shopCategories as categories, type Product } from "@/lib/catalog";
 
 export const sortOptions = [
   { value: "featured", label: "Featured" }, { value: "newest", label: "Newest" },
@@ -17,7 +17,7 @@ export function filterProducts(products: Product[], search: ExplorerSearch) {
   const category = categories.some((item) => item.slug === search.category) ? search.category : undefined;
   const filtered = products.filter((product) => {
     const price = product.price;
-    return (!category || product.category === category)
+    return (!category || categoryMatches(category, product.category))
       && (!search.edit || product.edit === search.edit)
       && terms.every((term) => product.name.toLowerCase().includes(term))
       && (search.min === undefined || (price !== null && price !== undefined && price >= Math.max(0, search.min)))
