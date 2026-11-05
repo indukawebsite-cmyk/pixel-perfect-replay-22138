@@ -1,0 +1,16 @@
+[build]
+  base = "."
+  command = "bun run build:netlify"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+  BUN_VERSION = "1.4.4"
+
+# Preserve existing Lovable-hosted image bytes without changing asset pointers.
+# This specific rule takes precedence over Nitro's generated SSR catch-all.
+[[redirects]]
+  from = "/__l5e/assets-v1/*"
+  to = "https://pixel-perfect-replay-22138.lovable.app/__l5e/assets-v1/:splat"
+  status = 200
+  force = true
