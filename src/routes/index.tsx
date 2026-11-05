@@ -6,7 +6,8 @@ import { Reveal, SectionHeading } from "@/components/brand/primitives";
 import { ProductCard } from "@/components/shop/ProductCard";
 import { Newsletter } from "@/components/brand/Newsletter";
 import { categoryGroups, categoryMatches, type Product } from "@/lib/catalog";
-import { giftingImage, menImagery, womenImagery } from "@/lib/campaign";
+import { giftingImage } from "@/lib/campaign";
+import heroCampaign from "@/assets/campaign/hero-campaign.jpg";
 import { GenderCampaign } from "@/components/brand/GenderCampaign";
 import { useLiveCatalog } from "@/lib/live-catalog";
 
