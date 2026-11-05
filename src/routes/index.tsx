@@ -6,7 +6,8 @@ import { Reveal, SectionHeading } from "@/components/brand/primitives";
 import { ProductCard } from "@/components/shop/ProductCard";
 import { Newsletter } from "@/components/brand/Newsletter";
 import { categoryGroups, categoryMatches, type Product } from "@/lib/catalog";
-import { giftingImage, menImagery, womenImagery } from "@/lib/campaign";
+import { giftingImage } from "@/lib/campaign";
+import heroCampaign from "@/assets/campaign/hero-campaign.jpg";
 import { GenderCampaign } from "@/components/brand/GenderCampaign";
 import { useLiveCatalog } from "@/lib/live-catalog";
 
@@ -27,26 +28,29 @@ export const Route = createFileRoute("/")({
 function Home() {
   const { products } = useLiveCatalog();
   const gifts = products.filter((p) => (p.stock ?? 0) > 0).slice(0, 4);
-  const [m1] = menImagery;
-  const [w1] = womenImagery;
   return (
     <>
-      {/* 1 · HERO */}
-      <section className="bg-midnight text-ivory">
-        <div className="grid md:grid-cols-[3fr_2fr]">
-          <div className="relative min-h-[min(72svh,760px)] overflow-hidden">
-            <img src={m1!.src} alt={m1!.alt} width={1400} height={1750} className="absolute inset-0 h-full w-full object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-t from-midnight via-midnight/45 to-transparent" />
-            <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }} className="relative flex h-full min-h-[inherit] flex-col justify-end gap-6 p-8 md:p-14">
-              <span className="eyebrow text-soft-gold">House of Induka · 925 Sterling Silver</span>
-              <h1 className="max-w-2xl text-5xl uppercase leading-[1.05] sm:text-6xl md:text-7xl">Pure silver. <span className="editorial normal-case text-champagne">Distinctive style.</span></h1>
-              <div className="grid gap-3 pt-2 sm:flex sm:gap-4">
-                <Button asChild variant="luxLight" size="xl"><Link to="/men">Shop Men</Link></Button>
-                <Button asChild variant="luxOutline" size="xl" className="text-ivory"><Link to="/women">Shop Women</Link></Button>
-              </div>
-            </motion.div>
-          </div>
-          <div className="hidden overflow-hidden md:block"><img src={w1!.src} alt={w1!.alt} width={1400} height={1750} className="h-full w-full object-cover" /></div>
+      {/* 1 · HERO — one full-width campaign image, text over gradient */}
+      <section className="relative bg-midnight text-ivory">
+        <div className="relative h-[min(80svh,750px)] min-h-[480px] overflow-hidden">
+          <img
+            src={heroCampaign}
+            alt="House of Induka campaign — a male and a female model wearing refined sterling silver jewellery"
+            width={1920}
+            height={1152}
+            fetchPriority="high"
+            className="absolute inset-0 h-full w-full object-cover object-[71%_center] md:object-[center_18%]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-midnight/85 via-midnight/30 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-midnight/70 via-transparent to-midnight/20" />
+          <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }} className="relative flex h-full flex-col justify-end gap-6 p-8 pb-12 md:p-14 md:pb-16">
+            <span className="eyebrow text-soft-gold">House of Induka · 925 Sterling Silver</span>
+            <h1 className="max-w-2xl text-5xl uppercase leading-[1.05] sm:text-6xl md:text-7xl">Pure silver. <span className="editorial normal-case text-champagne">Distinctive style.</span></h1>
+            <div className="grid gap-3 pt-2 sm:flex sm:gap-4">
+              <Button asChild variant="luxLight" size="xl"><Link to="/men">Shop Men</Link></Button>
+              <Button asChild variant="luxOutline" size="xl" className="text-ivory"><Link to="/women">Shop Women</Link></Button>
+            </div>
+          </motion.div>
         </div>
       </section>
 
