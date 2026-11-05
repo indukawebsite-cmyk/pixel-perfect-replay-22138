@@ -169,7 +169,7 @@ function MobileCarousel() {
         ))}
       </div>
 
-      <div className="pointer-events-none absolute inset-x-0 top-6 flex items-center justify-between px-6">
+      <div className="pointer-events-none absolute inset-x-0 top-24 flex items-center justify-between px-6">
         <motion.span
           animate={reduce ? { x: 0 } : { x: [0, 8, 0] }}
           transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
