@@ -47,7 +47,8 @@ describe("Product detail rules", () => {
   it("omits material and purity rows when the catalogue has none", async () => {
     const product = getProduct("fx-pendant-a");
     if (!product) throw new Error("Missing fixture");
-    render(<ProductAccordion product={{ ...product, specifications: undefined }} />);
+    const { specifications: _omit, ...withoutSpecs } = product;
+    render(<ProductAccordion product={withoutSpecs} />);
     fireEvent.click(screen.getByRole("button", { name: "Product details" }));
     expect(await screen.findByText("SKU")).toBeInTheDocument();
     expect(screen.queryByText("Material")).toBeNull();
