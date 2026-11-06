@@ -39,11 +39,11 @@ function Home() {
             width={1920}
             height={1152}
             fetchPriority="high"
-            className="absolute inset-0 h-full w-full object-cover object-[16%_center] md:object-[center_18%]"
+            className="absolute inset-x-0 top-0 h-[min(60vw,calc(100svh-440px))] w-full object-contain object-top sm:inset-0 sm:h-full sm:object-cover sm:object-[16%_center] md:object-[center_18%]"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-midnight/85 via-midnight/30 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-midnight/70 via-transparent to-midnight/20" />
-          <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }} className="relative flex h-full min-w-0 flex-col justify-end gap-4 p-6 sm:gap-6 sm:p-8 sm:pb-12 md:p-14 md:pb-16">
+          <div className="absolute inset-0 hidden bg-gradient-to-r from-midnight/85 via-midnight/30 to-transparent sm:block" />
+          <div className="absolute inset-0 hidden bg-gradient-to-t from-midnight/70 via-transparent to-midnight/20 sm:block" />
+          <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }} className="relative flex h-full min-w-0 flex-col justify-end gap-4 p-6 pt-[calc(min(60vw,100svh-440px)+16px)] sm:gap-6 sm:p-8 sm:pb-12 md:p-14 md:pb-16">
             <span className="eyebrow text-[0.625rem] leading-snug text-soft-gold sm:text-[0.6875rem] sm:leading-normal">House of Induka · 925 Sterling Silver</span>
             <h1 className="max-w-2xl text-[2.375rem] uppercase leading-none sm:text-6xl sm:leading-[1.05] md:text-7xl">Pure silver. <span className="editorial normal-case text-champagne">Distinctive style.</span></h1>
             <div className="grid shrink-0 gap-2.5 sm:flex sm:gap-4 sm:pt-2">
