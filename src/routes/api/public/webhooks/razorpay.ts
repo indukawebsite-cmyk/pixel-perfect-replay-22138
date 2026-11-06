@@ -19,7 +19,10 @@ export const Route = createFileRoute("/api/public/webhooks/razorpay")({
 
         let event: {
           event?: string;
-          payload?: { payment?: { entity?: { id?: string; order_id?: string } } };
+          payload?: {
+            payment?: { entity?: { id?: string; order_id?: string } };
+            refund?: { entity?: { id?: string; payment_id?: string } };
+          };
         };
         try {
           event = JSON.parse(raw);
@@ -48,6 +51,35 @@ export const Route = createFileRoute("/api/public/webhooks/razorpay")({
             .update({ status: "failed" })
             .eq("razorpay_order_id", payment.order_id)
             .eq("status", "created");
+        } else if (
+          (event.event === "refund.processed" || event.event === "refund.failed") &&
+          event.payload?.refund?.entity?.id
+        ) {
+          // Refund lifecycle: matched by the unique Razorpay refund ID stored
+          // when the refund was initiated. Re-delivery is a no-op.
+          const refund = event.payload.refund.entity;
+          const newStatus = event.event === "refund.processed" ? "processed" : "failed";
+          const { data: row } = await supabaseAdmin
+            .from("refunds")
+            .update({ status: newStatus })
+            .eq("razorpay_refund_id", refund.id)
+            .in("status", ["created", "pending"])
+            .select("order_id, kind")
+            .maybeSingle();
+          if (row && newStatus === "processed") {
+            await supabaseAdmin
+              .from("payments")
+              .update({ status: "refunded" })
+              .eq("order_id", row.order_id)
+              .eq("status", "captured");
+            if (row.kind === "return") {
+              await supabaseAdmin
+                .from("return_requests")
+                .update({ status: "refunded" })
+                .eq("order_id", row.order_id)
+                .eq("status", "inspection_passed");
+            }
+          }
         }
 
         return Response.json({ received: true });
