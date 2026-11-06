@@ -5,9 +5,20 @@ import { Button } from "@/components/ui/button";
 import { AdminHeader } from "@/components/admin/AdminUi";
 import { getOrder } from "@/lib/admin/api";
 import { updateOrderStatus } from "@/lib/admin/orders.functions";
+import {
+  approveCancellation,
+  approveReturn,
+  confirmOfflineRefund,
+  markReturnReceived,
+  recordInspection,
+  rejectCancellation,
+  rejectReturn,
+} from "@/lib/admin/cancellations.functions";
 import { formatPrice } from "@/lib/catalog";
 
-const ORDER_STATUSES = ["pending", "confirmed", "processing", "shipped", "delivered", "cancelled", "refunded"] as const;
+// Cancelled/refunded are excluded on purpose: those states are only reachable
+// through the guarded cancellation/return actions below.
+const ORDER_STATUSES = ["pending", "confirmed", "processing", "shipped", "delivered"] as const;
 
 export const Route = createFileRoute("/_authenticated/admin/orders/$orderId")({
   component: OrderDetail,
@@ -62,6 +73,25 @@ function OrderDetail() {
             <p className="mt-2 leading-relaxed">{o.shipping_name}<br />{o.address_line1}{o.address_line2 && <><br />{o.address_line2}</>}<br />{o.city}, {o.state} {o.pin_code}<br />{o.country}</p>
           </div>
           {o.shipments[0]?.tracking_url && <a href={o.shipments[0].tracking_url} target="_blank" rel="noreferrer" className="link-lux">Track shipment</a>}
+          <CancellationPanel order={o} onChanged={() => q.refetch()} />
+          <ReturnPanel order={o} onChanged={() => q.refetch()} />
+          {o.refunds.length > 0 && (
+            <div className="border border-border p-5">
+              <p className="eyebrow text-[0.6rem] text-champagne">Refunds</p>
+              <ul className="mt-2 flex flex-col gap-2">
+                {o.refunds.map((r) => (
+                  <li key={r.id}>
+                    {r.kind} · {formatPrice(Number(r.amount))} · {r.status}
+                    {r.razorpay_refund_id && <span className="text-muted-foreground"> · {r.razorpay_refund_id}</span>}
+                    {r.offline_reference && <span className="text-muted-foreground"> · {r.offline_method}: {r.offline_reference}</span>}
+                    {!r.payment_id && r.status !== "processed" && (
+                      <ConfirmOffline refundId={r.id} onChanged={() => q.refetch()} />
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
           <div className="border border-border p-5">
             <label htmlFor="order-status" className="eyebrow text-[0.6rem] text-champagne">Order status</label>
             <select
