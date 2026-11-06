@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import { Button } from "@/components/ui/button";
 import { PageIntro } from "@/components/layout/PageIntro";
 import { supabase } from "@/integrations/supabase/client";
 import { AuthField, AuthMessage, authHead } from "@/components/auth/AuthShell";
 import { fieldErrors, profileSchema } from "@/lib/auth-validation";
 import { formatPrice } from "@/lib/catalog";
+import { requestCancellation, requestReturn } from "@/lib/cancellations.functions";
+import { isCancellableStatus, withinCancellationWindow } from "@/lib/cancellation-policy";
 
 export const Route = createFileRoute("/_authenticated/account")({
   head: () => authHead("Your account", "Your House of Induka account and orders."),
@@ -37,6 +40,24 @@ function AccountPage() {
         .order("created_at", { ascending: false });
       if (error) throw error;
       return data;
+    },
+  });
+  const requests = useQuery({
+    queryKey: ["order-requests", user.id],
+    queryFn: async () => {
+      const [cancellations, returns, refunds] = await Promise.all([
+        supabase.from("cancellation_requests").select("order_id, status, requested_at"),
+        supabase.from("return_requests").select("order_id, status, requested_at"),
+        supabase.from("refunds").select("order_id, kind, status, amount"),
+      ]);
+      if (cancellations.error) throw cancellations.error;
+      if (returns.error) throw returns.error;
+      if (refunds.error) throw refunds.error;
+      return {
+        cancellations: cancellations.data ?? [],
+        returns: returns.data ?? [],
+        refunds: refunds.data ?? [],
+      };
     },
   });
   const isAdmin = useQuery({
