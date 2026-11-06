@@ -16,7 +16,8 @@ export function SiteFooter() {
           <Link to="/contact">Contact</Link>
           <Link to="/faqs">FAQs</Link>
           <Link to="/shipping">Shipping</Link>
-          <Link to="/returns">Returns &amp; exchanges</Link>
+          <Link to="/returns">Returns &amp; refunds</Link>
+          <a href="https://wa.me/917303186547" target="_blank" rel="noreferrer">WhatsApp us</a>
         </FooterCol>
         <FooterCol title="Shop">
           <Link to="/men">Shop Men</Link>
@@ -26,6 +27,7 @@ export function SiteFooter() {
         </FooterCol>
         <FooterCol title="House">
           <Link to="/about">About us</Link>
+          <Link to="/authenticity">Authenticity</Link>
           <Link to="/silver-care">Silver policy &amp; care</Link>
           <Link to="/contact">Contact</Link>
           <Link to="/account">Account</Link>
