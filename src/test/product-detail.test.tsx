@@ -33,8 +33,9 @@ describe("Product detail rules", () => {
   it("shows material and purity from the catalogue in product specifications", async () => {
     const product = getProduct("fx-pendant-a");
     if (!product) throw new Error("Missing fixture");
-    expect(product.material).toBe("925 Sterling Silver");
-    expect(product.purity).toBe("925 (92.5% Silver)");
+    expect(product.specifications?.verified).toBe(true);
+    expect(product.specifications?.material).toBe("925 Sterling Silver");
+    expect(product.specifications?.purity).toBe("925 (92.5% Silver)");
     render(<ProductAccordion product={product} />);
     fireEvent.click(screen.getByRole("button", { name: "Product details" }));
     expect(await screen.findByText("Material")).toBeInTheDocument();
@@ -46,7 +47,7 @@ describe("Product detail rules", () => {
   it("omits material and purity rows when the catalogue has none", async () => {
     const product = getProduct("fx-pendant-a");
     if (!product) throw new Error("Missing fixture");
-    render(<ProductAccordion product={{ ...product, material: undefined, purity: undefined }} />);
+    render(<ProductAccordion product={{ ...product, specifications: undefined }} />);
     fireEvent.click(screen.getByRole("button", { name: "Product details" }));
     expect(await screen.findByText("SKU")).toBeInTheDocument();
     expect(screen.queryByText("Material")).toBeNull();

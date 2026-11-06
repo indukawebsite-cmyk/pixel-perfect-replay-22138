@@ -76,8 +76,15 @@ export function toProduct(row: Row, urls: Map<string, string>): Product {
     stock: row.product_variants.reduce((sum, variant) => sum + variant.stock_quantity, 0),
     description: row.description ?? undefined,
     tagline: row.tagline ?? undefined,
-    material: row.material ?? undefined,
-    purity: row.purity ?? undefined,
+    // Owner-confirmed specifications render behind the verified marker.
+    specifications:
+      row.material || row.purity
+        ? {
+            verified: true,
+            material: row.material ?? undefined,
+            purity: row.purity ?? undefined,
+          }
+        : undefined,
     highlights: row.highlights,
     size: sizeLabel(row.length_cm, row.width_cm),
     addedOn: row.created_at,
