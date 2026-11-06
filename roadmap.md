@@ -1,13 +1,4 @@
 # Refinement pass
-# Netlify SSR deployment preparation
-- [x] Inspect the current build configuration, installed versions and SSR entry.
-- [x] Confirm Nitro's Netlify preset, output paths and integration portability requirements.
-- [x] Prepare the proposed configuration and exact Netlify settings for review.
-- [x] Before configuration edits, verify the existing asset-host rule and installed Nitro SSR output contract.
-- [x] Add only the approved Netlify build script, configuration and deployment documentation; preserve Lovable builds and all application logic/assets.
-- [x] Prepare exact diffs and report validation: 79 tests passed, configuration checks passed, Lovable build OK; no Netlify build/deployment executed.
-- [ ] Deployment remains blocked pending separate approval and authorized external privileged backend access; Netlify artifact/runtime validation is still outstanding.
-
 - [x] Refine product cards, product navigation and session wishlist.
 - [x] Refine collection contrast, navigation and functional catalogue search.
 - [x] Refine homepage, newsletter feedback and social placeholders.
