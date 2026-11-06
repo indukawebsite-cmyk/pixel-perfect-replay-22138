@@ -111,3 +111,95 @@ function OrderDetail() {
     </>
   );
 }
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+function CancellationPanel({ order, onChanged }: { order: any; onChanged: () => void }) {
+  const approve = useServerFn(approveCancellation);
+  const reject = useServerFn(rejectCancellation);
+  const open = order.cancellation_requests.filter((r: any) => r.status === "requested");
+  const past = order.cancellation_requests.filter((r: any) => r.status !== "requested");
+  if (!open.length && !past.length) return null;
+  const act = (fn: any, requestId: string) =>
+    void fn({ data: { requestId } }).then(onChanged).catch((e: Error) => alert(e.message));
+  return (
+    <div className="border border-border p-5">
+      <p className="eyebrow text-[0.6rem] text-champagne">Cancellation requests</p>
+      <ul className="mt-2 flex flex-col gap-3">
+        {open.map((r: any) => (
+          <li key={r.id}>
+            <p className="text-muted-foreground">"{r.reason}"</p>
+            <div className="mt-2 flex gap-2">
+              <Button variant="lux" size="sm" onClick={() => act(approve, r.id)}>Approve & cancel</Button>
+              <Button variant="luxOutline" size="sm" onClick={() => act(reject, r.id)}>Reject</Button>
+            </div>
+          </li>
+        ))}
+        {past.map((r: any) => (
+          <li key={r.id} className="text-muted-foreground">
+            {r.status} · "{r.reason}"{r.admin_note && ` · ${r.admin_note}`}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function ReturnPanel({ order, onChanged }: { order: any; onChanged: () => void }) {
+  const approve = useServerFn(approveReturn);
+  const reject = useServerFn(rejectReturn);
+  const received = useServerFn(markReturnReceived);
+  const inspect = useServerFn(recordInspection);
+  if (!order.return_requests.length) return null;
+  const act = (fn: any, data: Record<string, unknown>) =>
+    void fn({ data }).then(onChanged).catch((e: Error) => alert(e.message));
+  return (
+    <div className="border border-border p-5">
+      <p className="eyebrow text-[0.6rem] text-champagne">Return requests</p>
+      <ul className="mt-2 flex flex-col gap-3">
+        {order.return_requests.map((r: any) => (
+          <li key={r.id}>
+            <p>{r.status.replaceAll("_", " ")} · <span className="text-muted-foreground">"{r.reason}"</span></p>
+            {r.admin_note && <p className="text-muted-foreground">{r.admin_note}</p>}
+            {r.return_awb && <p className="text-muted-foreground">Return shipment: {r.return_courier} · {r.return_awb}</p>}
+            <div className="mt-2 flex flex-wrap gap-2">
+              {r.status === "requested" && (
+                <>
+                  <Button variant="lux" size="sm" onClick={() => act(approve, { requestId: r.id })}>Approve</Button>
+                  <Button variant="luxOutline" size="sm" onClick={() => act(reject, { requestId: r.id })}>Reject</Button>
+                </>
+              )}
+              {r.status === "approved" && (
+                <Button variant="lux" size="sm" onClick={() => act(received, { requestId: r.id })}>Mark received</Button>
+              )}
+              {r.status === "received" && (
+                <>
+                  <Button variant="lux" size="sm" onClick={() => act(inspect, { requestId: r.id, passed: true })}>Inspection passed</Button>
+                  <Button variant="luxOutline" size="sm" onClick={() => act(inspect, { requestId: r.id, passed: false })}>Inspection failed</Button>
+                </>
+              )}
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function ConfirmOffline({ refundId, onChanged }: { refundId: string; onChanged: () => void }) {
+  const confirm = useServerFn(confirmOfflineRefund);
+  return (
+    <Button
+      variant="luxOutline"
+      size="sm"
+      className="ml-2"
+      onClick={() => {
+        const reference = window.prompt("UPI / bank transfer reference:");
+        if (!reference) return;
+        const method = window.confirm("Paid via UPI? (Cancel = bank transfer)") ? "upi" : "bank_transfer";
+        void confirm({ data: { refundId, method, reference } }).then(onChanged).catch((e: Error) => alert(e.message));
+      }}
+    >
+      Confirm offline refund
+    </Button>
+  );
+}
