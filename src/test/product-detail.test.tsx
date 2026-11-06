@@ -10,6 +10,7 @@ import {
 } from "@/lib/product-detail";
 import { VariantSelector } from "@/components/shop/VariantSelector";
 import { QuantitySelector } from "@/components/shop/QuantitySelector";
+import { ProductAccordion } from "@/components/shop/ProductAccordion";
 import {
   RecentlyViewedProvider,
   useRecentlyViewed,
@@ -28,6 +29,28 @@ describe("Product detail rules", () => {
     expect(gallery.length).toBe(4);
     expect(gallery[0]?.src).toBe(product.image);
     expect(gallery[0]?.label).toBe("Main view");
+  });
+  it("shows material and purity from the catalogue in product specifications", async () => {
+    const product = getProduct("fx-pendant-a");
+    if (!product) throw new Error("Missing fixture");
+    expect(product.material).toBe("925 Sterling Silver");
+    expect(product.purity).toBe("925 (92.5% Silver)");
+    render(<ProductAccordion product={product} />);
+    fireEvent.click(screen.getByRole("button", { name: "Product details" }));
+    expect(await screen.findByText("Material")).toBeInTheDocument();
+    expect(screen.getByText("925 Sterling Silver")).toBeInTheDocument();
+    expect(screen.getByText("Purity")).toBeInTheDocument();
+    expect(screen.getByText("925 (92.5% Silver)")).toBeInTheDocument();
+    expect(screen.getByText(product.sku ?? "")).toBeInTheDocument();
+  });
+  it("omits material and purity rows when the catalogue has none", async () => {
+    const product = getProduct("fx-pendant-a");
+    if (!product) throw new Error("Missing fixture");
+    render(<ProductAccordion product={{ ...product, material: undefined, purity: undefined }} />);
+    fireEvent.click(screen.getByRole("button", { name: "Product details" }));
+    expect(await screen.findByText("SKU")).toBeInTheDocument();
+    expect(screen.queryByText("Material")).toBeNull();
+    expect(screen.queryByText("Purity")).toBeNull();
   });
   it("accepts whole positive quantities and rejects invalid input", () => {
     expect(validQuantity(1)).toBe(true);
