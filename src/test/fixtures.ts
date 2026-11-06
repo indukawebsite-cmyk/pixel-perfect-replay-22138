@@ -5,6 +5,7 @@ import { setCatalog } from "@/lib/live-catalog";
 
 const row = (slug: string, sku: string, category: string, collection: string, price: number, stock: number, images: number) => ({
   slug, sku, name: `Fixture ${sku}`, category, price, description: `Fixture description ${sku}`, tagline: null,
+  material: "925 Sterling Silver", purity: "925 (92.5% Silver)",
   highlights: ["Fixture highlight"], length_cm: 2, width_cm: 1, created_at: `2026-11-0${images}T00:00:00Z`,
   collections: { slug: collection }, product_variants: [{ stock_quantity: stock }],
   product_images: Array.from({ length: images }, (_, i) => ({ image_url: `${sku}/${String(i + 1).padStart(2, "0")}.jpg`, alt_text: "", display_order: images - 1 - i })),

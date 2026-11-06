@@ -9,6 +9,8 @@ import {
 export function ProductAccordion({ product }: { product: Product }) {
   const specs: [string, string][] = [
     ...(product.sku ? [["SKU", product.sku] as [string, string]] : []),
+    ...(product.material ? [["Material", product.material] as [string, string]] : []),
+    ...(product.purity ? [["Purity", product.purity] as [string, string]] : []),
     ...(product.size ? [["Size", product.size] as [string, string]] : []),
     ...(product.stock !== undefined
       ? [["Availability", product.stock > 0 ? "In stock" : "Currently unavailable"] as [string, string]]
