@@ -147,10 +147,17 @@ function AccountPage() {
           ) : (
             <ul className="divide-y divide-border">
               {orders.data.map((o) => (
-                <li key={o.id} className="flex justify-between py-4 text-sm">
-                  <span>{o.order_number} · {new Date(o.created_at).toLocaleDateString("en-IN")}</span>
-                  <span>{formatPrice(Number(o.total))} · {o.status}</span>
-                </li>
+                <OrderRow
+                  key={o.id}
+                  order={o}
+                  cancellation={requests.data?.cancellations.find((c) => c.order_id === o.id)}
+                  returnRequest={requests.data?.returns.find((r) => r.order_id === o.id)}
+                  refunds={requests.data?.refunds.filter((r) => r.order_id === o.id) ?? []}
+                  onChanged={() => {
+                    void queryClient.invalidateQueries({ queryKey: ["orders", user.id] });
+                    void queryClient.invalidateQueries({ queryKey: ["order-requests", user.id] });
+                  }}
+                />
               ))}
             </ul>
           )}
