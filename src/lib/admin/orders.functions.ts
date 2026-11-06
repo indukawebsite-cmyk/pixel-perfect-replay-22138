@@ -2,14 +2,15 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
+// "cancelled" and "refunded" are deliberately excluded: those states are only
+// reachable through the guarded cancellation/return functions, which enforce
+// shipment cancellation, refund and exactly-once inventory restoration.
 const orderStatusSchema = z.enum([
   "pending",
   "confirmed",
   "processing",
   "shipped",
   "delivered",
-  "cancelled",
-  "refunded",
 ]);
 
 export const updateOrderStatus = createServerFn({ method: "POST" })
@@ -29,5 +30,13 @@ export const updateOrderStatus = createServerFn({ method: "POST" })
       .update({ status: data.status })
       .eq("id", data.orderId);
     if (error) throw new Error("Could not update the order status.");
+    // Record the actual delivery timestamp — it starts the 7-day return window.
+    if (data.status === "delivered") {
+      await supabaseAdmin
+        .from("shipments")
+        .update({ delivered_at: new Date().toISOString() })
+        .eq("order_id", data.orderId)
+        .is("delivered_at", null);
+    }
     return { ok: true };
   });

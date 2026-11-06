@@ -202,7 +202,7 @@ export async function listOrders() {
 export async function getOrder(id: string) {
   const { data, error } = await supabase
     .from("orders")
-    .select("*, customers(email, full_name, phone), order_items(*), payments(*), shipments(*)")
+    .select("*, customers(email, full_name, phone), order_items(*), payments(*), shipments(*), cancellation_requests(*), return_requests(*), refunds(*)")
     .eq("id", id)
     .maybeSingle();
   if (error) throw error;
