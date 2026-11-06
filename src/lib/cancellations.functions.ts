@@ -60,10 +60,11 @@ export const requestCancellation = createServerFn({ method: "POST" })
     const shipment = await cancelShipmentBestEffort(supabaseAdmin, order.id);
     if (!shipment.ok) throw new Error("SHIPMENT_NOT_CANCELLABLE");
 
-    const { data: result, error } = await supabaseAdmin.rpc("cancel_order_and_restore", {
+    const { data: rawResult, error } = await supabaseAdmin.rpc("cancel_order_and_restore", {
       p_order_id: order.id,
       p_reason: data.reason,
     });
+    const result = rawResult as { ok: boolean; stock_restored?: boolean } | null;
     if (error || !result?.ok) throw new Error("CANCEL_FAILED");
 
     // Prepaid orders get a full refund of subtotal − discount (no shipping).

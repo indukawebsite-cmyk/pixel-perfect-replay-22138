@@ -57,12 +57,12 @@ export const Route = createFileRoute("/api/public/webhooks/razorpay")({
         ) {
           // Refund lifecycle: matched by the unique Razorpay refund ID stored
           // when the refund was initiated. Re-delivery is a no-op.
-          const refund = event.payload.refund.entity;
+          const refundId = event.payload.refund.entity.id;
           const newStatus = event.event === "refund.processed" ? "processed" : "failed";
           const { data: row } = await supabaseAdmin
             .from("refunds")
             .update({ status: newStatus })
-            .eq("razorpay_refund_id", refund.id)
+            .eq("razorpay_refund_id", refundId)
             .in("status", ["created", "pending"])
             .select("order_id, kind")
             .maybeSingle();

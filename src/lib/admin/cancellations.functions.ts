@@ -37,10 +37,11 @@ export const approveCancellation = createServerFn({ method: "POST" })
     const shipment = await cancelShipmentBestEffort(admin, request.order_id);
     if (!shipment.ok) throw new Error("SHIPMENT_NOT_CANCELLABLE");
 
-    const { data: result, error } = await admin.rpc("cancel_order_and_restore", {
+    const { data: rawResult, error } = await admin.rpc("cancel_order_and_restore", {
       p_order_id: request.order_id,
       p_reason: request.reason,
     });
+    const result = rawResult as { ok: boolean; stock_restored?: boolean } | null;
     if (error || !result?.ok) throw new Error("CANCEL_FAILED");
 
     const { data: payment } = await admin
@@ -213,9 +214,10 @@ export const recordInspection = createServerFn({ method: "POST" })
       .update({ status: "inspection_passed", inspection_note: data.note ?? null })
       .eq("id", request.id);
 
-    const { data: restored, error } = await admin.rpc("restore_returned_stock", {
+    const { data: rawRestored, error } = await admin.rpc("restore_returned_stock", {
       p_return_id: request.id,
     });
+    const restored = rawRestored as { ok: boolean } | null;
     if (error || !restored?.ok) throw new Error("STOCK_RESTORE_FAILED");
 
     const { data: payment } = await admin
