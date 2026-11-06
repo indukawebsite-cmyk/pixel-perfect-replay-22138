@@ -77,14 +77,15 @@ export function toProduct(row: Row, urls: Map<string, string>): Product {
     description: row.description ?? undefined,
     tagline: row.tagline ?? undefined,
     // Owner-confirmed specifications render behind the verified marker.
-    specifications:
-      row.material || row.purity
-        ? {
-            verified: true,
-            material: row.material ?? undefined,
-            purity: row.purity ?? undefined,
-          }
-        : undefined,
+    ...(row.material || row.purity
+      ? {
+          specifications: {
+            verified: true as const,
+            ...(row.material ? { material: row.material } : {}),
+            ...(row.purity ? { purity: row.purity } : {}),
+          },
+        }
+      : {}),
     highlights: row.highlights,
     size: sizeLabel(row.length_cm, row.width_cm),
     addedOn: row.created_at,
