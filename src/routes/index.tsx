@@ -32,7 +32,7 @@ function Home() {
     <>
       {/* 1 · HERO — one full-width campaign image, text over gradient */}
       <section className="relative bg-midnight text-ivory">
-        <div className="relative h-[min(80svh,750px)] min-h-[480px] overflow-hidden">
+        <div className="relative h-[calc(100svh-160px)] overflow-hidden sm:h-[min(80svh,750px)] sm:min-h-[480px]">
           <img
             src={heroCampaign}
             alt="House of Induka campaign — a male and a female model wearing refined sterling silver jewellery"
@@ -43,12 +43,12 @@ function Home() {
           />
           <div className="absolute inset-0 bg-gradient-to-r from-midnight/85 via-midnight/30 to-transparent" />
           <div className="absolute inset-0 bg-gradient-to-t from-midnight/70 via-transparent to-midnight/20" />
-          <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }} className="relative flex h-full flex-col justify-end gap-6 p-8 pb-12 md:p-14 md:pb-16">
-            <span className="eyebrow text-soft-gold">House of Induka · 925 Sterling Silver</span>
-            <h1 className="max-w-2xl text-5xl uppercase leading-[1.05] sm:text-6xl md:text-7xl">Pure silver. <span className="editorial normal-case text-champagne">Distinctive style.</span></h1>
-            <div className="grid gap-3 pt-2 sm:flex sm:gap-4">
-              <Button asChild variant="luxLight" size="xl"><Link to="/men">Shop Men</Link></Button>
-              <Button asChild variant="luxOutline" size="xl" className="text-ivory"><Link to="/women">Shop Women</Link></Button>
+          <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }} className="relative flex h-full min-w-0 flex-col justify-end gap-4 p-6 sm:gap-6 sm:p-8 sm:pb-12 md:p-14 md:pb-16">
+            <span className="eyebrow text-[0.625rem] leading-snug text-soft-gold sm:text-[0.6875rem] sm:leading-normal">House of Induka · 925 Sterling Silver</span>
+            <h1 className="max-w-2xl text-[2.375rem] uppercase leading-none sm:text-6xl sm:leading-[1.05] md:text-7xl">Pure silver. <span className="editorial normal-case text-champagne">Distinctive style.</span></h1>
+            <div className="grid shrink-0 gap-2.5 sm:flex sm:gap-4 sm:pt-2">
+              <Button asChild variant="luxLight" size="xl" className="h-12 w-full sm:h-13 sm:w-auto"><Link to="/men">Shop Men</Link></Button>
+              <Button asChild variant="luxOutline" size="xl" className="h-12 w-full text-ivory sm:h-13 sm:w-auto"><Link to="/women">Shop Women</Link></Button>
             </div>
           </motion.div>
         </div>
