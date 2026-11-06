@@ -33,4 +33,4 @@ Verified: 52 tests pass; desktop/mobile checkout to confirmation, coupon checks,
 
 Limitations: bag survives refresh in this tab when session storage is available; customer details and demo confirmations are not persisted. DEMO code applies no discount; ₹150 shipping is an illustrative assumption, not approved pricing. Taxes, live shipping, payments and actual orders remain disabled.
 # Cancellation, returns and refunds (design phase)
-- [ ] Revised architecture plan incorporating owner-approved rules — awaiting owner approval; no implementation until approved.
+- [x] Revised architecture plan approved and implemented: schema, guarded cancellation/return functions, refunds, webhook events, admin lockdown, account/admin UI, policy page, tests. Email notifications deferred (no sender domain configured).
