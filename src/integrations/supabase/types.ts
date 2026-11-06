@@ -14,6 +14,57 @@ export type Database = {
   }
   public: {
     Tables: {
+      cancellation_requests: {
+        Row: {
+          admin_note: string | null
+          customer_id: string
+          id: string
+          order_id: string
+          reason: string
+          requested_at: string
+          resolved_at: string | null
+          resolved_by: string | null
+          status: Database["public"]["Enums"]["cancellation_status"]
+        }
+        Insert: {
+          admin_note?: string | null
+          customer_id: string
+          id?: string
+          order_id: string
+          reason: string
+          requested_at?: string
+          resolved_at?: string | null
+          resolved_by?: string | null
+          status?: Database["public"]["Enums"]["cancellation_status"]
+        }
+        Update: {
+          admin_note?: string | null
+          customer_id?: string
+          id?: string
+          order_id?: string
+          reason?: string
+          requested_at?: string
+          resolved_at?: string | null
+          resolved_by?: string | null
+          status?: Database["public"]["Enums"]["cancellation_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cancellation_requests_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cancellation_requests_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       collections: {
         Row: {
           created_at: string
@@ -139,6 +190,8 @@ export type Database = {
         Row: {
           address_line1: string
           address_line2: string | null
+          cancellation_reason: string | null
+          cancelled_at: string | null
           city: string
           country: string
           created_at: string
@@ -154,6 +207,7 @@ export type Database = {
           state: string
           status: Database["public"]["Enums"]["order_status"]
           stock_deducted: boolean
+          stock_restored: boolean
           subtotal: number
           total: number
           updated_at: string
@@ -161,6 +215,8 @@ export type Database = {
         Insert: {
           address_line1: string
           address_line2?: string | null
+          cancellation_reason?: string | null
+          cancelled_at?: string | null
           city: string
           country?: string
           created_at?: string
@@ -176,6 +232,7 @@ export type Database = {
           state: string
           status?: Database["public"]["Enums"]["order_status"]
           stock_deducted?: boolean
+          stock_restored?: boolean
           subtotal: number
           total: number
           updated_at?: string
@@ -183,6 +240,8 @@ export type Database = {
         Update: {
           address_line1?: string
           address_line2?: string | null
+          cancellation_reason?: string | null
+          cancelled_at?: string | null
           city?: string
           country?: string
           created_at?: string
@@ -198,6 +257,7 @@ export type Database = {
           state?: string
           status?: Database["public"]["Enums"]["order_status"]
           stock_deducted?: boolean
+          stock_restored?: boolean
           subtotal?: number
           total?: number
           updated_at?: string
@@ -412,11 +472,141 @@ export type Database = {
           },
         ]
       }
+      refunds: {
+        Row: {
+          amount: number
+          created_at: string
+          id: string
+          idempotency_key: string
+          kind: Database["public"]["Enums"]["refund_kind"]
+          offline_confirmed_at: string | null
+          offline_confirmed_by: string | null
+          offline_method: string | null
+          offline_reference: string | null
+          order_id: string
+          payment_id: string | null
+          razorpay_refund_id: string | null
+          reason: string | null
+          status: Database["public"]["Enums"]["refund_status"]
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          id?: string
+          idempotency_key: string
+          kind: Database["public"]["Enums"]["refund_kind"]
+          offline_confirmed_at?: string | null
+          offline_confirmed_by?: string | null
+          offline_method?: string | null
+          offline_reference?: string | null
+          order_id: string
+          payment_id?: string | null
+          razorpay_refund_id?: string | null
+          reason?: string | null
+          status?: Database["public"]["Enums"]["refund_status"]
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          id?: string
+          idempotency_key?: string
+          kind?: Database["public"]["Enums"]["refund_kind"]
+          offline_confirmed_at?: string | null
+          offline_confirmed_by?: string | null
+          offline_method?: string | null
+          offline_reference?: string | null
+          order_id?: string
+          payment_id?: string | null
+          razorpay_refund_id?: string | null
+          reason?: string | null
+          status?: Database["public"]["Enums"]["refund_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "refunds_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "refunds_payment_id_fkey"
+            columns: ["payment_id"]
+            isOneToOne: false
+            referencedRelation: "payments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      return_requests: {
+        Row: {
+          admin_note: string | null
+          customer_id: string
+          id: string
+          inspection_note: string | null
+          order_id: string
+          reason: string
+          requested_at: string
+          resolved_at: string | null
+          resolved_by: string | null
+          return_awb: string | null
+          return_courier: string | null
+          status: Database["public"]["Enums"]["return_status"]
+        }
+        Insert: {
+          admin_note?: string | null
+          customer_id: string
+          id?: string
+          inspection_note?: string | null
+          order_id: string
+          reason: string
+          requested_at?: string
+          resolved_at?: string | null
+          resolved_by?: string | null
+          return_awb?: string | null
+          return_courier?: string | null
+          status?: Database["public"]["Enums"]["return_status"]
+        }
+        Update: {
+          admin_note?: string | null
+          customer_id?: string
+          id?: string
+          inspection_note?: string | null
+          order_id?: string
+          reason?: string
+          requested_at?: string
+          resolved_at?: string | null
+          resolved_by?: string | null
+          return_awb?: string | null
+          return_courier?: string | null
+          status?: Database["public"]["Enums"]["return_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "return_requests_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "return_requests_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       shipments: {
         Row: {
           awb_code: string | null
           courier_name: string | null
           created_at: string
+          delivered_at: string | null
           id: string
           order_id: string
           shiprocket_order_id: string | null
@@ -428,6 +618,7 @@ export type Database = {
           awb_code?: string | null
           courier_name?: string | null
           created_at?: string
+          delivered_at?: string | null
           id?: string
           order_id: string
           shiprocket_order_id?: string | null
@@ -439,6 +630,7 @@ export type Database = {
           awb_code?: string | null
           courier_name?: string | null
           created_at?: string
+          delivered_at?: string | null
           id?: string
           order_id?: string
           shiprocket_order_id?: string | null
@@ -452,6 +644,48 @@ export type Database = {
             columns: ["order_id"]
             isOneToOne: false
             referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      stock_movements: {
+        Row: {
+          change: number
+          created_at: string
+          id: string
+          order_id: string | null
+          reason: string
+          variant_id: string | null
+        }
+        Insert: {
+          change: number
+          created_at?: string
+          id?: string
+          order_id?: string | null
+          reason: string
+          variant_id?: string | null
+        }
+        Update: {
+          change?: number
+          created_at?: string
+          id?: string
+          order_id?: string | null
+          reason?: string
+          variant_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stock_movements_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "stock_movements_variant_id_fkey"
+            columns: ["variant_id"]
+            isOneToOne: false
+            referencedRelation: "product_variants"
             referencedColumns: ["id"]
           },
         ]
@@ -482,6 +716,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      cancel_order_and_restore: {
+        Args: { p_order_id: string; p_reason: string }
+        Returns: Json
+      }
       finalize_order: {
         Args: {
           p_mark_paid: boolean
@@ -498,9 +736,11 @@ export type Database = {
         Returns: boolean
       }
       owns_order: { Args: { _order_id: string }; Returns: boolean }
+      restore_returned_stock: { Args: { p_return_id: string }; Returns: Json }
     }
     Enums: {
       app_role: "admin" | "customer"
+      cancellation_status: "requested" | "approved" | "rejected" | "completed"
       order_status:
         | "pending"
         | "confirmed"
@@ -515,6 +755,17 @@ export type Database = {
         | "captured"
         | "failed"
         | "refunded"
+      refund_kind: "cancellation" | "return"
+      refund_status: "created" | "pending" | "processed" | "failed"
+      return_status:
+        | "requested"
+        | "approved"
+        | "rejected"
+        | "received"
+        | "inspection_passed"
+        | "inspection_failed"
+        | "refunded"
+        | "closed"
       shipment_status:
         | "pending"
         | "created"
@@ -652,6 +903,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "customer"],
+      cancellation_status: ["requested", "approved", "rejected", "completed"],
       order_status: [
         "pending",
         "confirmed",
@@ -667,6 +919,18 @@ export const Constants = {
         "captured",
         "failed",
         "refunded",
+      ],
+      refund_kind: ["cancellation", "return"],
+      refund_status: ["created", "pending", "processed", "failed"],
+      return_status: [
+        "requested",
+        "approved",
+        "rejected",
+        "received",
+        "inspection_passed",
+        "inspection_failed",
+        "refunded",
+        "closed",
       ],
       shipment_status: [
         "pending",

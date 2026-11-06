@@ -47,6 +47,38 @@ export async function createRazorpayOrder(opts: {
   return (await response.json()) as RazorpayOrder;
 }
 
+export type RazorpayRefund = { id: string; amount: number; status: string; payment_id: string };
+
+// Creates a full refund for a captured payment. Server-side keys only.
+export async function createRazorpayRefund(
+  paymentId: string,
+  amountInr: number,
+): Promise<RazorpayRefund> {
+  const { keyId, keySecret } = razorpayConfig();
+  const response = await fetch(`https://api.razorpay.com/v1/payments/${paymentId}/refund`, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      authorization: `Basic ${btoa(`${keyId}:${keySecret}`)}`,
+    },
+    body: JSON.stringify({ amount: Math.round(amountInr * 100) }),
+  });
+  if (!response.ok) throw new Error(`Razorpay refund failed (${response.status})`);
+  return (await response.json()) as RazorpayRefund;
+}
+
+// Lists refunds already made against a payment — used to reconcile after an
+// ambiguous timeout before any retry, so a refund is never issued twice.
+export async function listRazorpayRefunds(paymentId: string): Promise<RazorpayRefund[]> {
+  const { keyId, keySecret } = razorpayConfig();
+  const response = await fetch(`https://api.razorpay.com/v1/payments/${paymentId}/refunds`, {
+    headers: { authorization: `Basic ${btoa(`${keyId}:${keySecret}`)}` },
+  });
+  if (!response.ok) throw new Error(`Razorpay refund lookup failed (${response.status})`);
+  const body = (await response.json()) as { items?: RazorpayRefund[] };
+  return body.items ?? [];
+}
+
 function safeEqual(a: string, b: string): boolean {
   const ba = Buffer.from(a);
   const bb = Buffer.from(b);

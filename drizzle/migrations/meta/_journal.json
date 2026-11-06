@@ -57,6 +57,13 @@
       "when": 1793911753556,
       "tag": "0007_restrict_product_image_storage_reads",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1793954346797,
+      "tag": "0008_cancellations_returns_refunds",
+      "breakpoints": true
     }
   ]
 }

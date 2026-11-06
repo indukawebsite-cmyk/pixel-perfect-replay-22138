@@ -112,3 +112,97 @@ export async function createShipmentBestEffort(
     return { ok: false, reason: "exception" };
   }
 }
+
+// Cancels a Shiprocket order when still eligible (no active AWB / not picked
+// up). A failure blocks the order cancellation so nothing ships after cancel.
+export async function cancelShipmentBestEffort(
+  admin: AdminClient,
+  orderId: string,
+): Promise<{ ok: boolean; reason?: string }> {
+  try {
+    if (!shiprocketConfigured()) return { ok: false, reason: "not_configured" };
+
+    const { data: shipment } = await admin
+      .from("shipments")
+      .select("id, shiprocket_order_id, awb_code, status")
+      .eq("order_id", orderId)
+      .maybeSingle();
+    if (!shipment?.shiprocket_order_id) return { ok: true }; // nothing booked
+    if (shipment.status === "cancelled") return { ok: true };
+    if (!["pending", "created", "pickup_scheduled"].includes(shipment.status) || shipment.awb_code)
+      return { ok: false, reason: "not_cancellable" };
+
+    const token = await login();
+    const response = await fetch(`${BASE}/orders/cancel`, {
+      method: "POST",
+      headers: { "content-type": "application/json", authorization: `Bearer ${token}` },
+      body: JSON.stringify({ ids: [Number(shipment.shiprocket_order_id)] }),
+    });
+    if (!response.ok) return { ok: false, reason: `api_${response.status}` };
+    await admin.from("shipments").update({ status: "cancelled" }).eq("id", shipment.id);
+    return { ok: true };
+  } catch (error) {
+    console.error("Shiprocket shipment cancellation failed", error);
+    return { ok: false, reason: "exception" };
+  }
+}
+
+// Attempts a Shiprocket reverse pickup for an approved return. If the account
+// or API does not support it, the caller falls back to an admin-managed
+// manual shipment (courier/AWB recorded on the return request).
+export async function createReturnPickupBestEffort(
+  admin: AdminClient,
+  orderId: string,
+): Promise<{ ok: boolean; reason?: string }> {
+  try {
+    if (!shiprocketConfigured()) return { ok: false, reason: "not_configured" };
+
+    const { data: order } = await admin
+      .from("orders")
+      .select("*, order_items(*), customers(email)")
+      .eq("id", orderId)
+      .single();
+    if (!order) return { ok: false, reason: "order_not_found" };
+
+    const token = await login();
+    const createdAt = new Date();
+    const pad = (n: number) => String(n).padStart(2, "0");
+    const orderDate = `${createdAt.getFullYear()}-${pad(createdAt.getMonth() + 1)}-${pad(createdAt.getDate())} ${pad(createdAt.getHours())}:${pad(createdAt.getMinutes())}`;
+    const response = await fetch(`${BASE}/shipments/create/return`, {
+      method: "POST",
+      headers: { "content-type": "application/json", authorization: `Bearer ${token}` },
+      body: JSON.stringify({
+        order_id: `${order.order_number}-R`,
+        order_date: orderDate,
+        pickup_customer_name: order.shipping_name,
+        pickup_address: order.address_line1,
+        pickup_address_2: order.address_line2 ?? "",
+        pickup_city: order.city,
+        pickup_state: order.state,
+        pickup_pincode: order.pin_code,
+        pickup_country: order.country,
+        pickup_email: order.customers?.email ?? "",
+        pickup_phone: order.shipping_phone,
+        shipping_is_billing: false,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        order_items: order.order_items.map((item: any) => ({
+          name: item.product_name,
+          sku: String(item.variant_id ?? item.product_id ?? item.id),
+          units: item.quantity,
+          selling_price: Number(item.purchase_price),
+        })),
+        payment_method: "Prepaid",
+        sub_total: Number(order.subtotal),
+        length: Number(process.env["SHIPROCKET_PARCEL_LENGTH_CM"] || 20),
+        breadth: Number(process.env["SHIPROCKET_PARCEL_BREADTH_CM"] || 15),
+        height: Number(process.env["SHIPROCKET_PARCEL_HEIGHT_CM"] || 5),
+        weight: Number(process.env["SHIPROCKET_PARCEL_WEIGHT_KG"] || 0.5),
+      }),
+    });
+    if (!response.ok) return { ok: false, reason: `api_${response.status}` };
+    return { ok: true };
+  } catch (error) {
+    console.error("Shiprocket reverse pickup failed", error);
+    return { ok: false, reason: "exception" };
+  }
+}
