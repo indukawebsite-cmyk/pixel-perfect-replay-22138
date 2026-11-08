@@ -36,6 +36,6 @@ Limitations: bag survives refresh in this tab when session storage is available;
 - [x] Revised architecture plan approved and implemented: schema, guarded cancellation/return functions, refunds, webhook events, admin lockdown, account/admin UI, policy page, tests. Email notifications deferred (no sender domain configured).
 
 # SEO corrections
-- [ ] Add and verify a router-derived public sitemap and robots reference.
-- [ ] Correct outdated silver-care and shipping notices using approved information only.
+- [x] Add and verify a router-derived public sitemap and robots reference.
+- [x] Correct outdated silver-care and shipping notices using approved information only.
 - [ ] Complete shipping policy content once approved destinations, estimates and charges are supplied.
