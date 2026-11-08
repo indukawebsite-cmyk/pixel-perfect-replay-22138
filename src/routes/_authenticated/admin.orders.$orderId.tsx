@@ -1,3 +1,4 @@
+import { authHead } from "@/components/auth/AuthShell";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -21,6 +22,8 @@ import { formatPrice } from "@/lib/catalog";
 const ORDER_STATUSES = ["pending", "confirmed", "processing", "shipped", "delivered"] as const;
 
 export const Route = createFileRoute("/_authenticated/admin/orders/$orderId")({
+  staticData: { sitemap: false },
+  head: () => authHead("Order administration", "Order administration for House of Induka administrators."),
   component: OrderDetail,
 });
 

@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { InformationPage, informationHead } from "@/components/layout/InformationPage";
 
 export const Route = createFileRoute("/silver-care")({
+  staticData: { sitemap: true },
   head: () => informationHead("Silver Policy & Care", "The 925 sterling silver standard at House of Induka, and how to care for your silver jewellery."),
   component: SilverCare,
 });

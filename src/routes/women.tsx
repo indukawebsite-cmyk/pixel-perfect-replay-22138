@@ -4,6 +4,7 @@ import { womenImagery } from "@/lib/campaign";
 import { validateExplorerSearch } from "@/lib/product-explorer";
 
 export const Route = createFileRoute("/women")({
+  staticData: { sitemap: true },
   validateSearch: validateExplorerSearch,
   head: () => ({
     meta: [

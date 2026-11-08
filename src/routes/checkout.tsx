@@ -6,6 +6,7 @@ import { CartLines } from "@/components/shop/CartLines";
 import { CheckoutSteps, EmptyCart } from "@/components/shop/CheckoutShell";
 import { checkoutHead } from "@/lib/demo-checkout";
 export const Route = createFileRoute("/checkout")({
+  staticData: { sitemap: false },
   head: () => checkoutHead("Checkout", "Place your INDUKA order with secure payment or cash on delivery."),
   component: CheckoutPage,
 });

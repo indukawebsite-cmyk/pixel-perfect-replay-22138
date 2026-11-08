@@ -7,6 +7,7 @@ import { AuthField, AuthMessage, AuthShell, authHead } from "@/components/auth/A
 import { fieldErrors, safeRedirect, signInSchema } from "@/lib/auth-validation";
 
 export const Route = createFileRoute("/auth")({
+  staticData: { sitemap: false },
   validateSearch: (search: Record<string, unknown>): { redirect?: string } =>
     typeof search["redirect"] === "string" ? { redirect: search["redirect"] } : {},
   head: () => authHead("Sign in", "Sign in to your House of Induka account."),

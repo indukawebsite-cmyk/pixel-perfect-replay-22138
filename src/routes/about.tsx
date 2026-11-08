@@ -3,6 +3,7 @@ import { PageIntro } from "@/components/layout/PageIntro";
 import { Logo } from "@/components/brand/Logo";
 
 export const Route = createFileRoute("/about")({
+  staticData: { sitemap: true },
   head: () => ({
     meta: [
       { title: "About Us — House of Induka" },

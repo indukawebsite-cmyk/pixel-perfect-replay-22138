@@ -1,3 +1,4 @@
+import { authHead } from "@/components/auth/AuthShell";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { AdminHeader } from "@/components/admin/AdminUi";
@@ -5,6 +6,8 @@ import { LOW_STOCK, overview } from "@/lib/admin/api";
 import { formatPrice } from "@/lib/catalog";
 
 export const Route = createFileRoute("/_authenticated/admin/")({
+  staticData: { sitemap: false },
+  head: () => authHead("Store overview", "Store overview for House of Induka administrators."),
   component: Overview,
 });
 

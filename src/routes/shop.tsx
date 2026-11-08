@@ -5,6 +5,7 @@ import { useLiveCatalog } from "@/lib/live-catalog";
 import { validateExplorerSearch } from "@/lib/product-explorer";
 
 export const Route = createFileRoute("/shop")({
+  staticData: { sitemap: true },
   validateSearch: validateExplorerSearch,
   head: () => ({
     meta: [

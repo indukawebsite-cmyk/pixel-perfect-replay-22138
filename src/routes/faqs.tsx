@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { InformationPage, informationHead } from "@/components/layout/InformationPage";
-export const Route = createFileRoute("/faqs")({ head: () => informationHead("Frequently Asked Questions", "Answers about the INDUKA catalogue, wishlist and launch."), component: FAQs });
+export const Route = createFileRoute("/faqs")({
+  staticData: { sitemap: true }, head: () => informationHead("Frequently Asked Questions", "Answers about the INDUKA catalogue, wishlist and launch."), component: FAQs });
 function FAQs() { return <InformationPage title="FAQs">{[
 ["Can I purchase the pieces shown?", "Not yet. All pieces are clearly marked samples. Official products, prices and availability will be confirmed at launch."],
 ["Where are my saved pieces?", "Your wishlist keeps sample pieces during this visit. It resets when the page is reloaded and is not linked to an account."],

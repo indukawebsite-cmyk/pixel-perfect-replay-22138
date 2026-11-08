@@ -6,6 +6,7 @@ import { AuthField, AuthMessage, AuthShell, authHead } from "@/components/auth/A
 import { passwordSchema } from "@/lib/auth-validation";
 
 export const Route = createFileRoute("/reset-password")({
+  staticData: { sitemap: false },
   head: () => authHead("Choose a new password", "Set a new password for your INDUKA account."),
   component: ResetPage,
 });

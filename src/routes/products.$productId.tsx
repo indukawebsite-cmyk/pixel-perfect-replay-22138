@@ -11,6 +11,7 @@ import { ShoppingError, ProductNotFound } from "@/components/shop/RouteFeedback"
 import { useEffect } from "react";
 
 export const Route = createFileRoute("/products/$productId")({
+  staticData: { sitemap: false },
   head: () => {
     const title = "Jewellery — House of Induka";
     const description = "925 sterling silver jewellery from House of Induka.";

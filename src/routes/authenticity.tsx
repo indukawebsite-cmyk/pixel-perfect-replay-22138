@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { InformationPage, informationHead } from "@/components/layout/InformationPage";
 
 export const Route = createFileRoute("/authenticity")({
+  staticData: { sitemap: true },
   head: () =>
     informationHead(
       "Hallmarking & Certificate of Authenticity",

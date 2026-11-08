@@ -4,6 +4,7 @@ import { createFileRoute } from "@tanstack/react-router";
 // before anything is read or written; processing is idempotent because the
 // database rejects duplicate payment IDs and stock is deducted exactly once.
 export const Route = createFileRoute("/api/public/webhooks/razorpay")({
+  staticData: { sitemap: false },
   server: {
     handlers: {
       POST: async ({ request }) => {
