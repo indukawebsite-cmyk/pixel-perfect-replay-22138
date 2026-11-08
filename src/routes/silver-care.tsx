@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { InformationPage, informationHead } from "@/components/layout/InformationPage";
 
 export const Route = createFileRoute("/silver-care")({
@@ -10,7 +10,7 @@ function SilverCare() {
   return <InformationPage title="Silver Policy & Care">
     <h2 className="font-display text-3xl text-foreground">Our silver</h2>
     <p className="mt-4">We sell only pure 925 sterling silver. 925 sterling silver is an alloy of 92.5% silver with a small amount of other metal added for strength, so the piece keeps its shape when worn.</p>
-    <p className="mt-4 text-sm">Hallmarking and certificate details will be added here once confirmed.</p>
+    <p className="mt-4 text-sm">Every INDUKA piece carries an embedded 925 purity marking, and every order includes an INDUKA Certificate of Authenticity. <Link to="/authenticity" className="underline underline-offset-4">Read about our hallmarking and authenticity assurance.</Link></p>
     <h2 className="mt-12 font-display text-3xl text-foreground">Caring for your silver</h2>
     <ul className="mt-4 list-disc space-y-2 pl-5">
       <li>Put jewellery on last — after perfume, lotion and hair spray.</li>
