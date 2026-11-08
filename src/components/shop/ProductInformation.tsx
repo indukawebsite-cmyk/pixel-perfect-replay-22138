@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Heart, ShoppingBag, MapPin } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import { availabilityLabel, productPriceLabel, type Product } from "@/lib/catalog";
+import { availabilityLabel, formatPrice, isOnSale, productPriceLabel, salePercent, type Product } from "@/lib/catalog";
 import { validPin, validQuantity } from "@/lib/product-detail";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/components/shop/CartProvider";
@@ -18,6 +18,7 @@ export function ProductInformation({ product }: { product: Product }) {
   const [pin, setPin] = useState("");
   const [pinFeedback, setPinFeedback] = useState("");
   const saved = ids.includes(product.id);
+  const onSale = isOnSale(product);
   const stock = product.stock ?? 0;
   const canAdd =
     product.price !== null &&
@@ -29,7 +30,18 @@ export function ProductInformation({ product }: { product: Product }) {
       <div>
         <h1 className="text-4xl leading-tight md:text-5xl">{product.name}</h1>
         {product.tagline && <p className="editorial mt-3 text-lg text-cocoa">{product.tagline}</p>}
-        <p className="mt-4 text-xl">{productPriceLabel(product)}</p>
+        {onSale && (
+          <p className="mt-4 flex items-center gap-3">
+            <span className="bg-midnight px-2.5 py-1 text-[0.65rem] font-medium uppercase tracking-[0.18em] text-champagne">
+              Diwali Special Sale
+            </span>
+            <span className="text-[0.65rem] font-medium uppercase tracking-[0.22em] text-champagne">{salePercent(product)}% off</span>
+          </p>
+        )}
+        <p className="mt-4 text-xl">
+          {onSale && <span className="mr-3 text-base text-muted-foreground line-through">{formatPrice(product.compareAtPrice!)}</span>}
+          {productPriceLabel(product)}
+        </p>
         <p className="mt-2 text-xs text-muted-foreground">
           {availabilityLabel(product)}
           {product.sku ? ` · SKU ${product.sku}` : ""}

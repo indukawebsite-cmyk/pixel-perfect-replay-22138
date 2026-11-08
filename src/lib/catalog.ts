@@ -41,6 +41,8 @@ export type Product = {
   /** Lighter grid-sized copy of the primary photo; falls back to `image`. */
   thumbnail?: string;
   price: number | null;
+  /** Original price before an owner-approved sale; shown struck through when above `price`. */
+  compareAtPrice?: number | undefined;
   sku?: string | undefined;
   stock?: number;
   tagline?: string | undefined;
@@ -134,7 +136,14 @@ export const getCollection = (slug: string) => collections.find((c) => c.slug ==
 export const allProducts = () => getCatalog().products;
 export const getProduct = (id: string) => allProducts().find((product) => product.id === id);
 export const productPriceLabel = (product: Product) => formatPrice(product.price);
+/** Owner-approved sale: original price stored in the catalogue is above the current price. */
+export const isOnSale = (product: Product) =>
+  product.price !== null && product.compareAtPrice !== undefined && product.compareAtPrice > product.price;
+export const salePercent = (product: Product) =>
+  isOnSale(product) ? Math.round((1 - product.price! / product.compareAtPrice!) * 100) : 0;
 export const availabilityLabel = (product: Product) =>
   product.stock === undefined ? "" : product.stock > 0 ? "In stock" : "Currently unavailable";
 export const formatPrice = (p: number | null) =>
-  p === null ? "Price to be announced" : `₹${p.toLocaleString("en-IN")}`;
+  p === null
+    ? "Price to be announced"
+    : `₹${p.toLocaleString("en-IN", { minimumFractionDigits: Number.isInteger(p) ? 0 : 2, maximumFractionDigits: 2 })}`;
