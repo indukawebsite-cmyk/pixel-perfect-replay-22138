@@ -3,8 +3,8 @@
 import { toProduct } from "@/lib/catalog-source";
 import { setCatalog } from "@/lib/live-catalog";
 
-const row = (slug: string, sku: string, category: string, collection: string, price: number, stock: number, images: number) => ({
-  slug, sku, name: `Fixture ${sku}`, category, price, description: `Fixture description ${sku}`, tagline: null,
+const row = (slug: string, sku: string, category: string, collection: string, price: number, stock: number, images: number, compareAtPrice: number | null = null) => ({
+  slug, sku, name: `Fixture ${sku}`, category, price, compare_at_price: compareAtPrice, description: `Fixture description ${sku}`, tagline: null,
   material: "925 Sterling Silver", purity: "925 (92.5% Silver)",
   highlights: ["Fixture highlight"], length_cm: 2, width_cm: 1, created_at: `2026-11-0${images}T00:00:00Z`,
   collections: { slug: collection }, product_variants: [{ stock_quantity: stock }],
@@ -12,7 +12,7 @@ const row = (slug: string, sku: string, category: string, collection: string, pr
 });
 export const fixtureRows = [
   row("fx-pendant-a", "BR001", "pendants", "nakshatra", 5899, 2, 3),
-  row("fx-pendant-b", "BR004", "pendants", "chandni", 10999, 1, 1),
+  row("fx-pendant-b", "BR004", "pendants", "chandni", 10999, 1, 1, 21998),
   row("fx-earring-a", "BR0015", "earrings", "chandni", 2099, 1, 2),
   row("fx-earring-b", "BR0013", "earrings", "chandrika", 1899, 0, 4),
 ];
