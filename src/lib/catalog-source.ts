@@ -37,6 +37,7 @@ type Row = {
   name: string;
   category: string;
   price: number;
+  compare_at_price: number | null;
   description: string | null;
   tagline: string | null;
   material: string | null;
@@ -73,6 +74,7 @@ export function toProduct(row: Row, urls: Map<string, string>): Product {
     thumbnail: gallery[0]?.thumb ?? gallery[0]?.src ?? "",
     gallery,
     price: Number(row.price),
+    ...(row.compare_at_price !== null ? { compareAtPrice: Number(row.compare_at_price) } : {}),
     stock: row.product_variants.reduce((sum, variant) => sum + variant.stock_quantity, 0),
     description: row.description ?? undefined,
     tagline: row.tagline ?? undefined,
@@ -99,7 +101,7 @@ export async function fetchCatalog(): Promise<Product[]> {
   const { data, error } = await supabase
     .from("products")
     .select(
-      "slug, sku, name, category, price, description, tagline, material, purity, highlights, length_cm, width_cm, created_at, gender, collections(slug), product_variants(stock_quantity), product_images(image_url, alt_text, display_order)",
+      "slug, sku, name, category, price, compare_at_price, description, tagline, material, purity, highlights, length_cm, width_cm, created_at, gender, collections(slug), product_variants(stock_quantity), product_images(image_url, alt_text, display_order)",
     );
   if (error) throw error;
   const rows = (data ?? []) as unknown as Row[];
