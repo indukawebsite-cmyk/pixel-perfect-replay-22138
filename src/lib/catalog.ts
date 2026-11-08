@@ -144,4 +144,6 @@ export const salePercent = (product: Product) =>
 export const availabilityLabel = (product: Product) =>
   product.stock === undefined ? "" : product.stock > 0 ? "In stock" : "Currently unavailable";
 export const formatPrice = (p: number | null) =>
-  p === null ? "Price to be announced" : `₹${p.toLocaleString("en-IN")}`;
+  p === null
+    ? "Price to be announced"
+    : `₹${p.toLocaleString("en-IN", { minimumFractionDigits: Number.isInteger(p) ? 0 : 2, maximumFractionDigits: 2 })}`;
