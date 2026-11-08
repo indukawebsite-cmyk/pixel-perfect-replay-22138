@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { PageIntro } from "@/components/layout/PageIntro";
 
 export const Route = createFileRoute("/contact")({
+  staticData: { sitemap: true },
   head: () => ({
     meta: [
       { title: "Contact — House of Induka" },

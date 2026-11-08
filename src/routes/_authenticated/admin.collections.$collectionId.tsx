@@ -1,3 +1,4 @@
+import { authHead } from "@/components/auth/AuthShell";
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -13,6 +14,8 @@ import {
 import { getCollection } from "@/lib/catalog";
 
 export const Route = createFileRoute("/_authenticated/admin/collections/$collectionId")({
+  staticData: { sitemap: false },
+  head: () => authHead("Edit collection", "Edit collection for House of Induka administrators."),
   component: CollectionEditor,
 });
 

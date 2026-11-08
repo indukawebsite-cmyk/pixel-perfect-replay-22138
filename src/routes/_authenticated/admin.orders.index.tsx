@@ -1,3 +1,4 @@
+import { authHead } from "@/components/auth/AuthShell";
 import { useMemo, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
@@ -6,6 +7,8 @@ import { listOrders } from "@/lib/admin/api";
 import { formatPrice } from "@/lib/catalog";
 
 export const Route = createFileRoute("/_authenticated/admin/orders/")({
+  staticData: { sitemap: false },
+  head: () => authHead("Manage orders", "Manage orders for House of Induka administrators."),
   component: OrdersPage,
 });
 

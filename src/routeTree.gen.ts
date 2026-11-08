@@ -29,6 +29,7 @@ import { Route as ShippingRouteImport } from './routes/shipping'
 import { Route as ShopRouteImport } from './routes/shop'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as SilverCareRouteImport } from './routes/silver-care'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SocialRouteImport } from './routes/social'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as WishlistRouteImport } from './routes/wishlist'
@@ -146,6 +147,11 @@ const SilverCareRoute = SilverCareRouteImport.update({
   path: '/silver-care',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SocialRoute = SocialRouteImport.update({
   id: '/social',
   path: '/social',
@@ -259,6 +265,7 @@ export interface FileRoutesByFullPath {
   '/shop': typeof ShopRoute
   '/signup': typeof SignupRoute
   '/silver-care': typeof SilverCareRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/social': typeof SocialRoute
   '/terms': typeof TermsRoute
   '/wishlist': typeof WishlistRoute
@@ -297,6 +304,7 @@ export interface FileRoutesByTo {
   '/shop': typeof ShopRoute
   '/signup': typeof SignupRoute
   '/silver-care': typeof SilverCareRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/social': typeof SocialRoute
   '/terms': typeof TermsRoute
   '/wishlist': typeof WishlistRoute
@@ -336,6 +344,7 @@ export interface FileRoutesById {
   '/shop': typeof ShopRoute
   '/signup': typeof SignupRoute
   '/silver-care': typeof SilverCareRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/social': typeof SocialRoute
   '/terms': typeof TermsRoute
   '/wishlist': typeof WishlistRoute
@@ -376,6 +385,7 @@ export interface FileRouteTypes {
     | '/shop'
     | '/signup'
     | '/silver-care'
+    | '/sitemap.xml'
     | '/social'
     | '/terms'
     | '/wishlist'
@@ -414,6 +424,7 @@ export interface FileRouteTypes {
     | '/shop'
     | '/signup'
     | '/silver-care'
+    | '/sitemap.xml'
     | '/social'
     | '/terms'
     | '/wishlist'
@@ -452,6 +463,7 @@ export interface FileRouteTypes {
     | '/shop'
     | '/signup'
     | '/silver-care'
+    | '/sitemap.xml'
     | '/social'
     | '/terms'
     | '/wishlist'
@@ -492,6 +504,7 @@ export interface RootRouteChildren {
   ShopRoute: typeof ShopRoute
   SignupRoute: typeof SignupRoute
   SilverCareRoute: typeof SilverCareRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SocialRoute: typeof SocialRoute
   TermsRoute: typeof TermsRoute
   WishlistRoute: typeof WishlistRoute
@@ -642,6 +655,13 @@ declare module '@tanstack/react-router' {
       path: '/silver-care'
       fullPath: '/silver-care'
       preLoaderRoute: typeof SilverCareRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/social': {
@@ -826,6 +846,7 @@ const rootRouteChildren: RootRouteChildren = {
   ShopRoute: ShopRoute,
   SignupRoute: SignupRoute,
   SilverCareRoute: SilverCareRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   SocialRoute: SocialRoute,
   TermsRoute: TermsRoute,
   WishlistRoute: WishlistRoute,

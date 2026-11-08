@@ -1,3 +1,4 @@
+import { authHead } from "@/components/auth/AuthShell";
 import { useEffect, useState, type FormEvent } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -12,6 +13,8 @@ import {
 } from "@/lib/admin/api";
 
 export const Route = createFileRoute("/_authenticated/admin/products/$productId")({
+  staticData: { sitemap: false },
+  head: () => authHead("Edit product", "Edit product for House of Induka administrators."),
   component: ProductEditor,
 });
 

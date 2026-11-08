@@ -29,6 +29,7 @@ type OrderRecord = {
 };
 
 export const Route = createFileRoute("/order-confirmation")({
+  staticData: { sitemap: false },
   validateSearch: (search: Record<string, unknown>): { order?: string } =>
     typeof search["order"] === "string" && /^[0-9a-f-]{36}$/i.test(search["order"])
       ? { order: search["order"] }

@@ -12,6 +12,7 @@ import { requestCancellation, requestReturn } from "@/lib/cancellations.function
 import { isCancellableStatus, withinCancellationWindow } from "@/lib/cancellation-policy";
 
 export const Route = createFileRoute("/_authenticated/account")({
+  staticData: { sitemap: false },
   head: () => authHead("Your account", "Your House of Induka account and orders."),
   component: AccountPage,
 });

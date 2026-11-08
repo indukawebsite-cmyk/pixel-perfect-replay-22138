@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { InformationPage, informationHead } from "@/components/layout/InformationPage";
 
 export const Route = createFileRoute("/returns")({
+  staticData: { sitemap: true },
   head: () => informationHead("Customer Care & Returns", "Customer care, returns, cancellations and refunds at House of Induka."),
   component: () => <InformationPage title="Customer Care & Returns">
     <p>

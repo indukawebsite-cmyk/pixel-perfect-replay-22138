@@ -12,6 +12,7 @@ import { GenderCampaign } from "@/components/brand/GenderCampaign";
 import { useLiveCatalog } from "@/lib/live-catalog";
 
 export const Route = createFileRoute("/")({
+  staticData: { sitemap: true },
   head: () => ({
     meta: [
       { title: "INDUKA — Pure 925 Sterling Silver Jewellery for Men & Women" },

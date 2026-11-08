@@ -7,6 +7,7 @@ import { AuthField, AuthMessage, AuthShell, authHead } from "@/components/auth/A
 import { fieldErrors, signUpSchema } from "@/lib/auth-validation";
 
 export const Route = createFileRoute("/signup")({
+  staticData: { sitemap: false },
   head: () => authHead("Create account", "Create your House of Induka account."),
   component: SignUpPage,
 });

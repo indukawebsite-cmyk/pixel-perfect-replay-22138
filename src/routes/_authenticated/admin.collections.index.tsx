@@ -1,3 +1,4 @@
+import { authHead } from "@/components/auth/AuthShell";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { Plus } from "lucide-react";
@@ -6,6 +7,8 @@ import { AdminHeader, StatusPill } from "@/components/admin/AdminUi";
 import { listCollections } from "@/lib/admin/api";
 
 export const Route = createFileRoute("/_authenticated/admin/collections/")({
+  staticData: { sitemap: false },
+  head: () => authHead("Manage collections", "Manage collections for House of Induka administrators."),
   component: CollectionsPage,
 });
 

@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { authHead } from "@/components/auth/AuthShell";
 
 export const Route = createFileRoute("/_authenticated/admin")({
+  staticData: { sitemap: false },
   head: () => authHead("Admin", "INDUKA store administration."),
   component: AdminLayout,
 });

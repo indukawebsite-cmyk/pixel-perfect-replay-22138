@@ -7,6 +7,7 @@ import { OrderSummary } from "@/components/shop/OrderSummary";
 import { CheckoutSteps, EmptyCart } from "@/components/shop/CheckoutShell";
 import { checkoutHead } from "@/lib/demo-checkout";
 export const Route = createFileRoute("/cart")({
+  staticData: { sitemap: false },
   head: () => checkoutHead("Your bag", "Review your INDUKA pieces before checkout."),
   component: CartPage,
 });
