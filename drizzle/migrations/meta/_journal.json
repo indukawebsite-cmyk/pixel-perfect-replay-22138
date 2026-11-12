@@ -71,6 +71,13 @@
       "when": 1794472619827,
       "tag": "0009_secure_account_coupon",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1794472877630,
+      "tag": "0010_coupon_confirmation_guard",
+      "breakpoints": true
     }
   ]
 }
