@@ -1,6 +1,6 @@
 import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Boxes, Gem, LayoutDashboard, Receipt } from "lucide-react";
+import { Boxes, Gem, LayoutDashboard, Receipt, TicketPercent } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PageIntro } from "@/components/layout/PageIntro";
 import { supabase } from "@/integrations/supabase/client";
@@ -17,6 +17,7 @@ const NAV = [
   { to: "/admin/products", label: "Products", icon: Gem, exact: false },
   { to: "/admin/collections", label: "Collections", icon: Boxes, exact: false },
   { to: "/admin/orders", label: "Orders", icon: Receipt, exact: false },
+  { to: "/admin/coupons", label: "Coupons", icon: TicketPercent, exact: false },
 ] as const;
 
 function AdminLayout() {

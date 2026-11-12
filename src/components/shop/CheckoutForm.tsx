@@ -7,6 +7,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { checkoutAddressSchema } from "@/lib/checkout-schema";
 import { placeOrder, confirmRazorpayPayment } from "@/lib/checkout.functions";
 import { useCart } from "@/components/shop/CartProvider";
+import { applyCoupon } from "@/lib/coupons.functions";
+import type { CouponTotals } from "@/components/shop/OrderSummary";
 
 const fields = [
   { key: "name", label: "Customer name", max: 100, section: "contact" },
@@ -57,7 +59,7 @@ function friendlyError(message: string): string {
   return message;
 }
 
-export function CheckoutForm() {
+export function CheckoutForm({ coupon, onCoupon }: { coupon?: CouponTotals | null; onCoupon?: (value: CouponTotals | null) => void }) {
   const [values, setValues] = useState(empty);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
@@ -68,6 +70,23 @@ export function CheckoutForm() {
   const navigate = useNavigate();
   const placeOrderFn = useServerFn(placeOrder);
   const confirmFn = useServerFn(confirmRazorpayPayment);
+  const applyFn = useServerFn(applyCoupon);
+  const [couponInput, setCouponInput] = useState("");
+  const [couponError, setCouponError] = useState("");
+  const [applying, setApplying] = useState(false);
+  const apply = async () => {
+    if (signedIn !== true || applying || submitting) return;
+    setApplying(true);
+    setCouponError("");
+    try {
+      const result = await applyFn({ data: { code: couponInput, items: items.map((item) => ({ productId: item.productId, variantId: item.variantId, quantity: item.quantity })) } });
+      idempotencyKey.current = null;
+      onCoupon?.(result);
+    } catch (error) {
+      onCoupon?.(null);
+      setCouponError(error instanceof Error ? error.message : "Could not apply coupon.");
+    } finally { setApplying(false); }
+  };
 
   useEffect(() => {
     void supabase.auth.getUser().then(({ data }) => setSignedIn(Boolean(data.user)));
@@ -131,6 +150,7 @@ export function CheckoutForm() {
           customer: validated.data,
           paymentMethod: method,
           idempotencyKey: idempotencyKey.current,
+          ...(coupon ? { couponCode: coupon.code } : {}),
         },
       });
 
@@ -268,6 +288,17 @@ export function CheckoutForm() {
         </fieldset>
       ))}
 
+      <fieldset className="mb-10" disabled={submitting || applying}>
+        <legend className="mb-5 text-3xl font-display">Apply Coupon Code</legend>
+        <label htmlFor="coupon-code" className="mb-2 block text-xs">Coupon code</label>
+        <div className="flex gap-3">
+          <input id="coupon-code" maxLength={40} value={couponInput} onChange={(event) => setCouponInput(event.target.value)} className="h-12 min-w-0 flex-1 border border-input bg-transparent px-3 text-sm" />
+          <Button type="button" variant="lux" disabled={!couponInput.trim() || Boolean(coupon)} onClick={() => void apply()}>{applying ? "Applying…" : "Apply"}</Button>
+        </div>
+        {coupon && <div className="mt-3 flex flex-wrap items-center justify-between gap-3"><p role="status" className="text-sm">FAMILYFIRST applied! You saved 20%.</p><Button type="button" variant="ghost" onClick={() => { onCoupon?.(null); idempotencyKey.current = null; }}>Remove coupon</Button></div>}
+        {couponError && <p role="alert" className="mt-3 text-sm text-destructive">{couponError}</p>}
+      </fieldset>
+
       <fieldset className="mb-4">
         <legend className="mb-5 text-3xl font-display">Payment</legend>
         <div className="grid gap-4 sm:grid-cols-2">
@@ -316,7 +347,7 @@ export function CheckoutForm() {
         variant="lux"
         type="submit"
         className="mt-6 h-13 w-full tracking-normal"
-        disabled={submitting || !items.length || signedIn !== true}
+        disabled={submitting || applying || !items.length || signedIn !== true}
       >
         {submitting
           ? "Processing…"
