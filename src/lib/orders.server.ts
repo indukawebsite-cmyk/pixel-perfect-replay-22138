@@ -18,7 +18,7 @@ export type PricedLine = {
   lineTotal: number;
 };
 
-export type Quote = { lines: PricedLine[]; subtotal: number; shipping: number; total: number };
+export type Quote = { lines: PricedLine[]; subtotal: number; shipping: number; total: number; discount?: number; couponCode?: string };
 
 export async function priceAndCheckStock(
   admin: AdminClient,
@@ -107,6 +107,7 @@ export async function createOrder(
     address: CheckoutAddress;
     quote: Quote;
     idempotencyKey: string;
+    paymentMethod?: "cod" | "razorpay";
   },
 ) {
   const { address, quote } = opts;
@@ -123,7 +124,9 @@ export async function createOrder(
       pin_code: address.pin,
       country: address.country,
       subtotal: quote.subtotal,
-      discount: 0,
+      discount: quote.discount ?? 0,
+      coupon_code: quote.couponCode ?? null,
+      coupon_payment_method: quote.couponCode ? opts.paymentMethod : null,
       shipping: quote.shipping,
       total: quote.total,
       status: "pending",
@@ -132,6 +135,7 @@ export async function createOrder(
     .select("id, order_number")
     .single();
   if (error) {
+    if (error.code === "23505" && quote.couponCode) throw new CheckoutError("A coupon checkout already exists for your account. Retry your existing checkout.");
     if (error.code === "23505") return null; // idempotency conflict — caller refetches
     throw new CheckoutError("Could not create your order. Please try again.");
   }
