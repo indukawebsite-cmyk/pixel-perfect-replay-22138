@@ -101,6 +101,73 @@ export type Database = {
         }
         Relationships: []
       }
+      coupon_redemptions: {
+        Row: {
+          coupon_code: string
+          customer_id: string
+          id: string
+          order_id: string
+          redeemed_at: string | null
+          reserved_at: string
+        }
+        Insert: {
+          coupon_code: string
+          customer_id: string
+          id?: string
+          order_id: string
+          redeemed_at?: string | null
+          reserved_at?: string
+        }
+        Update: {
+          coupon_code?: string
+          customer_id?: string
+          id?: string
+          order_id?: string
+          redeemed_at?: string | null
+          reserved_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "coupon_redemptions_coupon_code_fkey"
+            columns: ["coupon_code"]
+            isOneToOne: false
+            referencedRelation: "coupons"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "coupon_redemptions_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "coupon_redemptions_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: true
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      coupons: {
+        Row: {
+          code: string
+          discount_percent: number
+          is_active: boolean
+        }
+        Insert: {
+          code: string
+          discount_percent?: number
+          is_active?: boolean
+        }
+        Update: {
+          code?: string
+          discount_percent?: number
+          is_active?: boolean
+        }
+        Relationships: []
+      }
       customers: {
         Row: {
           created_at: string
@@ -194,6 +261,8 @@ export type Database = {
           cancelled_at: string | null
           city: string
           country: string
+          coupon_code: string | null
+          coupon_payment_method: string | null
           created_at: string
           customer_id: string
           discount: number
@@ -219,6 +288,8 @@ export type Database = {
           cancelled_at?: string | null
           city: string
           country?: string
+          coupon_code?: string | null
+          coupon_payment_method?: string | null
           created_at?: string
           customer_id: string
           discount?: number
@@ -244,6 +315,8 @@ export type Database = {
           cancelled_at?: string | null
           city?: string
           country?: string
+          coupon_code?: string | null
+          coupon_payment_method?: string | null
           created_at?: string
           customer_id?: string
           discount?: number
@@ -263,6 +336,13 @@ export type Database = {
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "orders_coupon_code_fkey"
+            columns: ["coupon_code"]
+            isOneToOne: false
+            referencedRelation: "coupons"
+            referencedColumns: ["code"]
+          },
           {
             foreignKeyName: "orders_customer_id_fkey"
             columns: ["customer_id"]
