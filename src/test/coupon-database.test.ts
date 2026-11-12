@@ -26,6 +26,7 @@ beforeAll(async () => {
     CREATE TABLE product_variants(id uuid,stock_quantity integer);
     INSERT INTO customers VALUES ('${a}'),('${b}'); INSERT INTO product_variants VALUES ('${a}',20);`);
   await db.exec(readFileSync("drizzle/migrations/0009_secure_account_coupon.sql", "utf8"));
+  await db.exec(readFileSync("drizzle/migrations/0010_coupon_confirmation_guard.sql", "utf8"));
   const original = readFileSync("drizzle/migrations/0006_checkout_hardening.sql", "utf8");
   await db.exec(original.slice(original.indexOf("CREATE OR REPLACE FUNCTION")));
   await db.exec("INSERT INTO coupons(code,discount_percent) VALUES ('FAMILYFIRST',20)");
@@ -48,6 +49,8 @@ describe("atomic account-limited redemption", () => {
     if (!id) throw new Error("Missing fixture order");
     await db.query("UPDATE payments SET status='failed' WHERE order_id=$1", [id]);
     expect((await db.query<{redeemed_at: string | null}>("SELECT redeemed_at FROM coupon_redemptions WHERE order_id=$1", [id])).rows[0]?.redeemed_at).toBeNull();
+    await expect(db.query("SELECT finalize_order($1,false,null)", [id])).rejects.toThrow("COUPON_PAYMENT_NOT_CONFIRMED");
+    expect((await db.query<{stock_quantity: number}>("SELECT stock_quantity FROM product_variants")).rows[0]?.stock_quantity).toBe(20);
     await db.query("SELECT finalize_order($1,true,'fixture-payment')", [id]);
     const first = (await db.query<{redeemed_at: Date | null}>("SELECT redeemed_at FROM coupon_redemptions WHERE order_id=$1", [id])).rows[0];
     expect(first?.redeemed_at).not.toBeNull();
