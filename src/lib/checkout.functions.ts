@@ -83,15 +83,17 @@ export const placeOrder = createServerFn({ method: "POST" })
     }
 
     // A repeated submit (refresh, double click, retry) reuses the same order.
-    let quote = await priceAndCheckStock(supabaseAdmin, data.items, cfg.testMode);
+    let existing = await findExistingOrder(supabaseAdmin, customerId, data.idempotencyKey);
+    // Keep ordinary idempotent retries independent of current stock. Coupon
+    // requests are checked separately unless this exact order already exists.
+    let quote = existing ? undefined : await priceAndCheckStock(supabaseAdmin, data.items, cfg.testMode);
     let reservedOrderId: string | undefined;
-    if (data.couponCode) {
+    if (data.couponCode && quote) {
       const discounted = await couponQuote(supabaseAdmin, customerId, data.couponCode, quote);
       quote = discounted;
       reservedOrderId = discounted.reservedOrderId;
     }
-    let existing = await findExistingOrder(supabaseAdmin, customerId, data.idempotencyKey);
-    if (reservedOrderId) {
+    if (reservedOrderId && quote) {
       const { data: reserved } = await supabaseAdmin.from("orders").select("*,order_items(product_id,variant_id,quantity,purchase_price)").eq("id", reservedOrderId).eq("customer_id", customerId).single();
       const sameItems = reserved?.order_items.length === quote.lines.length && quote.lines.every((line) => reserved.order_items.some((item) => item.product_id === line.productId && item.variant_id === line.variantId && item.quantity === line.quantity && Number(item.purchase_price) === line.price));
       if (!reserved || reserved.status !== "pending" || reserved.coupon_payment_method !== data.paymentMethod || Number(reserved.total) !== quote.total || !sameItems || reserved.shipping_name !== data.customer.name || reserved.shipping_phone !== data.customer.mobile || reserved.address_line1 !== data.customer.address || (reserved.address_line2 ?? "") !== data.customer.apartment || reserved.pin_code !== data.customer.pin || reserved.city !== data.customer.city || reserved.state !== data.customer.state) {
@@ -101,14 +103,16 @@ export const placeOrder = createServerFn({ method: "POST" })
     }
     if (existing) {
       if (data.paymentMethod === "cod") {
-        await finalizeOrder(supabaseAdmin, existing.id, false);
-        await createShipmentBestEffort(supabaseAdmin, existing.id);
+        if (existing.status === "pending") {
+          await finalizeOrder(supabaseAdmin, existing.id, false);
+          await createShipmentBestEffort(supabaseAdmin, existing.id);
+        }
         return {
           mode: "cod",
           orderId: existing.id,
           orderNumber: existing.order_number,
           total: Number(existing.total),
-          status: "confirmed",
+          status: existing.status === "pending" ? "confirmed" : existing.status,
         };
       }
       const { data: payment } = await supabaseAdmin
@@ -132,6 +136,7 @@ export const placeOrder = createServerFn({ method: "POST" })
     }
 
     // Authoritative pricing and stock checks happen here, server-side.
+    if (!quote) throw new CheckoutError("ORDER_CREATE_FAILED");
     const order = await createOrder(supabaseAdmin, {
       customerId,
       address: data.customer,
