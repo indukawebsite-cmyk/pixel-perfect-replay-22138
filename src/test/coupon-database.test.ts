@@ -16,6 +16,7 @@ async function order(customer: string, method: string = "razorpay", discount = 2
 }
 beforeAll(async () => {
   await db.exec(`CREATE ROLE anon; CREATE ROLE authenticated; CREATE ROLE service_role;
+    CREATE SCHEMA auth; CREATE FUNCTION auth.uid() RETURNS uuid LANGUAGE sql AS 'SELECT null::uuid';
     CREATE FUNCTION owns_order(uuid) RETURNS boolean LANGUAGE sql AS 'SELECT false';
     CREATE FUNCTION has_role(uuid,text) RETURNS boolean LANGUAGE sql AS 'SELECT false';
     CREATE TABLE customers(id uuid PRIMARY KEY);
@@ -48,7 +49,7 @@ describe("atomic account-limited redemption", () => {
     await db.query("UPDATE payments SET status='failed' WHERE order_id=$1", [id]);
     expect((await db.query<{redeemed_at: string | null}>("SELECT redeemed_at FROM coupon_redemptions WHERE order_id=$1", [id])).rows[0]?.redeemed_at).toBeNull();
     await db.query("SELECT finalize_order($1,true,'fixture-payment')", [id]);
-    const first = (await db.query("SELECT redeemed_at FROM coupon_redemptions WHERE order_id=$1", [id])).rows[0];
+    const first = (await db.query<{redeemed_at: Date | null}>("SELECT redeemed_at FROM coupon_redemptions WHERE order_id=$1", [id])).rows[0];
     expect(first?.redeemed_at).not.toBeNull();
     await db.query("SELECT finalize_order($1,true,'fixture-payment')", [id]);
     expect((await db.query("SELECT redeemed_at FROM coupon_redemptions WHERE order_id=$1", [id])).rows[0]).toEqual(first);
@@ -59,7 +60,7 @@ describe("atomic account-limited redemption", () => {
     const id = await order(b, "cod");
     expect((await db.query<{redeemed_at: string | null}>("SELECT redeemed_at FROM coupon_redemptions WHERE order_id=$1", [id])).rows[0]?.redeemed_at).toBeNull();
     await db.query("SELECT finalize_order($1,false,null)", [id]);
-    const result = await db.query("SELECT o.subtotal,o.discount,o.total,p.amount,r.redeemed_at FROM orders o JOIN payments p ON p.order_id=o.id JOIN coupon_redemptions r ON r.order_id=o.id WHERE o.id=$1", [id]);
+    const result = await db.query<{subtotal: string; discount: string; total: string; amount: string; redeemed_at: Date | null}>("SELECT o.subtotal,o.discount,o.total,p.amount,r.redeemed_at FROM orders o JOIN payments p ON p.order_id=o.id JOIN coupon_redemptions r ON r.order_id=o.id WHERE o.id=$1", [id]);
     expect(Number(result.rows[0]?.subtotal)).toBe(1000);
     expect(Number(result.rows[0]?.discount)).toBe(200);
     expect(Number(result.rows[0]?.total)).toBe(949);
