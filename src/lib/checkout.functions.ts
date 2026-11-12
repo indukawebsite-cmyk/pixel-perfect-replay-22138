@@ -15,12 +15,15 @@ import {
 } from "@/lib/orders.server";
 import { createRazorpayOrder, razorpayConfig, verifyPaymentSignature } from "@/lib/razorpay.server";
 import { createShipmentBestEffort } from "@/lib/shiprocket.server";
+import { couponQuote } from "@/lib/coupons.server";
+import { couponCodeSchema } from "@/lib/coupon-policy";
 
 const placeOrderInput = z.object({
   items: checkoutItemsSchema,
   customer: checkoutAddressSchema,
   paymentMethod: paymentMethodSchema,
   idempotencyKey: z.string().uuid(),
+  couponCode: couponCodeSchema.optional(),
 });
 
 const confirmPaymentInput = z.object({
@@ -80,16 +83,38 @@ export const placeOrder = createServerFn({ method: "POST" })
     }
 
     // A repeated submit (refresh, double click, retry) reuses the same order.
-    const existing = await findExistingOrder(supabaseAdmin, customerId, data.idempotencyKey);
+    let existing = await findExistingOrder(supabaseAdmin, customerId, data.idempotencyKey);
+    // Keep ordinary idempotent retries independent of current stock. Coupon
+    // requests are checked separately unless this exact order already exists.
+    let quote = existing ? undefined : await priceAndCheckStock(supabaseAdmin, data.items, cfg.testMode);
+    let reservedOrderId: string | undefined;
+    if (data.couponCode && quote) {
+      const discounted = await couponQuote(supabaseAdmin, customerId, data.couponCode, quote);
+      quote = discounted;
+      reservedOrderId = discounted.reservedOrderId;
+    }
+    if (reservedOrderId && quote) {
+      const { data: reserved } = await supabaseAdmin.from("orders").select("*,order_items(product_id,variant_id,quantity,purchase_price)").eq("id", reservedOrderId).eq("customer_id", customerId).single();
+      const sameItems = reserved?.order_items.length === quote.lines.length && quote.lines.every((line) => reserved.order_items.some((item) => item.product_id === line.productId && item.variant_id === line.variantId && item.quantity === line.quantity && Number(item.purchase_price) === line.price));
+      if (!reserved || reserved.status !== "pending" || reserved.coupon_payment_method !== data.paymentMethod || Number(reserved.total) !== quote.total || !sameItems || reserved.shipping_name !== data.customer.name || reserved.shipping_phone !== data.customer.mobile || reserved.address_line1 !== data.customer.address || (reserved.address_line2 ?? "") !== data.customer.apartment || reserved.pin_code !== data.customer.pin || reserved.city !== data.customer.city || reserved.state !== data.customer.state) {
+        throw new CheckoutError("Your coupon is reserved for an unfinished checkout. Retry with the original bag, delivery details and payment method, or remove the coupon.");
+      }
+      existing = reserved;
+    }
     if (existing) {
-      if (data.paymentMethod === "cod")
+      if (data.paymentMethod === "cod") {
+        if (existing.status === "pending") {
+          await finalizeOrder(supabaseAdmin, existing.id, false);
+          await createShipmentBestEffort(supabaseAdmin, existing.id);
+        }
         return {
           mode: "cod",
           orderId: existing.id,
           orderNumber: existing.order_number,
           total: Number(existing.total),
-          status: existing.status,
+          status: existing.status === "pending" ? "confirmed" : existing.status,
         };
+      }
       const { data: payment } = await supabaseAdmin
         .from("payments")
         .select("razorpay_order_id, amount")
@@ -111,12 +136,13 @@ export const placeOrder = createServerFn({ method: "POST" })
     }
 
     // Authoritative pricing and stock checks happen here, server-side.
-    const quote = await priceAndCheckStock(supabaseAdmin, data.items, cfg.testMode);
+    if (!quote) throw new CheckoutError("ORDER_CREATE_FAILED");
     const order = await createOrder(supabaseAdmin, {
       customerId,
       address: data.customer,
       quote,
       idempotencyKey: data.idempotencyKey,
+      paymentMethod: data.paymentMethod,
     });
     if (!order) throw new CheckoutError("ORDER_CREATE_FAILED");
 

@@ -40,6 +40,7 @@ import { Route as CollectionsIndexRouteImport } from './routes/collections.index
 import { Route as CollectionsSlugRouteImport } from './routes/collections.$slug'
 import { Route as ProductsProductIdRouteImport } from './routes/products.$productId'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
+import { Route as AuthenticatedAdminCouponsRouteImport } from './routes/_authenticated/admin.coupons'
 import { Route as AuthenticatedAdminCollectionsIndexRouteImport } from './routes/_authenticated/admin.collections.index'
 import { Route as AuthenticatedAdminCollectionsCollectionIdRouteImport } from './routes/_authenticated/admin.collections.$collectionId'
 import { Route as AuthenticatedAdminOrdersIndexRouteImport } from './routes/_authenticated/admin.orders.index'
@@ -202,6 +203,12 @@ const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthenticatedAdminRoute,
 } as any)
+const AuthenticatedAdminCouponsRoute =
+  AuthenticatedAdminCouponsRouteImport.update({
+    id: '/coupons',
+    path: '/coupons',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminCollectionsIndexRoute =
   AuthenticatedAdminCollectionsIndexRouteImport.update({
     id: '/collections/',
@@ -275,6 +282,7 @@ export interface FileRoutesByFullPath {
   '/collections/$slug': typeof CollectionsSlugRoute
   '/products/$productId': typeof ProductsProductIdRoute
   '/collections/': typeof CollectionsIndexRoute
+  '/admin/coupons': typeof AuthenticatedAdminCouponsRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/admin/collections/$collectionId': typeof AuthenticatedAdminCollectionsCollectionIdRoute
   '/admin/orders/$orderId': typeof AuthenticatedAdminOrdersOrderIdRoute
@@ -313,6 +321,7 @@ export interface FileRoutesByTo {
   '/collections/$slug': typeof CollectionsSlugRoute
   '/products/$productId': typeof ProductsProductIdRoute
   '/collections': typeof CollectionsIndexRoute
+  '/admin/coupons': typeof AuthenticatedAdminCouponsRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/admin/collections/$collectionId': typeof AuthenticatedAdminCollectionsCollectionIdRoute
   '/admin/orders/$orderId': typeof AuthenticatedAdminOrdersOrderIdRoute
@@ -354,6 +363,7 @@ export interface FileRoutesById {
   '/collections/$slug': typeof CollectionsSlugRoute
   '/products/$productId': typeof ProductsProductIdRoute
   '/collections/': typeof CollectionsIndexRoute
+  '/_authenticated/admin/coupons': typeof AuthenticatedAdminCouponsRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/admin/collections/$collectionId': typeof AuthenticatedAdminCollectionsCollectionIdRoute
   '/_authenticated/admin/orders/$orderId': typeof AuthenticatedAdminOrdersOrderIdRoute
@@ -395,6 +405,7 @@ export interface FileRouteTypes {
     | '/collections/$slug'
     | '/products/$productId'
     | '/collections/'
+    | '/admin/coupons'
     | '/admin/'
     | '/admin/collections/$collectionId'
     | '/admin/orders/$orderId'
@@ -433,6 +444,7 @@ export interface FileRouteTypes {
     | '/collections/$slug'
     | '/products/$productId'
     | '/collections'
+    | '/admin/coupons'
     | '/admin'
     | '/admin/collections/$collectionId'
     | '/admin/orders/$orderId'
@@ -473,6 +485,7 @@ export interface FileRouteTypes {
     | '/collections/$slug'
     | '/products/$productId'
     | '/collections/'
+    | '/_authenticated/admin/coupons'
     | '/_authenticated/admin/'
     | '/_authenticated/admin/collections/$collectionId'
     | '/_authenticated/admin/orders/$orderId'
@@ -734,6 +747,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/coupons': {
+      id: '/_authenticated/admin/coupons'
+      path: '/coupons'
+      fullPath: '/admin/coupons'
+      preLoaderRoute: typeof AuthenticatedAdminCouponsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/collections/': {
       id: '/_authenticated/admin/collections/'
       path: '/collections'
@@ -787,6 +807,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedAdminRouteChildren {
+  AuthenticatedAdminCouponsRoute: typeof AuthenticatedAdminCouponsRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
   AuthenticatedAdminCollectionsCollectionIdRoute: typeof AuthenticatedAdminCollectionsCollectionIdRoute
   AuthenticatedAdminOrdersOrderIdRoute: typeof AuthenticatedAdminOrdersOrderIdRoute
@@ -797,6 +818,7 @@ interface AuthenticatedAdminRouteChildren {
 }
 
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
+  AuthenticatedAdminCouponsRoute: AuthenticatedAdminCouponsRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
   AuthenticatedAdminCollectionsCollectionIdRoute:
     AuthenticatedAdminCollectionsCollectionIdRoute,

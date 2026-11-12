@@ -39,3 +39,9 @@ Limitations: bag survives refresh in this tab when session storage is available;
 - [x] Add and verify a router-derived public sitemap and robots reference.
 - [x] Correct outdated silver-care and shipping notices using approved information only.
 - [ ] Complete shipping policy content once approved destinations, estimates and charges are supplied.
+
+# Secure account coupon
+- [x] Add atomic coupon reservations/redemptions and server-priced checkout integration.
+- [x] Add checkout coupon controls and admin redemption history.
+- [x] Run full tests, isolated PostgreSQL redemption checks, and signed-out desktop/mobile login checks without real transactions.
+- [ ] Verify authenticated coupon apply/remove and admin history in the preview; blocked until the requesting user signs in (no matching account for session minting).
